@@ -1,0 +1,1935 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimalist Quote Image Generator</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Dancing+Script:wght@600;700&family=Montserrat:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- html2canvas library for high quality rendering -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <style>
+        /* Modern CSS Reset & Variable Tokens */
+        :root {
+            --bg-color: #08090d;
+            --card-bg: rgba(15, 17, 26, 0.65);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --accent-default: #DAA520;
+            /* Gold */
+            --accent-color: #DAA520;
+            --text-white: #FFFFFF;
+            --text-gray: #a0a0b0;
+            --glass-shine: rgba(255, 255, 255, 0.03);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-white);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+            padding: 40px 20px;
+        }
+
+        /* Ambient Glowing Background Blobs */
+        .bg-blobs {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -10;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.25;
+            animation: pulse 20s infinite alternate ease-in-out;
+        }
+
+        .blob-1 {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, #a855f7 0%, rgba(99, 102, 241, 0) 70%);
+            top: -10%;
+            left: -10%;
+        }
+
+        .blob-2 {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, #f43f5e 0%, rgba(244, 63, 94, 0) 70%);
+            bottom: -10%;
+            right: -10%;
+            animation-delay: -7s;
+        }
+
+        .blob-3 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, #0ea5e9 0%, rgba(14, 165, 233, 0) 70%);
+            top: 40%;
+            left: 45%;
+            animation-delay: -14s;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            50% {
+                transform: translate(60px, -40px) scale(1.1);
+            }
+
+            100% {
+                transform: translate(-30px, 30px) scale(0.95);
+            }
+        }
+
+        /* App Wrapper */
+        .app-container {
+            max-width: 1100px;
+            width: 100%;
+            z-index: 1;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            background: linear-gradient(135deg, #ffffff 40%, #c084fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+
+        header p {
+            color: var(--text-gray);
+            font-size: 0.95rem;
+            font-weight: 400;
+        }
+
+        /* Main Dashboard Grid */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 40px;
+            align-items: start;
+            transition: grid-template-columns 0.5s cubic-bezier(0.4, 0, 0.2, 1), gap 0.5s ease;
+        }
+
+        .dashboard.panel-collapsed {
+            grid-template-columns: 0px 1fr;
+            gap: 20px;
+        }
+
+        /* Controls Wrapper for retractable logic */
+        .controls-wrapper {
+            position: relative;
+            width: 100%;
+            overflow: visible;
+        }
+
+        /* Glassmorphic Panel Styles */
+        .glass-panel {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+            transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), padding 0.5s ease, margin 0.5s ease, max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-origin: left center;
+            overflow: hidden;
+            max-height: 1200px;
+        }
+
+        .glass-panel-content {
+            width: 100%;
+            transition: opacity 0.3s ease;
+        }
+
+        .dashboard.panel-collapsed .glass-panel {
+            opacity: 0;
+            transform: scaleX(0);
+            padding: 30px 0;
+            border-color: transparent;
+            pointer-events: none;
+        }
+
+        .dashboard.panel-collapsed .glass-panel-content {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Toggle Button styled like a premium folder tab/badge */
+        .panel-toggle-btn {
+            position: absolute;
+            right: -20px;
+            top: 40px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 20px rgba(168, 85, 247, 0.3);
+            z-index: 10;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .panel-toggle-btn:hover {
+            transform: scale(1.1);
+            background: linear-gradient(135deg, #b55fe6 0%, #8b5cf6 100%);
+            box-shadow: 0 12px 24px rgba(168, 85, 247, 0.5);
+        }
+
+        .panel-toggle-btn:active {
+            transform: scale(0.95);
+        }
+
+        .toggle-icon {
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .dashboard.panel-collapsed .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        /* ==== Mobile UI Refactor ==== */
+        @media (max-width: 968px) {
+            /* Layout Reversal (Canvas Top, Controls Bottom) */
+            .dashboard {
+                display: flex !important;
+                flex-direction: column-reverse;
+                gap: 30px;
+            }
+            .dashboard.panel-collapsed {
+                gap: 30px;
+            }
+            
+            /* Remove Lag & Glassmorphic filters for smooth mobile scrolling */
+            .glass-panel {
+                backdrop-filter: none;
+                -webkit-backdrop-filter: none;
+                background: rgba(15, 17, 26, 0.95); /* Solid-like dark background */
+                border: 1px solid rgba(255, 255, 255, 0.05);
+                box-shadow: none;
+                padding: 20px;
+                max-height: none;
+                transform: none !important;
+                opacity: 1 !important;
+            }
+            .bg-blobs {
+                display: none !important; /* Hide massive blob filters */
+            }
+
+            /* Hide Desktop Retractable Folder Logic entirely */
+            .panel-toggle-btn {
+                display: none !important;
+            }
+            
+            /* Fix Canvas Scaling and Overflow Container */
+            .canvas-area {
+                width: 100%;
+                overflow: visible; /* Prevents cutting off the download button or canvas bottom */
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: center;
+                padding-top: 10px;
+                position: relative !important; /* Overrides the sticky positioning on mobile */
+                top: 0 !important;
+            }
+            
+            .preview-shadow-wrap {
+                transform-origin: top center;
+                transition: transform 0.3s ease;
+            }
+        }
+
+        /* Controls Panel Form Styles */
+        .controls-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #d8b4fe;
+        }
+
+        .control-group {
+            margin-bottom: 20px;
+        }
+
+        .control-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            color: var(--text-gray);
+            text-transform: uppercase;
+        }
+
+        textarea,
+        input,
+        select {
+            width: 100%;
+            padding: 12px 14px;
+            background-color: rgba(10, 11, 18, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--text-white);
+            font-family: inherit;
+            font-size: 0.9rem;
+            box-sizing: border-box;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        textarea:focus,
+        input:focus,
+        select:focus {
+            border-color: #c084fc;
+            box-shadow: 0 0 0 2px rgba(192, 132, 252, 0.15);
+            background-color: rgba(10, 11, 18, 0.9);
+        }
+
+        textarea {
+            resize: vertical;
+            height: 90px;
+            line-height: 1.5;
+        }
+
+        /* Action Sliders & Alignments */
+        .range-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .range-value {
+            font-size: 0.85rem;
+            color: #d8b4fe;
+            min-width: 32px;
+            text-align: right;
+            font-weight: 600;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            outline: none;
+            border: none;
+            padding: 0;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #c084fc;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        /* Checkbox & Switch Layout */
+        .switch-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .switch-label {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-white);
+        }
+
+        .switch-control {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 22px;
+        }
+
+        .switch-control input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider-round {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.1);
+            transition: .3s;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .slider-round:before {
+            position: absolute;
+            content: "";
+            height: 14px;
+            width: 14px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+
+        input:checked+.slider-round {
+            background-color: #a855f7;
+        }
+
+        input:checked+.slider-round:before {
+            transform: translateX(22px);
+        }
+
+        /* Alignment Toggle Buttons */
+        .align-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            background: rgba(10, 11, 18, 0.7);
+            padding: 4px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .align-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-gray);
+            padding: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .align-btn.active {
+            background: #a855f7;
+            color: white;
+        }
+
+        /* Color presets grid */
+        .color-grid {
+            display: flex;
+            gap: 10px;
+            margin-top: 5px;
+        }
+
+        .color-dot {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: transform 0.2s;
+        }
+
+        .color-dot:hover {
+            transform: scale(1.15);
+        }
+
+        .color-dot.active {
+            border-color: #ffffff;
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+        }
+
+        /* Preset themes selection */
+        .theme-select-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .theme-btn {
+            height: 36px;
+            border-radius: 6px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+            transition: all 0.2s ease;
+        }
+
+        .theme-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .theme-btn.active {
+            border-color: white;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+        }
+
+        /* Preset Background Styles */
+        .theme-midnight {
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #30103b 100%);
+        }
+
+        .theme-sunset {
+            background: linear-gradient(135deg, #1e1b4b 0%, #450a0a 50%, #78350f 100%);
+        }
+
+        .theme-forest {
+            background: linear-gradient(135deg, #022c22 0%, #064e3b 50%, #0d9488 100%);
+        }
+
+        .theme-cosmic {
+            background: linear-gradient(135deg, #0f172a 0%, #2563eb 50%, #c084fc 100%);
+        }
+
+        .theme-velvet {
+            background: linear-gradient(135deg, #180828 0%, #0f051d 50%, #000000 100%);
+        }
+
+        .theme-minimal {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        }
+
+        /* The Canvas Wrapper & Flyer */
+        .canvas-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: sticky;
+            top: 40px;
+        }
+
+        .preview-shadow-wrap {
+            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7);
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 25px;
+        }
+
+        #quote-canvas {
+            width: 500px;
+            height: 500px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-sizing: border-box;
+            padding: 40px;
+            overflow: hidden;
+        }
+
+        /* Custom subtle overlay grids inside canvas to enhance preview */
+        .canvas-overlay-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                radial-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 0),
+                radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 0);
+            background-size: 40px 40px;
+            background-position: 0 0, 20px 20px;
+            opacity: 0.15;
+            pointer-events: none;
+        }
+
+        /* Glowing Accent Blob inside the Canvas behind Card */
+        .canvas-glow {
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            opacity: 0.15;
+            filter: blur(60px);
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        /* Glassmorphic card centered inside canvas */
+        .glass-card {
+            width: 100%;
+            height: 100%;
+            border-radius: 20px;
+            padding: 35px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            transition: all 0.3s ease;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Visual Glass Grain simulated via noise overlay */
+        .glass-grain {
+            position: absolute;
+            inset: 0;
+            opacity: 0.02;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            pointer-events: none;
+            border-radius: inherit;
+        }
+
+        .quote-icon {
+            font-size: 72px;
+            color: var(--accent-color);
+            line-height: 1;
+            margin-top: 10px;
+            opacity: 0.85;
+            user-select: none;
+            transition: color 0.3s ease;
+        }
+
+        .quote-text-container {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 10px 0;
+        }
+
+        .quote-text {
+            color: var(--text-white);
+            line-height: 1.5;
+            margin: 0;
+            white-space: pre-line;
+            word-break: break-word;
+            transition: all 0.2s ease;
+        }
+
+        .footer-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .divider {
+            width: 35px;
+            height: 2px;
+            background-color: var(--accent-color);
+            margin-bottom: 15px;
+            border-radius: 1px;
+            transition: color 0.3s ease;
+        }
+
+        .author {
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 5px;
+            color: var(--text-white);
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            margin-left: 5px;
+            /* offset letter spacing centering issue */
+        }
+
+        .branding {
+            font-size: 0.55rem;
+            letter-spacing: 3px;
+            color: var(--text-gray);
+            text-transform: uppercase;
+            margin-left: 3px;
+            opacity: 0.6;
+        }
+
+        /* Large Download Action Button */
+        .download-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 8px 20px rgba(168, 85, 247, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px rgba(168, 85, 247, 0.5);
+            background: linear-gradient(135deg, #b55fe6 0%, #8b5cf6 100%);
+        }
+
+        .download-btn:active {
+            transform: translateY(1px);
+        }
+
+        .download-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+        }
+        /* Template Toggles */
+        .template-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            background: rgba(10, 11, 18, 0.7);
+            padding: 6px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .template-btn {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text-gray);
+            padding: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .template-btn.active {
+            background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(168, 85, 247, 0.3);
+        }
+
+        /* Base Canvas Adjustments */
+        #quote-canvas {
+            transition: width 0.4s ease, height 0.4s ease, background 0.4s ease;
+        }
+
+        /* Editorial Minimalist Template */
+        .canvas-editorial {
+            background: #E8DDDC !important;
+            width: 500px !important;
+            height: 625px !important; /* 4:5 portrait */
+        }
+
+        /* Hide elements when in Editorial Mode */
+        .canvas-editorial .canvas-overlay-grid,
+        .canvas-editorial .canvas-glow {
+            display: none;
+        }
+
+        /* New Template Structure */
+        .editorial-card {
+            display: none;
+            width: 100%;
+            height: 100%;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .canvas-editorial .editorial-card {
+            display: flex;
+        }
+
+        .canvas-editorial #quote-card {
+            display: none; /* Hide glass card */
+        }
+
+        /* Black Brush Stroke Container */
+        .brush-stroke {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-2deg);
+            width: 80%;
+            min-height: 280px;
+            background-color: #111;
+            filter: url('#rough-brush');
+            z-index: 1;
+        }
+
+        /* Text Over Brush Stroke */
+        .editorial-quote-container {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            width: 70%;
+            color: #fff;
+            font-family: 'Playfair Display', serif; /* Default */
+            font-size: 32px;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+
+        .editorial-quote-container p {
+            margin: 0;
+            white-space: pre-line;
+            word-break: break-word;
+        }
+
+        /* Signature Handle */
+        .editorial-handle {
+            position: absolute;
+            bottom: 30px;
+            right: 35px;
+            color: #111;
+            font-family: 'Playfair Display', serif;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        /* Educational Minimalist Template */
+        .canvas-educational {
+            background: #F4F4F2 !important;
+            width: 500px !important;
+            height: 625px !important;
+            border-radius: 16px !important;
+            overflow: hidden;
+        }
+
+        .canvas-educational .canvas-overlay-grid,
+        .canvas-educational .canvas-glow {
+            display: none;
+        }
+
+        .canvas-educational #quote-card,
+        .canvas-educational #editorial-card {
+            display: none !important;
+        }
+
+        .educational-card {
+            display: none;
+            width: 100%;
+            height: 100%;
+            position: relative;
+            z-index: 2;
+        }
+
+        .canvas-educational .educational-card {
+            display: block;
+        }
+
+        .edu-handle {
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            color: #222222;
+            font-size: 11px;
+            letter-spacing: -0.5px;
+        }
+
+        .edu-frame-wrapper {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 310px;
+            height: 300px;
+            pointer-events: none;
+        }
+
+        .edu-icon-top {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: -25px;
+            width: 32px;
+            height: 32px;
+            background-color: #8DBF77;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FFF;
+            font-size: 16px;
+            font-weight: 900;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .edu-line-left {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 2px;
+            height: 217px;
+            background: #A8CF93;
+        }
+
+        .edu-line-top {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 2px;
+            width: 115px;
+            background: #A8CF93;
+        }
+
+        .edu-line-bottom {
+            position: absolute;
+            left: 0;
+            top: 217px;
+            height: 2px;
+            width: 282px;
+            background: #A8CF93;
+        }
+
+        .edu-icon-bottom {
+            position: absolute;
+            left: 282px;
+            top: 217px;
+            transform: translate(-50%, -50%) rotate(180deg);
+            width: 32px;
+            height: 32px;
+            background-color: #8DBF77;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FFF;
+            font-size: 16px;
+            font-weight: 900;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .edu-content {
+            position: absolute;
+            left: 25px;
+            top: 40px;
+            width: 285px;
+            text-align: left;
+        }
+
+        .edu-headline {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            color: #212721;
+            font-size: 31px;
+            line-height: 0.85;
+            letter-spacing: -0.01em;
+            margin: 0 0 16px 0;
+            white-space: pre-line;
+        }
+
+        .edu-body {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 500;
+            color: #333333;
+            font-size: 16px;
+            line-height: 1.2;
+            margin: 0;
+            white-space: pre-line;
+            word-break: break-word;
+        }
+
+        .edu-highlight {
+            font-weight: 700;
+            color: #5FAE55;
+        }
+
+        /* Bank Modal Overlay */
+        .bank-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(10, 11, 18, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .bank-overlay.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .bank-modal {
+            width: 90%;
+            max-width: 900px;
+            height: 85vh;
+            background: rgba(15, 17, 26, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .bank-header {
+            padding: 20px 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .bank-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: #fff;
+        }
+
+        .close-bank-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-gray);
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-bank-btn:hover { color: #fff; }
+
+        .bank-tabs {
+            display: flex;
+            background: rgba(0,0,0,0.2);
+            padding: 10px 30px;
+        }
+
+        .bank-tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-gray);
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .bank-tab-btn.active {
+            color: #fff;
+            border-bottom: 2px solid #a855f7;
+        }
+
+        .bank-content-area {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        .bank-view { display: none; }
+        .bank-view.active { display: block; }
+
+        /* Quotes Bank List */
+        .saved-quote-item {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .saved-quote-item:hover { background: rgba(255,255,255,0.08); }
+        .saved-quote-text { font-size: 1.1rem; color: #fff; margin-bottom: 10px; }
+        .saved-quote-meta { font-size: 0.85rem; color: var(--text-gray); }
+
+        /* Designs Bank Grid */
+        .designs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        .saved-design-item {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .saved-design-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+        .saved-design-thumb {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            object-position: top;
+            background: #000;
+        }
+        .saved-design-info {
+            padding: 15px;
+        }
+        .saved-design-title { font-size: 0.95rem; color: #fff; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 5px;}
+        .saved-design-date { font-size: 0.8rem; color: var(--text-gray); }
+
+        /* Header Button & Action buttons */
+        .header-actions { display: flex; gap: 15px; }
+        .open-bank-btn {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.3s ease;
+        }
+        .open-bank-btn:hover { background: rgba(255,255,255,0.2); }
+
+        .save-actions-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+        }
+        .save-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+        .save-quote-btn {
+            background: rgba(255,255,255,0.05);
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .save-quote-btn:hover { background: rgba(255,255,255,0.1); }
+        
+        .save-design-btn {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+        .save-design-btn:hover { filter: brightness(1.1); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #fff;
+            color: #111;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: 600;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 2000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="bg-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <div class="app-container">
+        <header style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+            <div>
+                <h1>Quote Image Hub</h1>
+                <p>Design and download beautiful cinematic quotes with premium glassmorphic styling</p>
+            </div>
+            <div class="header-actions">
+                <button class="open-bank-btn" id="open-bank-btn">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"></path></svg>
+                    My Bank
+                </button>
+            </div>
+        </header>
+
+        <div class="dashboard" id="dashboard">
+            <!-- Left Panel: Controls Wrapper -->
+            <div class="controls-wrapper">
+                <div class="glass-panel" id="controls-panel">
+                    <div class="glass-panel-content">
+                        <div class="controls-title">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path
+                                    d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.1a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
+                                <circle cx="12" cy="12" r="3" />
+                            </svg>
+                            Customization Panel
+                        </div>
+
+                        <!-- Template Style Selector -->
+                        <div class="control-group">
+                            <label>Design Template</label>
+                            <div class="template-selector">
+                                <button class="template-btn active" data-template="glass">Glassmorphic</button>
+                                <button class="template-btn" data-template="editorial">Editorial</button>
+                                <button class="template-btn" data-template="educational">Educational</button>
+                            </div>
+                        </div>
+
+                        <!-- Educational specific inputs -->
+                        <div class="control-group" id="headline-control" style="display: none;">
+                            <label for="input-headline">Headline (Educational only)</label>
+                            <textarea id="input-headline" rows="2" style="background: rgba(10,11,18,0.7); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 10px; border-radius: 8px; width: 100%; box-sizing: border-box; resize: vertical; margin-bottom: 10px;">DID YOU&#10;KNOW?</textarea>
+                        </div>
+
+                        <div class="control-group">
+                            <label for="input-text">Quote content (Use *asterisks* to highlight green!)</label>
+                            <textarea id="input-text">People are *40%* more emotional when they don't get enough sleep.</textarea>
+                        </div>
+
+                        <div class="control-row">
+                            <div class="control-group">
+                                <label for="input-author">Author</label>
+                                <input type="text" id="input-author" value="Anteeny">
+                            </div>
+                            <div class="control-group">
+                                <label for="input-branding">Sub-branding / Tag</label>
+                                <input type="text" id="input-branding" value="LIFE'SBEREAL">
+                            </div>
+                        </div>
+
+                        <!-- Theme Preset Gradients -->
+                        <div class="control-group">
+                            <label>Canvas Theme Background</label>
+                            <div class="theme-select-container">
+                                <div class="theme-btn theme-midnight active" data-theme="theme-midnight">Midnight</div>
+                                <div class="theme-btn theme-sunset" data-theme="theme-sunset">Sunset</div>
+                                <div class="theme-btn theme-forest" data-theme="theme-forest">Forest</div>
+                                <div class="theme-btn theme-cosmic" data-theme="theme-cosmic">Cosmic</div>
+                                <div class="theme-btn theme-velvet" data-theme="theme-velvet">Velvet</div>
+                                <div class="theme-btn theme-minimal" data-theme="theme-minimal">Minimal</div>
+                            </div>
+                        </div>
+
+                        <div class="control-row">
+                            <div class="control-group">
+                                <label for="select-font">Font Family</label>
+                                <select id="select-font">
+                                    <option value="'Cinzel', serif" selected>Cinzel (Classic Serif)</option>
+                                    <option value="'Playfair Display', serif">Playfair (Elegant Serif)</option>
+                                    <option value="'Montserrat', sans-serif">Montserrat (Modern Sans)</option>
+                                    <option value="'Dancing Script', cursive">Dancing Script (Script)</option>
+                                </select>
+                            </div>
+                            <div class="control-group">
+                                <label>Text Alignment</label>
+                                <div class="align-buttons">
+                                    <button class="align-btn" data-align="left">Left</button>
+                                    <button class="align-btn active" data-align="center">Center</button>
+                                    <button class="align-btn" data-align="right">Right</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="control-row">
+                            <div class="control-group">
+                                <label>Font Size</label>
+                                <div class="range-container">
+                                    <input type="range" id="slider-fontsize" min="16" max="46" value="23">
+                                    <span class="range-value" id="val-fontsize">23px</span>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label>Glass Transparency</label>
+                                <div class="range-container">
+                                    <input type="range" id="slider-opacity" min="0" max="80" value="8">
+                                    <span class="range-value" id="val-opacity">8%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Custom Accent Colors -->
+                        <div class="control-group">
+                            <label>Highlight Accent Color</label>
+                            <div class="color-grid">
+                                <div class="color-dot active" style="background-color: #DAA520;" data-color="#DAA520"></div>
+                                <div class="color-dot" style="background-color: #ec4899;" data-color="#ec4899"></div>
+                                <div class="color-dot" style="background-color: #06b6d4;" data-color="#06b6d4"></div>
+                                <div class="color-dot" style="background-color: #10b981;" data-color="#10b981"></div>
+                                <div class="color-dot" style="background-color: #f43f5e;" data-color="#f43f5e"></div>
+                                <div class="color-dot" style="background-color: #a855f7;" data-color="#a855f7"></div>
+                            </div>
+                        </div>
+
+                        <!-- Card Toggles -->
+                        <div class="control-row" style="margin-top: 10px;">
+                            <div class="switch-group" style="width: 100%;">
+                                <span class="switch-label">Show Card Border</span>
+                                <label class="switch-control">
+                                    <input type="checkbox" id="check-border" checked>
+                                    <span class="slider-round"></span>
+                                </label>
+                            </div>
+                            <div class="switch-group" style="width: 100%;">
+                                <span class="switch-label">Show Quote Icon</span>
+                                <label class="switch-control">
+                                    <input type="checkbox" id="check-icon" checked>
+                                    <span class="slider-round"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Save Actions -->
+                        <div class="save-actions-row">
+                            <button class="save-btn save-quote-btn" id="save-quote-btn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                                Save Quote Text
+                            </button>
+                            <button class="save-btn save-design-btn" id="save-design-btn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+                                Save Full Design
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <button class="panel-toggle-btn" id="panel-toggle" aria-label="Toggle Customization Panel">
+                    <svg class="toggle-icon" id="toggle-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Right Panel: Canvas Preview & Download -->
+            <div class="canvas-area">
+                <div class="preview-shadow-wrap">
+                    <div id="quote-canvas" class="theme-midnight">
+                        <!-- SVG Filter -->
+                        <svg width="0" height="0" style="position: absolute; pointer-events: none;">
+                            <filter id="rough-brush" x="-20%" y="-20%" width="140%" height="140%">
+                                <feTurbulence type="fractalNoise" baseFrequency="0.08 0.15" numOctaves="4" result="noise" />
+                                <feDisplacementMap in="SourceGraphic" in2="noise" scale="20" xChannelSelector="R" yChannelSelector="G" />
+                            </filter>
+                        </svg>
+
+                        <div class="canvas-overlay-grid"></div>
+                        <div class="canvas-glow"></div>
+
+                        <!-- Template 1: Glassmorphic Card -->
+                        <div class="glass-card" id="quote-card">
+                            <div class="glass-grain"></div>
+                            <div class="quote-icon" id="quote-icon-element">“</div>
+
+                            <div class="quote-text-container">
+                                <p class="quote-text" id="quote-display">A man that understands<br>Principles will
+                                    get<br>more Miracles</p>
+                            </div>
+
+                            <div class="footer-area">
+                                <div class="divider" id="quote-divider"></div>
+                                <div class="author" id="author-display">Anteeny</div>
+                                <div class="branding" id="branding-display">LIFE'SBEREAL</div>
+                            </div>
+                        </div>
+
+                        <!-- Template 2: Editorial Minimalist Card -->
+                        <div class="editorial-card" id="editorial-card">
+                            <div class="brush-stroke"></div>
+                            <div class="editorial-quote-container">
+                                <p id="editorial-quote-display">A man that understands<br>Principles will
+                                    get<br>more Miracles</p>
+                            </div>
+                            <div class="editorial-handle" id="editorial-handle-display">@LIFE'SBEREAL</div>
+                        </div>
+
+                        <!-- Template 3: Educational Minimalist Card -->
+                        <div class="educational-card" id="educational-card">
+                            <div class="edu-handle" id="edu-handle-display">@LIFE'SBEREAL</div>
+                            <div class="edu-frame-wrapper">
+                                <div class="edu-line-left"></div>
+                                <div class="edu-line-top"></div>
+                                <div class="edu-line-bottom"></div>
+                                <div class="edu-icon-top">“</div>
+                                <div class="edu-icon-bottom">”</div>
+                                <div class="edu-content">
+                                    <h1 class="edu-headline" id="edu-headline-display">DID YOU<br>KNOW?</h1>
+                                    <p class="edu-body" id="edu-body-display">People are <span class="edu-highlight">40%</span><br>more emotional<br>when they don't<br>get enough sleep.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="download-btn" id="download-btn">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
+                    </svg>
+                    Download Quote Card (PNG)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bank Modal -->
+    <div class="bank-overlay" id="bank-overlay">
+        <div class="bank-modal">
+            <div class="bank-header">
+                <h2>My Bank</h2>
+                <button class="close-bank-btn" id="close-bank-btn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            <div class="bank-tabs">
+                <button class="bank-tab-btn active" data-tab="bank-view-designs">Saved Designs</button>
+                <button class="bank-tab-btn" data-tab="bank-view-quotes">Saved Quotes</button>
+            </div>
+            <div class="bank-content-area">
+                <!-- Designs View -->
+                <div class="bank-view active" id="bank-view-designs">
+                    <div class="designs-grid" id="designs-grid-container"></div>
+                </div>
+                <!-- Quotes View -->
+                <div class="bank-view" id="bank-view-quotes">
+                    <div id="quotes-list-container"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast-notification">Saved successfully!</div>
+
+    <script>
+        // Interactive Elements Selector
+        const inputText = document.getElementById('input-text');
+        const inputAuthor = document.getElementById('input-author');
+        const inputBranding = document.getElementById('input-branding');
+        const selectFont = document.getElementById('select-font');
+        const sliderFontsize = document.getElementById('slider-fontsize');
+        const valFontsize = document.getElementById('val-fontsize');
+        const sliderOpacity = document.getElementById('slider-opacity');
+        const valOpacity = document.getElementById('val-opacity');
+        const checkBorder = document.getElementById('check-border');
+        const checkIcon = document.getElementById('check-icon');
+        const downloadBtn = document.getElementById('download-btn');
+
+        // Target Preview Elements
+        const canvasContainer = document.getElementById('quote-canvas');
+        const quoteCard = document.getElementById('quote-card');
+        const quoteDisplay = document.getElementById('quote-display');
+        const authorDisplay = document.getElementById('author-display');
+        const brandingDisplay = document.getElementById('branding-display');
+        const quoteIconElement = document.getElementById('quote-icon-element');
+        const quoteDivider = document.getElementById('quote-divider');
+
+        // Editorial Target Elements
+        const editorialQuoteDisplay = document.getElementById('editorial-quote-display');
+        const editorialHandleDisplay = document.getElementById('editorial-handle-display');
+
+        // Educational Target Elements
+        const eduHeadlineDisplay = document.getElementById('edu-headline-display');
+        const eduBodyDisplay = document.getElementById('edu-body-display');
+        const eduHandleDisplay = document.getElementById('edu-handle-display');
+        const inputHeadline = document.getElementById('input-headline');
+
+        // Dynamic State
+        let currentAlignment = 'center';
+        let currentAccentColor = '#DAA520';
+
+        function parseAsterisks(text) {
+            return text.replace(/\*(.*?)\*/g, '<span class="edu-highlight">$1</span>');
+        }
+
+        // 1. Text & Branding Updates
+        inputText.addEventListener('input', () => {
+            quoteDisplay.textContent = inputText.value;
+            editorialQuoteDisplay.textContent = inputText.value;
+            eduBodyDisplay.innerHTML = parseAsterisks(inputText.value.replace(/\n/g, '<br>'));
+        });
+
+        inputHeadline.addEventListener('input', () => {
+            eduHeadlineDisplay.innerHTML = inputHeadline.value.replace(/\n/g, '<br>');
+        });
+
+        inputAuthor.addEventListener('input', () => {
+            authorDisplay.textContent = inputAuthor.value;
+        });
+
+        inputBranding.addEventListener('input', () => {
+            brandingDisplay.textContent = inputBranding.value;
+            let handle = inputBranding.value;
+            if (!handle.startsWith('@') && handle.trim() !== '') {
+                handle = '@' + handle;
+            }
+            editorialHandleDisplay.textContent = handle;
+            eduHandleDisplay.textContent = handle;
+        });
+
+        // 2. Font Style & Alignment Updates
+        selectFont.addEventListener('change', () => {
+            quoteDisplay.style.fontFamily = selectFont.value;
+            editorialQuoteDisplay.parentElement.style.fontFamily = selectFont.value;
+        });
+
+        sliderFontsize.addEventListener('input', () => {
+            const size = sliderFontsize.value;
+            quoteDisplay.style.fontSize = `${size}px`;
+            // Editorial uses slightly larger font by default, so we scale it
+            editorialQuoteDisplay.style.fontSize = `${Math.floor(size * 1.4)}px`;
+            valFontsize.textContent = `${size}px`;
+        });
+
+        // Alignment Buttons Logic
+        document.querySelectorAll('.align-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.align-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentAlignment = btn.getAttribute('data-align');
+                quoteDisplay.style.textAlign = currentAlignment;
+                editorialQuoteDisplay.style.textAlign = currentAlignment;
+
+                // Adjust container flex align for non-center text
+                const alignMap = { 'left': 'flex-start', 'center': 'center', 'right': 'flex-end' };
+                quoteDisplay.parentElement.style.justifyContent = alignMap[currentAlignment];
+            });
+        });
+
+        // 3. Card Translucency & Styling Updates
+        function updateCardStyles() {
+            const opacityPct = sliderOpacity.value;
+            valOpacity.textContent = `${opacityPct}%`;
+
+            // Adjust card background glass levels
+            const glassOpacity = opacityPct / 100;
+            // Mixed translucent dark and white background to give frosted feel
+            quoteCard.style.backgroundColor = `rgba(15, 17, 26, ${0.4 + glassOpacity * 0.5})`;
+
+            // Card Border logic
+            if (checkBorder.checked) {
+                quoteCard.style.border = `1px solid rgba(255, 255, 255, ${0.05 + (opacityPct / 200)})`;
+            } else {
+                quoteCard.style.border = 'none';
+            }
+
+            // Quote Icon visibility
+            quoteIconElement.style.display = checkIcon.checked ? 'block' : 'none';
+        }
+
+        sliderOpacity.addEventListener('input', updateCardStyles);
+        checkBorder.addEventListener('change', updateCardStyles);
+        checkIcon.addEventListener('change', updateCardStyles);
+
+        // 4. Custom Accent Color selection
+        document.querySelectorAll('.color-dot').forEach(dot => {
+            dot.addEventListener('click', () => {
+                document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
+                dot.classList.add('active');
+
+                const hexColor = dot.getAttribute('data-color');
+                currentAccentColor = hexColor;
+                document.documentElement.style.setProperty('--accent-color', hexColor);
+
+                quoteIconElement.style.color = hexColor;
+                quoteDivider.style.backgroundColor = hexColor;
+
+                // update local glowing blob inside canvas too
+                document.querySelector('.canvas-glow').style.background = hexColor;
+            });
+        });
+
+        // 5. Canvas Theme presets
+        document.querySelectorAll('.theme-btn').forEach(themeBtn => {
+            themeBtn.addEventListener('click', () => {
+                document.querySelectorAll('.theme-btn').forEach(tb => tb.classList.remove('active'));
+                themeBtn.classList.add('active');
+
+                // Remove all existing themes
+                canvasContainer.className = canvasContainer.className.replace(/theme-\w+/g, '').trim();
+                // Add the newly selected theme class
+                canvasContainer.classList.add(themeBtn.getAttribute('data-theme'));
+            });
+        });
+
+        // Template Selection Logic
+        const templateBtns = document.querySelectorAll('.template-btn');
+        const themeSelectContainer = document.querySelector('.theme-select-container').closest('.control-group');
+        const opacityControlContainer = sliderOpacity.closest('.control-group');
+        const borderControlContainer = checkBorder.closest('.control-row');
+        const headlineControl = document.getElementById('headline-control');
+        
+        templateBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                templateBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                const template = btn.getAttribute('data-template');
+                if (template === 'editorial') {
+                    canvasContainer.className = canvasContainer.className.replace(/theme-\w+/g, '').trim();
+                    canvasContainer.classList.remove('canvas-educational');
+                    canvasContainer.classList.add('canvas-editorial');
+                    headlineControl.style.display = 'none';
+                    // Dim/fade unsupported controls
+                    themeSelectContainer.style.opacity = '0.3';
+                    themeSelectContainer.style.pointerEvents = 'none';
+                    opacityControlContainer.style.opacity = '0.3';
+                    opacityControlContainer.style.pointerEvents = 'none';
+                    borderControlContainer.style.opacity = '0.3';
+                    borderControlContainer.style.pointerEvents = 'none';
+                } else if (template === 'educational') {
+                    canvasContainer.className = canvasContainer.className.replace(/theme-\w+/g, '').trim();
+                    canvasContainer.classList.remove('canvas-editorial');
+                    canvasContainer.classList.add('canvas-educational');
+                    headlineControl.style.display = 'block';
+                    // Dim/fade unsupported controls
+                    themeSelectContainer.style.opacity = '0.3';
+                    themeSelectContainer.style.pointerEvents = 'none';
+                    opacityControlContainer.style.opacity = '0.3';
+                    opacityControlContainer.style.pointerEvents = 'none';
+                    borderControlContainer.style.opacity = '0.3';
+                    borderControlContainer.style.pointerEvents = 'none';
+                } else {
+                    canvasContainer.classList.remove('canvas-editorial');
+                    canvasContainer.classList.remove('canvas-educational');
+                    headlineControl.style.display = 'none';
+                    themeSelectContainer.style.opacity = '1';
+                    themeSelectContainer.style.pointerEvents = 'auto';
+                    opacityControlContainer.style.opacity = '1';
+                    opacityControlContainer.style.pointerEvents = 'auto';
+                    borderControlContainer.style.opacity = '1';
+                    borderControlContainer.style.pointerEvents = 'auto';
+                }
+            });
+        });
+
+        // Initialize Card Values on Load
+        quoteDisplay.style.fontSize = `${sliderFontsize.value}px`;
+        editorialQuoteDisplay.style.fontSize = `${Math.floor(sliderFontsize.value * 1.4)}px`;
+        quoteDisplay.style.fontFamily = selectFont.value;
+        editorialQuoteDisplay.parentElement.style.fontFamily = selectFont.value;
+        updateCardStyles();
+
+        // 5.5 Retractable Customization Panel
+        const panelToggleBtn = document.getElementById('panel-toggle');
+        const dashboardElement = document.getElementById('dashboard');
+
+        panelToggleBtn.addEventListener('click', () => {
+            dashboardElement.classList.toggle('panel-collapsed');
+        });
+
+        // 6. html2canvas Download implementation
+        downloadBtn.addEventListener('click', () => {
+            // Apply scale: 3 for high-res output matching physical print standards
+            html2canvas(canvasContainer, {
+                scale: 3,
+                useCORS: true,
+                allowTaint: true,
+                backgroundColor: null // transparency support if needed
+            }).then(canvas => {
+                const link = document.createElement('a');
+                const timestamp = new Date().toISOString().slice(0, 10);
+                link.download = `quote-${timestamp}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        });
+
+        // --- Bank & Storage Logic ---
+        const openBankBtn = document.getElementById('open-bank-btn');
+        const closeBankBtn = document.getElementById('close-bank-btn');
+        const bankOverlay = document.getElementById('bank-overlay');
+        const bankTabBtns = document.querySelectorAll('.bank-tab-btn');
+        const bankViews = document.querySelectorAll('.bank-view');
+        
+        const saveQuoteBtn = document.getElementById('save-quote-btn');
+        const saveDesignBtn = document.getElementById('save-design-btn');
+        const toast = document.getElementById('toast-notification');
+        
+        const quotesContainer = document.getElementById('quotes-list-container');
+        const designsContainer = document.getElementById('designs-grid-container');
+
+        // Toggle Modal
+        openBankBtn.addEventListener('click', () => {
+            renderBank();
+            bankOverlay.classList.add('show');
+        });
+        closeBankBtn.addEventListener('click', () => bankOverlay.classList.remove('show'));
+
+        // Tabs
+        bankTabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                bankTabBtns.forEach(b => b.classList.remove('active'));
+                bankViews.forEach(v => v.classList.remove('active'));
+                btn.classList.add('active');
+                document.getElementById(btn.getAttribute('data-tab')).classList.add('active');
+            });
+        });
+
+        function showToast(msg) {
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // Save Quote
+        saveQuoteBtn.addEventListener('click', () => {
+            const quotes = JSON.parse(localStorage.getItem('savedQuotes') || '[]');
+            quotes.unshift({
+                id: Date.now(),
+                text: inputText.value,
+                headline: inputHeadline.value,
+                author: inputAuthor.value,
+                date: new Date().toLocaleDateString()
+            });
+            localStorage.setItem('savedQuotes', JSON.stringify(quotes));
+            showToast("Quote saved to Bank!");
+        });
+
+        // Save Design
+        saveDesignBtn.addEventListener('click', () => {
+            const originalText = saveDesignBtn.innerHTML;
+            saveDesignBtn.innerHTML = "Saving...";
+            
+            // Capture thumbnail
+            html2canvas(canvasContainer, { scale: 0.5, useCORS: true }).then(canvas => {
+                const thumbnail = canvas.toDataURL('image/jpeg', 0.6);
+                
+                // Get active template
+                let activeTemplate = 'glass';
+                templateBtns.forEach(btn => {
+                    if(btn.classList.contains('active')) activeTemplate = btn.getAttribute('data-template');
+                });
+                
+                // Get active theme
+                let activeTheme = 'theme-midnight';
+                document.querySelectorAll('.theme-btn').forEach(btn => {
+                    if(btn.classList.contains('active')) activeTheme = btn.getAttribute('data-theme');
+                });
+
+                const designState = {
+                    id: Date.now(),
+                    date: new Date().toLocaleDateString(),
+                    thumbnail: thumbnail,
+                    template: activeTemplate,
+                    theme: activeTheme,
+                    text: inputText.value,
+                    headline: inputHeadline.value,
+                    author: inputAuthor.value,
+                    branding: inputBranding.value,
+                    font: selectFont.value,
+                    alignment: currentAlignment,
+                    fontSize: sliderFontsize.value,
+                    opacity: sliderOpacity.value,
+                    accentColor: currentAccentColor,
+                    showBorder: checkBorder.checked,
+                    showIcon: checkIcon.checked
+                };
+
+                const designs = JSON.parse(localStorage.getItem('savedDesigns') || '[]');
+                designs.unshift(designState);
+                localStorage.setItem('savedDesigns', JSON.stringify(designs));
+                
+                saveDesignBtn.innerHTML = originalText;
+                showToast("Full Design saved to Bank!");
+            });
+        });
+
+        // Render Bank Items
+        function renderBank() {
+            // Quotes
+            const quotes = JSON.parse(localStorage.getItem('savedQuotes') || '[]');
+            if(quotes.length === 0) {
+                quotesContainer.innerHTML = '<p style="color: #888;">No quotes saved yet.</p>';
+            } else {
+                quotesContainer.innerHTML = quotes.map(q => `
+                    <div class="saved-quote-item" onclick="loadQuote(${q.id})">
+                        <div class="saved-quote-text">${q.text.replace(/\n/g, ' ').substring(0, 100)}${q.text.length > 100 ? '...' : ''}</div>
+                        <div class="saved-quote-meta">${q.author ? q.author + ' • ' : ''}${q.date}</div>
+                    </div>
+                `).join('');
+            }
+
+            // Designs
+            const designs = JSON.parse(localStorage.getItem('savedDesigns') || '[]');
+            if(designs.length === 0) {
+                designsContainer.innerHTML = '<p style="color: #888;">No designs saved yet.</p>';
+            } else {
+                designsContainer.innerHTML = designs.map(d => `
+                    <div class="saved-design-item" onclick="loadDesign(${d.id})">
+                        <img src="${d.thumbnail}" class="saved-design-thumb" alt="Thumbnail">
+                        <div class="saved-design-info">
+                            <div class="saved-design-title">${d.text.split('\\n')[0]}</div>
+                            <div class="saved-design-date">${d.template.toUpperCase()} • ${d.date}</div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Loaders attached to window for onclick attributes
+        window.loadQuote = function(id) {
+            const quotes = JSON.parse(localStorage.getItem('savedQuotes') || '[]');
+            const q = quotes.find(item => item.id === id);
+            if(q) {
+                inputText.value = q.text;
+                inputHeadline.value = q.headline || '';
+                inputAuthor.value = q.author || '';
+                
+                // Trigger events
+                inputText.dispatchEvent(new Event('input'));
+                inputHeadline.dispatchEvent(new Event('input'));
+                inputAuthor.dispatchEvent(new Event('input'));
+                
+                bankOverlay.classList.remove('show');
+                showToast("Quote loaded!");
+            }
+        };
+
+        window.loadDesign = function(id) {
+            const designs = JSON.parse(localStorage.getItem('savedDesigns') || '[]');
+            const d = designs.find(item => item.id === id);
+            if(d) {
+                inputText.value = d.text;
+                inputHeadline.value = d.headline || '';
+                inputAuthor.value = d.author || '';
+                inputBranding.value = d.branding || '';
+                
+                selectFont.value = d.font;
+                sliderFontsize.value = d.fontSize;
+                sliderOpacity.value = d.opacity;
+                checkBorder.checked = d.showBorder;
+                checkIcon.checked = d.showIcon;
+                
+                // Trigger DOM updates
+                inputText.dispatchEvent(new Event('input'));
+                inputHeadline.dispatchEvent(new Event('input'));
+                inputAuthor.dispatchEvent(new Event('input'));
+                inputBranding.dispatchEvent(new Event('input'));
+                selectFont.dispatchEvent(new Event('change'));
+                sliderFontsize.dispatchEvent(new Event('input'));
+                sliderOpacity.dispatchEvent(new Event('input'));
+                
+                // Click corresponding buttons
+                document.querySelector(`.template-btn[data-template="${d.template}"]`)?.click();
+                document.querySelector(`.theme-btn[data-theme="${d.theme}"]`)?.click();
+                document.querySelector(`.align-btn[data-align="${d.alignment}"]`)?.click();
+                document.querySelector(`.color-dot[data-color="${d.accentColor}"]`)?.click();
+                
+                bankOverlay.classList.remove('show');
+                showToast("Design loaded!");
+            }
+        };
+
+        // --- Mobile Responsive Canvas Scaler ---
+        function scaleCanvasForMobile() {
+            if (window.innerWidth <= 968) {
+                const canvasArea = document.querySelector('.canvas-area');
+                const wrap = document.querySelector('.preview-shadow-wrap');
+                const canvasContainerObj = document.getElementById('quote-canvas');
+                
+                // Assuming canvas is approx 600px max width or 500px in some templates
+                const padding = 40; 
+                const availableWidth = window.innerWidth - padding;
+                const canvasWidth = canvasContainerObj.offsetWidth || 500;
+                
+                const scale = Math.min(1, availableWidth / canvasWidth);
+                wrap.style.transform = `scale(${scale})`;
+                
+                // Adjust parent height so it doesn't leave huge whitespace below scaled canvas
+                // Add extra padding (120px) to account for the Download Button and bottom margins
+                const canvasHeight = canvasContainerObj.offsetHeight || 625;
+                canvasArea.style.height = `${canvasHeight * scale + 120}px`;
+            } else {
+                const wrap = document.querySelector('.preview-shadow-wrap');
+                const canvasArea = document.querySelector('.canvas-area');
+                wrap.style.transform = 'none';
+                canvasArea.style.height = 'auto';
+            }
+        }
+
+        window.addEventListener('resize', scaleCanvasForMobile);
+        // Initial call
+        setTimeout(scaleCanvasForMobile, 100);
+        
+        // Ensure scale is correct when template changes (because width/height change)
+        templateBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                setTimeout(scaleCanvasForMobile, 50);
+            });
+        });
+    </script>
+</body>
+
+</html>

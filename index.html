@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AnteenyHub | Premium Web Development & Digital Engineering</title>
+  <meta name="description"
+    content="We design and engineer high-performance web applications, interactive admin portals, SaaS products, and custom digital solutions.">
+  <meta name="keywords"
+    content="web development, web design, portfolio, dashboard, React, custom applications, AnteenyHub">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22 width=%22100%22 height=%22100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%230f172a%22/><text y=%2265%22 x=%2215%22 font-family=%22system-ui, sans-serif%22 font-size=%2250%22 font-weight=%22bold%22 fill=%22%238b5cf6%22>A</text><text y=%2265%22 x=%2252%22 font-family=%22system-ui, sans-serif%22 font-size=%2250%22 font-weight=%22bold%22 fill=%22%2306b6d4%22>H</text></svg>">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <!-- Tabler Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+  <!-- Background Blobs -->
+  <div class="bg-blobs" aria-hidden="true">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+
+  <!-- Navbar -->
+  <header class="header">
+    <div class="container nav-container">
+      <a href="#" class="logo" id="logo-nav">
+        <span class="logo-text-gradient">AnteenyHub</span>
+        <span class="logo-dot"></span>
+      </a>
+
+      <nav class="nav-menu" id="nav-menu">
+        <a href="#hero" class="nav-link active">Home</a>
+        <a href="#services" class="nav-link">Services</a>
+        <a href="#portfolio" class="nav-link">Portfolio</a>
+        <a href="#pricing" class="nav-link">Pricing</a>
+        <a href="#contact" class="nav-link">Contact</a>
+        <a href="#contact" class="btn btn-sm btn-primary nav-cta">Get a Quote</a>
+      </nav>
+
+      <button class="mobile-toggle" id="mobile-toggle" aria-label="Toggle Navigation">
+        <i class="ti ti-menu-2"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="section hero" id="hero">
+    <div class="container hero-grid">
+      <div class="hero-content">
+        <div class="badge-new">
+          <span class="badge-dot"></span>
+          <span>Open for Bookings Q3 2026</span>
+        </div>
+        <h1 class="hero-title">
+          We Engineer High-Performance <span class="text-gradient">Web Applications</span>
+        </h1>
+        <p class="hero-description">
+          Bespoke web applications, high-fidelity administrative dashboards, and sleek interactive platforms designed
+          with premium aesthetics and sub-second load times.
+        </p>
+        <div class="hero-actions">
+          <a href="#contact" class="btn btn-lg btn-primary">
+            <span>Start Your Project</span>
+            <i class="ti ti-arrow-up-right"></i>
+          </a>
+          <a href="#portfolio" class="btn btn-lg btn-secondary">Explore Our Works</a>
+        </div>
+      </div>
+
+      <!-- Interactive Showcase Mockup -->
+      <div class="hero-visual">
+        <div class="code-window">
+          <div class="window-header">
+            <span class="dot red"></span>
+            <span class="dot yellow"></span>
+            <span class="dot green"></span>
+            <span class="window-title">AnteenyHub.js</span>
+          </div>
+          <div class="window-content">
+            <pre><code><span class="keyword">const</span> <span class="variable">AnteenyHub</span> = {
+  <span class="property">mission</span>: <span class="string">"Create pixel-perfect websites"</span>,
+  <span class="property">stack</span>: [<span class="string">"React"</span>, <span class="string">"Vanilla CSS"</span>, <span class="string">"Supabase"</span>],
+  <span class="property">standards</span>: [<span class="string">"High Performance"</span>, <span class="string">"Glassmorphism"</span>],
+  
+  <span class="method">deliverValue</span>() {
+    <span class="keyword">return</span> <span class="string">"🚀 Scale client operations by 10x"</span>;
+  }
+};</code></pre>
+          </div>
+        </div>
+        <div class="dashboard-preview">
+          <div class="preview-header">
+            <div class="circle-avatar"></div>
+            <div class="line-sm"></div>
+          </div>
+          <div class="preview-metrics">
+            <div class="metric-card">
+              <span class="metric-title">Performance</span>
+              <span class="metric-val text-cyan">99%</span>
+            </div>
+            <div class="metric-card">
+              <span class="metric-title">UX Index</span>
+              <span class="metric-val text-violet">10/10</span>
+            </div>
+          </div>
+          <div class="preview-bar-chart">
+            <div class="bar bar-1"></div>
+            <div class="bar bar-2"></div>
+            <div class="bar bar-3"></div>
+            <div class="bar bar-4"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Grid Section -->
+  <section class="stats-section">
+    <div class="container stats-grid">
+      <div class="stat-card">
+        <span class="stat-num text-gradient">100%</span>
+        <span class="stat-label">Client Satisfaction</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num text-gradient">4+</span>
+        <span class="stat-label">Signature Platforms Built</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num text-gradient">&lt;1.2s</span>
+        <span class="stat-label">Average Load Time</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num text-gradient">24/7</span>
+        <span class="stat-label">Premium Support</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services Section -->
+  <section class="section services" id="services">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Engineered Digital Solutions</h2>
+        <p class="section-subtitle">We specialize in building clean, interactive applications that replace clunky legacy
+          software and scale businesses.</p>
+      </div>
+
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="service-icon text-cyan">
+            <i class="ti ti-layout-dashboard"></i>
+          </div>
+          <h3 class="service-title">High-Fidelity Admin Portals</h3>
+          <p class="service-desc">Robust backend administration hubs featuring secure user authentication, role
+            hierarchies, and automated reporting systems.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon text-violet">
+            <i class="ti ti-device-laptop"></i>
+          </div>
+          <h3 class="service-title">SaaS & Web Applications</h3>
+          <p class="service-desc">Complete full-stack React and Vite solutions. Engineered with fast-loading states,
+            clean animations, and responsive templates.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon text-gold">
+            <i class="ti ti-chart-dots"></i>
+          </div>
+          <h3 class="service-title">Interactive Data Visualization</h3>
+          <p class="service-desc">Integrated charting engines (like Chart.js) and visual representation models that
+            translate raw business metrics into actionable insights.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon text-pink">
+            <i class="ti ti-brush"></i>
+          </div>
+          <h3 class="service-title">Modern Typography & Layouts</h3>
+          <p class="service-desc">Stunning interfaces with curated palettes, custom web canvas exports, fluid layouts,
+            and polished micro-animations.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon text-green">
+            <i class="ti ti-shield-lock"></i>
+          </div>
+          <h3 class="service-title">Cybersecurity & SecOps</h3>
+          <p class="service-desc">Implementation of end-to-end encryption protocols, robust authentication systems,
+            database access control audits, and secure coding practices to safeguard data.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Portfolio Section -->
+  <section class="section portfolio" id="portfolio">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Our Signature Creations</h2>
+        <p class="section-subtitle">A collection of custom applications we've designed and engineered. Click any card to
+          explore its feature set.</p>
+      </div>
+
+      <div class="portfolio-grid">
+
+        <!-- Project 1: The Mirror School Academy -->
+        <a href="../FutureLearnClone/index.html" target="_blank" class="portfolio-card" data-project="mirror-academy">
+          <div class="portfolio-img-wrapper">
+            <img src="mirror_academy.png" alt="The Mirror School Academy Preview" class="portfolio-screenshot">
+            <span class="portfolio-tag">Ongoing</span>
+          </div>
+          <div class="portfolio-info">
+            <h3 class="portfolio-project-title">The Mirror School Academy</h3>
+            <p class="portfolio-project-summary">Next-generation online learning platform with subject-focused
+              navigation structures and smooth grids.</p>
+            <div class="portfolio-tech-list">
+              <span>React</span>
+              <span>Vite</span>
+              <span>TailwindCSS</span>
+              <span>Typography API</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Project 2: NCF UNN Admin Portal -->
+        <a href="https://ncfunn.vercel.app" target="_blank" class="portfolio-card" data-project="admin-portal">
+          <div class="portfolio-img-wrapper">
+            <img src="ncf_admin.png" alt="NCF Admin Portal Preview" class="portfolio-screenshot">
+            <span class="portfolio-tag">Finished</span>
+          </div>
+          <div class="portfolio-info">
+            <h3 class="portfolio-project-title">NCF Admin Portal & Dashboard</h3>
+            <p class="portfolio-project-summary">Enterprise administrative environment. Includes real-time database
+              syncing, attendance analytics, and dynamic Chart.js dashboards.</p>
+            <div class="portfolio-tech-list">
+              <span>JavaScript ES6</span>
+              <span>Chart.js</span>
+              <span>Supabase Backend</span>
+              <span>Glassmorphism</span>
+            </div>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+
+
+  <!-- Tech Stack Scrolling Marquee -->
+  <section class="marquee-section">
+    <div class="marquee-title-container">
+      <span class="marquee-title-label">OUR CORE TECHNOLOGY STACK</span>
+    </div>
+    <div class="marquee-wrapper">
+      <div class="marquee-content" id="marquee-content">
+        <!-- Double elements for infinite loop -->
+        <div class="tech-item"><i class="ti ti-brand-react text-cyan"></i>React.js</div>
+        <div class="tech-item"><i class="ti ti-brand-javascript text-gold"></i>JavaScript (ES6+)</div>
+        <div class="tech-item"><i class="ti ti-brand-html5 text-orange"></i>HTML5 Semantic</div>
+        <div class="tech-item"><i class="ti ti-brand-css3 text-blue"></i>CSS3 Vanilla</div>
+        <div class="tech-item"><i class="ti ti-brand-vite text-violet"></i>Vite Bundler</div>
+        <div class="tech-item"><i class="ti ti-brand-supabase text-emerald"></i>Supabase DB</div>
+        <div class="tech-item"><i class="ti ti-chart-bar text-cyan"></i>Chart.js</div>
+        <div class="tech-item"><i class="ti ti-git-branch text-pink"></i>Git Control</div>
+        <div class="tech-item"><i class="ti ti-api text-violet"></i>REST APIs</div>
+
+        <!-- Duplicate for gapless scrolling -->
+        <div class="tech-item"><i class="ti ti-brand-react text-cyan"></i>React.js</div>
+        <div class="tech-item"><i class="ti ti-brand-javascript text-gold"></i>JavaScript (ES6+)</div>
+        <div class="tech-item"><i class="ti ti-brand-html5 text-orange"></i>HTML5 Semantic</div>
+        <div class="tech-item"><i class="ti ti-brand-css3 text-blue"></i>CSS3 Vanilla</div>
+        <div class="tech-item"><i class="ti ti-brand-vite text-violet"></i>Vite Bundler</div>
+        <div class="tech-item"><i class="ti ti-brand-supabase text-emerald"></i>Supabase DB</div>
+        <div class="tech-item"><i class="ti ti-chart-bar text-cyan"></i>Chart.js</div>
+        <div class="tech-item"><i class="ti ti-git-branch text-pink"></i>Git Control</div>
+        <div class="tech-item"><i class="ti ti-api text-violet"></i>REST APIs</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing Section -->
+  <section class="section pricing" id="pricing">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Tailored Solutions, Transparent Pricing</h2>
+        <p class="section-subtitle">Choose the perfect partnership tier to engineer and scale your web platform.</p>
+      </div>
+
+      <div class="pricing-grid">
+
+        <!-- Tier 1 -->
+        <div class="pricing-card">
+          <div class="pricing-header">
+            <h3 class="pricing-tier-title">Launch Pad</h3>
+            <p class="pricing-tier-desc">Perfect for showcasing products or initiating an online profile.</p>
+            <div class="pricing-price-wrap">
+              <span class="currency">$</span>
+              <span class="price-val">299</span>
+              <span class="price-period">/project</span>
+            </div>
+          </div>
+          <ul class="pricing-features">
+            <li><i class="ti ti-circle-check text-cyan"></i>1 Custom Landing Page</li>
+            <li><i class="ti ti-circle-check text-cyan"></i>High-Fidelity Animations</li>
+            <li><i class="ti ti-circle-check text-cyan"></i>Fully Responsive Architecture</li>
+            <li><i class="ti ti-circle-check text-cyan"></i>Basic SEO Optimization</li>
+            <li><i class="ti ti-circle-check text-cyan"></i>1 Month Support</li>
+          </ul>
+          <div class="pricing-action">
+            <a href="#contact" class="btn btn-secondary btn-full" data-package="Launch Pad">Choose Launch Pad</a>
+          </div>
+        </div>
+
+        <!-- Tier 2 -->
+        <div class="pricing-card pricing-featured">
+          <div class="pricing-badge">Popular</div>
+          <div class="pricing-header">
+            <h3 class="pricing-tier-title">Application Engine</h3>
+            <p class="pricing-tier-desc">Designed for modern SaaS products, learning academies, and admin panels.</p>
+            <div class="pricing-price-wrap">
+              <span class="currency">$</span>
+              <span class="price-val">1,499</span>
+              <span class="price-period">/project</span>
+            </div>
+          </div>
+          <ul class="pricing-features">
+            <li><i class="ti ti-circle-check text-violet"></i>Full-Stack React/Vite App</li>
+            <li><i class="ti ti-circle-check text-violet"></i>Custom Admin Dashboard</li>
+            <li><i class="ti ti-circle-check text-violet"></i>Supabase Database Integration</li>
+            <li><i class="ti ti-circle-check text-violet"></i>Interactive Charts & Analytics</li>
+            <li><i class="ti ti-circle-check text-violet"></i>Advanced SEO & Performance Audit</li>
+            <li><i class="ti ti-circle-check text-violet"></i>3 Months Support</li>
+          </ul>
+          <div class="pricing-action">
+            <a href="#contact" class="btn btn-primary btn-full" data-package="Application Engine">Choose Engine</a>
+          </div>
+        </div>
+
+        <!-- Tier 3 -->
+        <div class="pricing-card">
+          <div class="pricing-header">
+            <h3 class="pricing-tier-title">Enterprise Scale</h3>
+            <p class="pricing-tier-desc">Bespoke software platforms constructed for demanding workflows.</p>
+            <div class="pricing-price-wrap">
+              <span class="price-val">Custom</span>
+            </div>
+          </div>
+          <ul class="pricing-features">
+            <li><i class="ti ti-circle-check text-gold"></i>Unlimited Application Pages</li>
+            <li><i class="ti ti-circle-check text-gold"></i>Complex Integrations & APIs</li>
+            <li><i class="ti ti-circle-check text-gold"></i>Multi-role Auth & Access Security</li>
+            <li><i class="ti ti-circle-check text-gold"></i>Custom Canvas Export Systems</li>
+            <li><i class="ti ti-circle-check text-gold"></i>Dedicated Dev Ops & Setup</li>
+            <li><i class="ti ti-circle-check text-gold"></i>1 Year Support & SLA</li>
+          </ul>
+          <div class="pricing-action">
+            <a href="#contact" class="btn btn-secondary btn-full" data-package="Enterprise Scale">Let's Connect</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="section contact" id="contact">
+    <div class="container contact-grid">
+      <div class="contact-info">
+        <h2 class="section-title text-left">Let's Engineer Something Beautiful</h2>
+        <p class="contact-desc">
+          Ready to turn your website concepts into high-performing, professionally managed assets? Fill out the details
+          below. We typically respond within 12 hours with a complete proposal outline.
+        </p>
+
+        <div class="contact-methods">
+          <div class="contact-method-item">
+            <div class="contact-icon text-cyan"><i class="ti ti-mail"></i></div>
+            <div>
+              <h4 class="method-title">Direct Inquiry</h4>
+              <p class="method-detail">hello@anteenyhub.com</p>
+            </div>
+          </div>
+          <div class="contact-method-item">
+            <div class="contact-icon text-violet"><i class="ti ti-clock"></i></div>
+            <div>
+              <h4 class="method-title">Response Window</h4>
+              <p class="method-detail">Monday - Saturday (12h SLA)</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact Form Card -->
+      <div class="contact-card">
+        <form id="inquiry-form" class="inquiry-form">
+          <div class="form-group">
+            <label for="client-name" class="form-label">Full Name</label>
+            <input type="text" id="client-name" name="name" class="form-input" placeholder="John Doe" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="client-email" class="form-label">Email Address</label>
+              <input type="email" id="client-email" name="email" class="form-input" placeholder="john@example.com"
+                required>
+            </div>
+            <div class="form-group">
+              <label for="interest" class="form-label">Desired Tier</label>
+              <select id="interest" name="tier" class="form-input">
+                <option value="launch-pad">Launch Pad Tier ($799)</option>
+                <option value="application-engine" selected>Application Engine ($2,499)</option>
+                <option value="enterprise-scale">Enterprise Scale (Custom)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="message" class="form-label">Project Details</label>
+            <textarea id="message" name="message" class="form-textarea"
+              placeholder="Tell us about the application you'd like to build..." required></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-full btn-submit" id="submit-btn">
+            <span>Send Project Inquiry</span>
+            <i class="ti ti-send"></i>
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <a href="#" class="logo">
+          <span class="logo-text-gradient">AnteenyHub</span>
+          <span class="logo-dot"></span>
+        </a>
+        <p class="footer-desc">Professional web systems and interactive digital products engineered for scalability,
+          speed, and premium user experience.</p>
+      </div>
+      <div class="footer-links">
+        <h4 class="footer-title">Navigation</h4>
+        <a href="#hero">Home</a>
+        <a href="#services">Services</a>
+        <a href="#portfolio">Portfolio</a>
+        <a href="#pricing">Pricing</a>
+      </div>
+      <div class="footer-links">
+        <h4 class="footer-title">Inspirations</h4>
+        <a href="#portfolio">Mirror Academy</a>
+        <a href="#portfolio">Accountability System</a>
+        <a href="#portfolio">NCF Admin Portal</a>
+        <a href="#portfolio">Quote Generator</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container footer-bottom-flex">
+        <span>&copy; 2026 AnteenyHub. All rights reserved.</span>
+        <span>Built by AnteenyHub Dev Team</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Notification Wrapper -->
+  <div class="toast-wrapper" id="toast-wrapper"></div>
+
+  <!-- Custom Scripts -->
+  <script src="app.js"></script>
+</body>
+
+</html>
