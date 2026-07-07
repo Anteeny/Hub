@@ -5,6 +5,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   initNavbar();
   initPortfolioModal();
+  initContactModalTriggers();
   initContactForm();
   initPricingConnector();
   initScrollSpy();
@@ -43,6 +44,43 @@ function initNavbar() {
       navMenu.classList.remove('active');
       mobileToggle.querySelector('i').className = 'ti ti-menu-2';
     });
+  });
+}
+
+/* --- Contact Modal Triggers (open contact modal from buttons/links) --- */
+function initContactModalTriggers() {
+  const contactModal = document.getElementById('contact-modal');
+  const contactBackdrop = document.getElementById('contact-backdrop');
+  const contactClose = document.getElementById('contact-modal-close');
+
+  if (!contactModal) return;
+
+  const openButtons = document.querySelectorAll('.open-contact-btn');
+  const contactLinks = document.querySelectorAll('a[href="#contact"]');
+
+  const open = (e) => {
+    if (e) e.preventDefault();
+    contactModal.classList.add('active');
+    contactModal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  };
+
+  const close = () => {
+    contactModal.classList.remove('active');
+    contactModal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  };
+
+  openButtons.forEach(b => b.addEventListener('click', open));
+  contactLinks.forEach(a => a.addEventListener('click', open));
+
+  contactClose && contactClose.addEventListener('click', close);
+  contactBackdrop && contactBackdrop.addEventListener('click', close);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && contactModal.classList.contains('active')) {
+      close();
+    }
   });
 }
 

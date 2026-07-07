@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@builder.io/react": "^9.4.0"
+  }
+}
