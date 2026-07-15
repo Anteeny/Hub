@@ -1887,9 +1887,28 @@ select.form-input option {
   }
 
   /* Prevent hero 3D mockup and absolute elements from overflowing / clipping off-screen on mobile */
+  .hero-visual {
+    flex-direction: column !important;
+    width: 100% !important;
+    margin-top: 40px !important;
+  }
+
+  .hero-actions {
+    flex-direction: column !important;
+    width: 100% !important;
+    max-width: 320px !important;
+    margin: 0 auto !important;
+    gap: 12px !important;
+  }
+
   .code-window {
     transform: none !important;
     width: 100% !important;
+  }
+
+  .window-content pre {
+    white-space: pre-wrap !important;
+    word-break: break-all !important;
   }
   
   .dashboard-preview {
