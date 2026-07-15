@@ -1,5 +1,13 @@
 {
+  "name": "anteeny-hub",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "vite"
+  },
   "dependencies": {
     "@builder.io/react": "^9.4.0"
+  },
+  "devDependencies": {
+    "vite": "^5.3.0"
   }
 }
