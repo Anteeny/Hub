@@ -299,26 +299,43 @@ function initContactForm() {
       <span>Encrypting & Sending...</span>
     `;
 
-    // Simulated API response delay
-    setTimeout(() => {
-      submitBtn.innerHTML = `
-        <i class="ti ti-check"></i>
-        <span>Submitted!</span>
+    const formData = new FormData(form);
+
+    // Send email using FormSubmit AJAX endpoint
+    fetch('https://formsubmit.co/ajax/contact@anteenyhub.site', {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'Accept': 'application/json'
+      }
+    })
+      .then(response => {
+        if (response.ok) {
+          submitBtn.innerHTML = `
+          <i class="ti ti-check"></i>
+          <span>Submitted!</span>
+        `;
+          showToast('Project inquiry submitted! We will email you back within 12 hours.', 'success');
+          form.reset();
+        } else {
+          throw new Error('Form submission failed');
+        }
+      })
+      .catch(error => {
+        console.error('Error submitting form:', error);
+        submitBtn.innerHTML = `
+        <i class="ti ti-x"></i>
+        <span>Failed to Send</span>
       `;
-      
-      // Toast notice
-      showToast('Project inquiry submitted! We will email you back within 12 hours.', 'success');
-
-      // Reset form
-      form.reset();
-
-      // Reset button after success visual
-      setTimeout(() => {
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = originalContent;
-      }, 3000);
-      
-    }, 1800);
+        showToast('Oops! Something went wrong. Please email us directly or try again.', 'error');
+      })
+      .finally(() => {
+        // Reset button after success/failure visual
+        setTimeout(() => {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalContent;
+        }, 3000);
+      });
   });
 
   // Dynamic spinner keyframe helper injection
@@ -332,10 +349,18 @@ function initContactForm() {
   function showToast(message, type) {
     const toast = document.createElement('div');
     toast.className = 'toast';
+    const isError = type === 'error';
+    const iconClass = isError ? 'ti ti-circle-x-filled text-pink' : 'ti ti-circle-check-filled text-green';
+
     toast.innerHTML = `
-      <i class="ti ti-circle-check-filled text-green toast-icon"></i>
+      <i class="${iconClass} toast-icon"></i>
       <span>${message}</span>
     `;
+
+    if (isError) {
+      toast.style.borderColor = 'rgba(236, 72, 153, 0.35)';
+      toast.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(236, 72, 153, 0.1)';
+    }
 
     toastWrapper.appendChild(toast);
 
