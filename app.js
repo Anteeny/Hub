@@ -110,7 +110,7 @@ const PROJECTS_DATA = {
       'Fully customizable partner carousel'
     ],
     tech: ['React.js', 'Vite', 'Vanilla CSS', 'GitHub Pages'],
-    liveUrl: '../FutureLearnClone/index.html'
+    liveUrl: '../MirrorAcademy/index.html'
   },
   'accountability': {
     title: 'NCF Accountability System',
