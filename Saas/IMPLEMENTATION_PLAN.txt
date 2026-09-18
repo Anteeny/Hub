@@ -1,0 +1,149 @@
+STOREFLOW POS SAAS
+IMPLEMENTATION PLAN
+===================
+
+How to use this file
+---------------------
+This is the working plan for the project. Completed work is marked [x].
+Add questions, ideas, or changes in the COMMENTS section at the bottom.
+
+PHASE 1 - PROJECT FOUNDATION [x]
+---------------------------------
+[x] Create the Vite + React + TypeScript project.
+[x] Add Tailwind CSS and Supabase client dependencies.
+[x] Set up the light visual style for the app.
+[x] Create the first Storeflow home screen.
+[x] Add .env.example for Supabase settings.
+[x] Add the PostgreSQL database migration.
+[x] Add tenant, user, role, location, product, inventory, sale, payment,
+    and employee shift tables.
+[x] Add tenant_id to business data tables.
+[x] Add indexes for common tenant and sales queries.
+[x] Turn on Supabase Row Level Security.
+[x] Add the create_tenant_with_owner onboarding function.
+[x] Add the README and workspace instructions.
+[x] Run the production build and lint checks.
+
+PHASE 2 - LOGIN AND STORE SETUP [x]
+-----------------------------------
+[x] Add Supabase session detection.
+[x] Add sign-in screen.
+[x] Add sign-up screen.
+[x] Add email confirmation message after sign-up.
+[x] Add store setup after the first login.
+[x] Create the first store through the secure Supabase function.
+[x] Load the signed-in user's store and role.
+[x] Add sign-out.
+[x] Make the auth and setup screens responsive.
+[x] Rewrite the screen copy in plain, everyday language.
+[x] Run the production build and lint checks.
+
+PHASE 3 - PRODUCTS AND STOCK [x]
+--------------------------------
+[x] Add the first product and stock screen.
+[x] Add product search and category filters.
+[x] Add a detailed product form for different types of businesses.
+[x] Add product type choices for food, medicine, clothing, gadgets, and services.
+[x] Add selling units for each, weight, bundle, pack, box, litre, metre, and hour.
+[x] Add selling price, cost price, tax rate, SKU, barcode, description, and POS image URL.
+[x] Add the option to track inventory or leave it off.
+[x] Add product prices through product_prices.
+[x] Add the product options database migration.
+[x] Save product categories and starting inventory for real stores.
+[x] Add stock adjustments and low-stock warnings.
+[x] Create a default Main store location during onboarding.
+[x] Add a backfill migration for stores created before default locations existed.
+[x] Add a backfill migration for existing tracked products without inventory balances.
+[x] Add edit actions (edit button and form pre-fill).
+[ ] Add archive and delete actions.
+[ ] Add prices by location.
+[ ] Add product images with Supabase Storage.
+[ ] Add stock counts by location.
+[ ] Add stock adjustments and receiving (additional locations).
+[ ] Add product search and barcode fields.
+
+PHASE 4 - CHECKOUT [x]
+----------------------
+[x] Build the first cashier checkout screen.
+[x] Add a large touch-friendly product grid.
+[x] Add categories and search.
+[x] Add the cart with quantities and totals.
+[x] Add a cash payment and change flow in demo mode.
+[x] Calculate checkout tax from each product tax rate.
+[x] Add cash and card payment method selection.
+[x] Add store receipt and Nigerian VAT settings to the database model.
+[x] Add the transactional complete_sale Supabase function.
+[x] Save completed cash sales and payments for real stores.
+[x] Deduct tracked inventory and record sale movements after payment.
+[x] Add cart-level discounts with flat/percentage toggle.
+[x] Add cash payment and change calculation.
+[x] Save completed sales.
+[x] Deduct stock when a sale is completed.
+[x] Add the Nigerian-style receipt preview and print layout.
+[x] Receipt now loads real store name, address, TIN, VAT, and footer from settings.
+[ ] Add email receipts (deferred - requires email provider).
+[ ] Add split payments.
+
+PHASE 5 - PEOPLE AND SHIFTS [x]
+------------------------------
+[x] Add employees to a store (Name, Role, Email & PIN).
+[x] Add Owner, Manager, and Cashier permissions & role badges.
+[x] Add secure cashier PIN setup (bcrypt via pgcrypto & SHA-256 Web Crypto fallback).
+[x] Add email-based invitations with automatic login workspace linking via claim_my_invitation RPC.
+[x] Add roster management with search, role filters, active/inactive toggles, and delete options.
+[x] Copy invitation link support for pending staff members.
+[ ] Add shift start and end.
+[ ] Add register assignment.
+[ ] Add cash drawer reconciliation.
+
+PHASE 6 - REPORTS [x]
+---------------------
+[x] Add daily sales totals and revenue summaries.
+[x] Add gross profit and margin reports.
+[x] Add best-selling products roster.
+[x] Add cashier/staff sales performance breakdowns.
+[x] Add payment method (Cash vs Card) split calculations.
+[x] Add live completed transactions history.
+[x] Sub-tabbed reporting architecture (Overview, Items, Team, Receipts, Taxes).
+[x] Full Items & Categories ledger with COGS, Margins, and Tax collections.
+[x] Searchable Receipts Ledger with interactive Slide-over inspection drawer & re-print.
+[x] Regulatory Tax (VAT) and Discount Impact analytics.
+[x] In-browser contextual CSV reports export.
+[ ] Add CSV catalog import.
+
+PHASE 7 - DEVICE SUPPORT [ ]
+----------------------------
+[ ] Add barcode scanner support.
+[ ] Add receipt printer support.
+[ ] Keep device code behind small browser-friendly interfaces.
+[ ] Test supported browsers and fallback behavior.
+
+PHASE 8 - REALTIME, OFFLINE, AND RELEASE [ ]
+--------------------------------------------
+[x] Add role-aware RLS policies for catalog, stock, sales, and memberships.
+[ ] Add realtime stock and product updates.
+[ ] Add reliable sale submission for weak connections.
+[ ] Add duplicate-sale protection.
+[ ] Add error tracking and audit review.
+[ ] Apply database migrations to the production Supabase project.
+[ ] Set up Vercel or Netlify deployment.
+[ ] Add preview deployments and environment variables.
+[ ] Test the complete cashier and owner journeys.
+
+CURRENT STATUS
+--------------
+The app is running locally at:
+http://localhost:5173/
+
+The project folder is:
+C:\Users\USER\Desktop\AnteenyHub\Saas
+
+The Supabase migration has been written but still needs to be applied to a
+Supabase project before real sign-in and store creation can work.
+
+COMMENTS
+--------
+Write comments, questions, or changes below this line.
+
+
+

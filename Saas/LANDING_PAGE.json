@@ -1,0 +1,139 @@
+{
+  "page": {
+    "name": "Storeflow welcome page",
+    "route": "/",
+    "purpose": "Give a signed-in store owner a simple starting point for checkout, products, and reports.",
+    "theme": "light",
+    "voice": "Plain, friendly, and practical"
+  },
+  "header": {
+    "brand": {
+      "name": "Storeflow",
+      "tagline": "Your store, in one place",
+      "mark": "S"
+    },
+    "workspace": {
+      "source": "Signed-in tenant name",
+      "status_indicator": "green dot"
+    },
+    "user_button": {
+      "label": "User initials",
+      "action": "Sign out"
+    }
+  },
+  "hero": {
+    "eyebrow": "Owner account",
+    "heading": "Ready for your first sale.",
+    "description": "Your store is ready for products, stock, and checkout.",
+    "status_card": {
+      "icon": "check mark",
+      "heading": "You're all set",
+      "detail": "Signed-in user's email"
+    }
+  },
+  "modules": [
+    {
+      "id": "checkout",
+      "icon": "grid",
+      "accent": "blue",
+      "status": "Up next",
+      "heading": "Checkout",
+      "description": "Ring up orders, take payments, and get customers out the door.",
+      "button": {
+        "label": "Open checkout",
+        "action": "Open POS checkout"
+      },
+      "featured": true
+    },
+    {
+      "id": "products-and-stock",
+      "icon": "diamond",
+      "accent": "green",
+      "status": "Ready when you are",
+      "heading": "Products & stock",
+      "description": "Add what you sell, set prices, and keep an eye on what is running low.",
+      "button": {
+        "label": "See products",
+        "action": "Open products and inventory"
+      },
+      "featured": false
+    },
+    {
+      "id": "reports",
+      "icon": "line",
+      "accent": "amber",
+      "status": "Coming soon",
+      "heading": "How things are going",
+      "description": "See your sales, best sellers, and how the team is doing.",
+      "button": {
+        "label": "See what's planned",
+        "action": "Open product roadmap"
+      },
+      "featured": false
+    }
+  ],
+  "footer": {
+    "version": "Storeflow v0.1",
+    "security_note": "Secure multi-tenant workspace",
+    "status_indicator": "green dot"
+  },
+  "auth_states": {
+    "signed_out": {
+      "intro_eyebrow": "Let's get your store set up",
+      "heading": "Run the store without the fuss.",
+      "description": "Keep your products, people, and sales together so the day is easier to manage.",
+      "sign_in_heading": "Sign in to Storeflow",
+      "sign_in_description": "Use your email to get back in.",
+      "sign_up_heading": "Make an account",
+      "sign_up_description": "We'll set up your store next.",
+      "demo_login": {
+        "email": "demo@storeflow.test",
+        "password": "Storeflow123!",
+        "result": "Opens the authenticated demo store without Supabase."
+      }
+    },
+    "new_account": {
+      "eyebrow": "Let's get things ready",
+      "heading": "What's your store called?",
+      "description": "This is your private store. You can add locations and people when you're ready.",
+      "fields": [
+        {
+          "label": "Store name",
+          "placeholder": "e.g. Northline Market"
+        },
+        {
+          "label": "Short name for your store",
+          "placeholder": "northline-market"
+        }
+      ],
+      "button": "Set up my store"
+    }
+  },
+  "visual_design": {
+    "background": "#f7f9fb with a soft pale-teal radial highlight",
+    "surface": "white with subtle transparency",
+    "text": "dark blue-gray",
+    "primary_color": "#168379",
+    "card_radius": "13px",
+    "shadow": "soft, low-contrast shadow",
+    "heading_font": "Georgia",
+    "body_font": "Trebuchet MS, Segoe UI, sans-serif"
+  },
+  "responsive_layout": {
+    "desktop": {
+      "header": "single horizontal row",
+      "hero": "text and status card side by side",
+      "modules": "three columns"
+    },
+    "mobile": {
+      "header": "brand and user button; workspace name hidden",
+      "hero": "stacked text and status card",
+      "modules": "single column",
+      "footer": "stacked rows"
+    }
+  },
+  "source": {
+    "component": "src/App.tsx",
+    "styles": "src/App.css"
+  }
+}

@@ -1,0 +1,178 @@
+{
+  "product": {
+    "name": "Storeflow",
+    "type": "Multi-tenant cloud POS SaaS",
+    "audience": ["Retail businesses", "Food service businesses", "Store owners", "Managers", "Cashiers"],
+    "goal": "Make everyday selling, stock management, and store reporting simple for small and growing businesses."
+  },
+  "technology": {
+    "frontend": "React with TypeScript",
+    "bundler": "Vite",
+    "styling": "Tailwind CSS with custom light-theme styles",
+    "backend": "Supabase",
+    "database": "PostgreSQL",
+    "authentication": "Supabase Auth",
+    "realtime": "Supabase Realtime",
+    "file_storage": "Supabase Storage",
+    "hosting": ["Vercel", "Netlify"],
+    "local_url": "http://localhost:5173/"
+  },
+  "design": {
+    "theme": "Light only",
+    "tone": "Plain, friendly, and practical",
+    "colors": {
+      "background": "White and very light gray",
+      "text": "Dark gray and black",
+      "primary": "Teal green",
+      "secondary": "Soft blue",
+      "warning": "Warm amber",
+      "error": "Soft red"
+    },
+    "rules": [
+      "Keep screens clean and easy to scan.",
+      "Use large touch-friendly controls in checkout.",
+      "Use short, everyday language.",
+      "Keep important totals and actions easy to find.",
+      "Make the layout work on desktop, tablet, and mobile."
+    ]
+  },
+  "users_and_permissions": {
+    "identity_source": "auth.users",
+    "application_profile": "public.profiles",
+    "membership_table": "public.tenant_members",
+    "roles": {
+      "owner": {
+        "description": "Owns the business and can manage everything.",
+        "can": ["Manage business settings", "Manage staff", "Manage products", "Manage stock", "View reports", "Process sales"]
+      },
+      "manager": {
+        "description": "Runs day-to-day store operations.",
+        "can": ["Manage products", "Manage stock", "View reports", "Manage shifts", "Process sales"]
+      },
+      "cashier": {
+        "description": "Works at the checkout.",
+        "can": ["Start a shift", "Process sales", "Take payments", "Print receipts", "View their own shift details"]
+      }
+    }
+  },
+  "multi_tenant_security": {
+    "model": "Shared PostgreSQL database with tenant-scoped rows",
+    "required_tenant_column": "tenant_id",
+    "rules": [
+      "Every business-owned table must include tenant_id.",
+      "Every tenant-owned table must have Row Level Security enabled.",
+      "Users may only read or change rows for businesses where they are active members.",
+      "The frontend must never be trusted to enforce tenant isolation.",
+      "Tenant creation must go through the secure create_tenant_with_owner function.",
+      "PINs must be stored as hashes, never as plain text.",
+      "Sale prices and costs must be copied into sale_items so old sales never change."
+    ],
+    "tenant_creation": "Authenticated user calls create_tenant_with_owner, which creates the tenant, profile, and owner membership in one transaction."
+  },
+  "database": {
+    "migration_file": "supabase/migrations/202609150001_initial_schema.sql",
+    "tables": {
+      "tenants": "Business accounts and settings",
+      "profiles": "User profile details linked to Supabase Auth",
+      "tenant_members": "User membership and role for each business",
+      "locations": "Stores or branches belonging to a business",
+      "registers": "Checkout registers at a location",
+      "categories": "Product groups",
+      "products": "Catalog items, barcodes, pricing costs, and tax rates",
+      "product_prices": "Prices that can vary by location and time",
+      "inventory_balances": "Current stock by location and product",
+      "inventory_movements": "Stock history for sales, purchases, returns, and adjustments",
+      "sales": "Sale headers and totals",
+      "sale_items": "Frozen product details and prices from the time of sale",
+      "payments": "Cash, card, gift card, and split payment records",
+      "employee_shifts": "Shift times, registers, and cash drawer amounts"
+    },
+    "important_rules": [
+      "Completed sales and stock deductions must happen in a database transaction.",
+      "Multiple payment rows represent a split payment.",
+      "Historical reporting uses sale_items.unit_cost and sale_items.unit_price.",
+      "Inventory movements provide the audit trail behind current balances."
+    ]
+  },
+  "application_modules": {
+    "authentication": {
+      "status": "Implemented",
+      "features": ["Sign in", "Sign up", "Email confirmation message", "Session persistence", "Sign out"]
+    },
+    "store_setup": {
+      "status": "Implemented",
+      "features": ["Business name", "Short store name", "Owner membership creation"]
+    },
+    "products_and_stock": {
+      "status": "Planned",
+      "features": ["Product CRUD", "Category CRUD", "Location prices", "Stock counts", "Stock adjustments", "Low-stock alerts", "Barcode search", "CSV import and export"]
+    },
+    "checkout": {
+      "status": "Planned",
+      "features": ["Touch-friendly product grid", "Categories", "Search", "Cart", "Quantities", "Taxes", "Discounts", "Cash payments", "Card payments", "Split payments", "Receipts"]
+    },
+    "staff_and_shifts": {
+      "status": "Planned",
+      "features": ["Staff management", "Role assignment", "PIN login", "Shift start and end", "Register assignment", "Cash reconciliation"]
+    },
+    "reports": {
+      "status": "Planned",
+      "features": ["Daily sales", "Profit margins", "Top products", "Employee performance", "Location performance"]
+    },
+    "hardware": {
+      "status": "Planned",
+      "features": ["Barcode scanners", "Thermal receipt printers", "Browser capability checks", "Fallback behavior"]
+    }
+  },
+  "key_workflows": {
+    "new_business": [
+      "User creates an account.",
+      "User confirms their email if required.",
+      "User enters the store name and short name.",
+      "The secure database function creates the tenant and owner membership.",
+      "The user enters the store home screen."
+    ],
+    "sale": [
+      "Cashier signs in or enters their PIN.",
+      "Cashier selects a register and starts a shift.",
+      "Cashier scans or taps products into the cart.",
+      "The system calculates subtotal, tax, discounts, and total.",
+      "Customer pays with one or more payment methods.",
+      "The sale is completed in a database transaction.",
+      "Stock is deducted and an inventory movement is recorded.",
+      "The receipt is emailed or printed."
+    ],
+    "stock_adjustment": [
+      "Manager selects a location and product.",
+      "Manager enters the stock change and a reason.",
+      "The balance and movement ledger are updated together.",
+      "The change appears in the stock history."
+    ]
+  },
+  "hardware_interfaces": {
+    "barcode_scanner": ["connect", "onScan", "disconnect"],
+    "receipt_printer": ["print"],
+    "implementation_note": "Keep WebHID, WebUSB, and Web Bluetooth code behind small interfaces so the checkout screen is not tied to one browser or device."
+  },
+  "project_files": {
+    "frontend_entry": "src/App.tsx",
+    "frontend_styles": ["src/App.css", "src/index.css"],
+    "supabase_client": "src/lib/supabase.ts",
+    "environment_template": ".env.example",
+    "database_migration": "supabase/migrations/202609150001_initial_schema.sql",
+    "implementation_plan": "IMPLEMENTATION_PLAN.txt",
+    "workspace_instructions": ".github/copilot-instructions.md"
+  },
+  "release_requirements": [
+    "Apply the database migration to a Supabase project.",
+    "Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in the deployment environment.",
+    "Keep the Supabase service-role key out of the frontend.",
+    "Run npm run build and npm run lint before deployment.",
+    "Test tenant isolation with two separate businesses.",
+    "Test checkout, payment, stock deduction, refunds, and role permissions.",
+    "Deploy the frontend to Vercel or Netlify."
+  ],
+  "comments": [
+    "Add questions or changes to the COMMENTS section in IMPLEMENTATION_PLAN.txt."
+  ]
+}
