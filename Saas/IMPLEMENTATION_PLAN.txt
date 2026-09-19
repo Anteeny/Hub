@@ -110,6 +110,7 @@ PHASE 6 - REPORTS [x]
 [x] Regulatory Tax (VAT) and Discount Impact analytics.
 [x] In-browser contextual CSV reports export.
 [ ] Add CSV catalog import.
+[ ] Add CSV catalog export.
 
 PHASE 7 - DEVICE SUPPORT [ ]
 ----------------------------
