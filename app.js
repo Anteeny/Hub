@@ -5,6 +5,8 @@
 document.addEventListener('DOMContentLoaded', () => {
   initNavbar();
   initPortfolioModal();
+  initPortfolioFilters();
+  initHeroSpotlight();
   initContactModalTriggers();
   initContactForm();
   initPricingConnector();
@@ -86,9 +88,101 @@ function initContactModalTriggers() {
 
 /* --- Portfolio Projects Database & Modal Logic --- */
 const PROJECTS_DATA = {
+  'storeflow': {
+    title: 'Storeflow Multi-Tenant Retail POS & Cloud ERP',
+    badge: 'Production SaaS',
+    badgeColor: 'var(--accent-cyan)',
+    miniClass: 'storeflow-mini',
+    miniContent: `
+      <div class="mini-pos-bar">
+        <span class="mini-tag-pos">STOREFLOW POS</span>
+        <span class="mini-badge-pos">Terminal 1 • Active</span>
+      </div>
+      <div class="mini-pos-grid">
+        <div class="mini-pos-metric"><small>Net Sales Today</small><strong>₦245,800</strong></div>
+        <div class="mini-pos-metric"><small>VAT (7.5%)</small><strong>₦17,150</strong></div>
+        <div class="mini-pos-metric"><small>Till Float</small><strong>Balanced</strong></div>
+      </div>
+      <div class="mini-pos-lines">
+        <div class="mini-line-item"><span>Paracetamol 500mg (x2)</span><span>₦1,800</span></div>
+        <div class="mini-line-item"><span>Amoxil 250mg (x1)</span><span>₦3,200</span></div>
+      </div>
+    `,
+    description: 'A complete multi-tenant cloud retail point-of-sale and store administration system engineered for Nigerian commercial businesses. It supports multi-terminal registers, cryptographic cashier PIN locking, cash drawer till reconciliation (opening/closing shifts and Z-reports), automated 7.5% Nigerian VAT calculations, dynamic barcode search, and 80mm thermal receipt printing.',
+    features: [
+      'Multi-tenant architecture powered by Supabase Row-Level Security (RLS)',
+      'Cash drawer till reconciliation with opening float, closing audit & Z-Reports',
+      '4-digit cashier PIN authentication with PBKDF2 cryptographic hashing',
+      '80mm thermal receipt generator & Nigerian VAT compliance ledgers',
+      'Multi-register support with instant live/demo sandbox toggling'
+    ],
+    tech: ['React 18', 'Vite', 'TypeScript', 'Supabase RLS', 'Vanilla CSS Tokens', 'Web Crypto API'],
+    liveUrl: 'https://storeflow-mu-eight.vercel.app/'
+  },
+  'colour-picnic': {
+    title: 'UNN Freshers Colour Picnic 2026',
+    badge: 'Live Event Platform',
+    badgeColor: 'var(--accent-gold)',
+    miniClass: 'picnic-mini',
+    miniContent: `
+      <div class="mini-ticket-header">
+        <span class="mini-tag-picnic">UNN COLOUR PICNIC</span>
+        <span class="mini-badge-picnic">CEDR Field</span>
+      </div>
+      <div class="mini-team-badge" style="background:#2E9CFF22; color:#2E9CFF; border:1px solid #2E9CFF44; padding:4px 8px; border-radius:4px; font-size:10px; font-weight:700; margin:6px 0;">
+        ⚡ Team Waves (Sky Blue) • Biological Sciences
+      </div>
+      <div class="mini-stub-pass">
+        <div style="font-size:9px; color:#888;">TICKET PASS ID</div>
+        <strong style="color:var(--accent-gold); font-size:13px; letter-spacing:1px;">UCP-2026-9481</strong>
+      </div>
+    `,
+    description: 'A high-concurrency event registration and ticketing platform engineered for the University of Nigeria Nsukka (UNN) freshman welcome week. The system maps incoming students to their official faculty color teams, features a synchronized countdown clock, generates digital pass stubs, and automates verified WhatsApp community onboarding.',
+    features: [
+      'Automatic faculty-to-team colour classification logic',
+      'Dynamic digital ticket stub generation with custom attendee ID',
+      'Live synchronized countdown timer with timezone persistence',
+      'Integrated WhatsApp community onboarding funnel for 1,000+ freshers',
+      'Real-time registration tracking with Supabase backend'
+    ],
+    tech: ['JavaScript ES6', 'Supabase Backend', 'HTML5 Canvas API', 'Modern CSS3', 'WhatsApp Automation'],
+    liveUrl: 'https://freshers-experience26.vercel.app/'
+  },
+  'admin-portal': {
+    title: 'NCF Leadership Database & Admin Intelligence Portal',
+    badge: 'Enterprise Dashboard',
+    badgeColor: 'var(--accent-cyan)',
+    miniClass: 'admin-mini',
+    miniContent: `
+      <div class="mini-sidebar"><div class="mini-dot" style="background:var(--accent-cyan)"></div><div class="mini-dot"></div><div class="mini-dot"></div></div>
+      <div class="mini-dash-main">
+        <div class="mini-header-line"></div>
+        <div class="mini-stat-row">
+          <div class="mini-stat-block"></div>
+          <div class="mini-stat-block"></div>
+        </div>
+        <div class="mini-chart-mock">
+          <svg viewBox="0 0 100 40" class="mini-chart-svg" style="width:100%; height:25px;">
+            <path d="M0,40 Q25,10 50,25 T100,5" fill="none" stroke="#06b6d4" stroke-width="2" />
+            <circle cx="50" cy="25" r="2" fill="#06b6d4" />
+            <circle cx="100" cy="5" r="2" fill="#06b6d4" />
+          </svg>
+        </div>
+      </div>
+    `,
+    description: 'A centralized organizational administration portal built to manage student leadership directories, attendance trackers, and activity metrics. Employs modern grid architecture, dynamic sidebars, and real-time database visualization syncing.',
+    features: [
+      'Interactive Chart.js real-time analytics graphs',
+      'Dynamic sidebar navigation collapsers with fluid transitions',
+      'Advanced client-side multi-parameter search & filtering',
+      'Supabase database authentication with Row-Level Security'
+    ],
+    tech: ['JavaScript ES6+', 'Chart.js API', 'Supabase Syncing', 'Glassmorphism UI'],
+    liveUrl: 'https://ncfunn.vercel.app'
+  },
   'mirror-academy': {
-    title: 'The Mirror School Academy',
-    badge: 'Ongoing',
+    title: 'The Mirror School of Transformation',
+    badge: 'EdTech Platform',
     badgeColor: 'var(--accent-violet)',
     miniClass: 'academy-mini',
     miniContent: `
@@ -102,19 +196,19 @@ const PROJECTS_DATA = {
         <div class="mini-box"><div class="mini-circle"></div><div class="mini-text-line sm"></div></div>
       </div>
     `,
-    description: 'A premium, responsive online learning platform built to provide structured educational experiences. The app integrates semantic layouts, responsive grid card collections, custom navigation, and typography controls designed for modern digital schooling.',
+    description: 'A contemporary digital academy portal engineered for transformational education. Integrates subject-focused course explorer filters, responsive curriculum grids, partner carousels, and typography hierarchies designed for modern digital schooling.',
     features: [
-      'Subject Explorer & Sidebar Filters',
-      'Dynamic responsive courses card grid',
-      'Custom typography API styling',
-      'Fully customizable partner carousel'
+      'Subject explorer & responsive sidebar filter logic',
+      'Dynamic course curriculum card grid with animated hover states',
+      'Accessible typography hierarchies and high-contrast dark palette',
+      'Partner integration carousel with smooth hardware acceleration'
     ],
-    tech: ['React.js', 'Vite', 'Vanilla CSS', 'GitHub Pages'],
-    liveUrl: '../MirrorAcademy/index.html'
+    tech: ['React.js', 'Vite', 'Semantic CSS', 'Responsive Grids'],
+    liveUrl: 'https://mirrorschooloftransformation.vercel.app/'
   },
   'accountability': {
-    title: 'NCF Accountability System',
-    badge: 'Completed',
+    title: 'NCF Member Accountability System',
+    badge: 'Client Portal',
     badgeColor: 'var(--accent-gold)',
     miniClass: 'accountability-mini',
     miniContent: `
@@ -135,72 +229,15 @@ const PROJECTS_DATA = {
         <div class="mini-button bg-gold-color" style="background:var(--accent-gold); height:8px; border-radius:2px;"></div>
       </div>
     `,
-    description: 'A multi-step accountability and data reporting form engineered for membership evaluation. This client portal features clean stage-by-stage stepper logic, rich user guides, validation states, local storage data recovery, and file uploading mocks.',
+    description: 'A multi-step accountability and data reporting form engineered for leadership evaluations. Features stage-by-stage stepper logic, offline crash recovery with Web LocalStorage, rich validation states, and attachment uploading.',
     features: [
-      'Step-by-step progress tracking indicator',
-      'Self-saving forms using Web LocalStorage',
-      'Custom client upload dialog box',
-      'Optimized lightweight asset management'
+      'Multi-stage step progress tracking indicator',
+      'Self-saving forms with Web LocalStorage disaster recovery',
+      'Custom client attachment upload workflows',
+      'Optimized lightweight asset management with zero external framework overhead'
     ],
-    tech: ['HTML5', 'Vanilla CSS', 'JavaScript ES6', 'Local Storage'],
-    liveUrl: '../index.html'
-  },
-  'admin-portal': {
-    title: 'NCF Admin Portal & Dashboard',
-    badge: 'Completed',
-    badgeColor: 'var(--accent-cyan)',
-    miniClass: 'admin-mini',
-    miniContent: `
-      <div class="mini-sidebar"><div class="mini-dot" style="background:var(--accent-cyan)"></div><div class="mini-dot"></div><div class="mini-dot"></div></div>
-      <div class="mini-dash-main">
-        <div class="mini-header-line"></div>
-        <div class="mini-stat-row">
-          <div class="mini-stat-block"></div>
-          <div class="mini-stat-block"></div>
-        </div>
-        <div class="mini-chart-mock">
-          <svg viewBox="0 0 100 40" class="mini-chart-svg" style="width:100%; height:25px;">
-            <path d="M0,40 Q25,10 50,25 T100,5" fill="none" stroke="#06b6d4" stroke-width="2" />
-            <circle cx="50" cy="25" r="2" fill="#06b6d4" />
-            <circle cx="100" cy="5" r="2" fill="#06b6d4" />
-          </svg>
-        </div>
-      </div>
-    `,
-    description: 'A comprehensive, enterprise-level administrative dashboard built to manage membership databases, stats trackers, and activity metrics. Employs modern grid architecture, dynamic sidebars, and real-time database visualization syncing.',
-    features: [
-      'Chart.js real-time analytics graphs',
-      'Dynamic sidebar navigation collapsers',
-      'Advanced client-side search & filters',
-      'Supabase database authentication integration'
-    ],
-    tech: ['JavaScript ES6+', 'Chart.js API', 'Supabase Syncing', 'Glassmorphism'],
-    liveUrl: 'https://ncfunn.vercel.app'
-  },
-  'quote-generator': {
-    title: 'Minimalist Quote Image Generator',
-    badge: 'Completed',
-    badgeColor: 'var(--accent-pink)',
-    miniClass: 'quote-mini',
-    miniContent: `
-      <div class="mini-card-canvas">
-        <div class="mini-quote-quotes" style="font-family:serif; font-size:1.5rem; color:var(--accent-pink)">“</div>
-        <div class="mini-text-line md center" style="margin: 0 auto 4px auto;"></div>
-        <div class="mini-text-line sm center" style="margin: 0 auto;"></div>
-      </div>
-      <div class="mini-controls" style="display:flex; gap:6px;">
-        <div class="mini-knob"></div><div class="mini-knob"></div><div class="mini-knob"></div>
-      </div>
-    `,
-    description: 'An interactive canvas rendering utility that enables users to design customized graphic quote cards. The tool dynamically downloads configuration sets, applies live font assets, integrates glowing background blob controls, and renders high-definition PNG cards.',
-    features: [
-      'html2canvas client graphic generation',
-      'Direct Google Fonts API selector',
-      'Live gradient & filters canvas builder',
-      'One-click high-res image download'
-    ],
-    tech: ['Canvas API', 'html2canvas', 'Google Fonts API', 'CSS Variables'],
-    liveUrl: '../Quote/index.html'
+    tech: ['HTML5', 'Vanilla CSS', 'JavaScript ES6', 'Local Storage API'],
+    liveUrl: 'accountability.html'
   }
 };
 
@@ -218,7 +255,7 @@ function initPortfolioModal() {
     // Inject content
     modalBody.innerHTML = `
       <div class="modal-header-section">
-        <span class="modal-project-badge" style="background: ${data.badgeColor}22; color: ${data.badgeColor}; border: 1px solid ${data.badgeColor}33">${data.badge}</span>
+        <span class="modal-project-badge" style="background: ${data.badgeColor}22; color: ${data.badgeColor}; border: 1px solid ${data.badgeColor}44">${data.badge}</span>
         <h3 class="modal-title">${data.title}</h3>
       </div>
       
@@ -239,9 +276,9 @@ function initPortfolioModal() {
         <div class="modal-tech-pills">
           ${data.tech.map(t => `<span>${t}</span>`).join('')}
         </div>
-        <div style="display:flex; gap:10px;">
-          ${data.liveUrl ? `<a href="${data.liveUrl}" target="_blank" class="btn btn-sm btn-secondary">View Live <i class="ti ti-external-link"></i></a>` : ''}
-          <a href="#contact" class="btn btn-sm btn-primary modal-cta-btn">Inquire Project</a>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          ${data.liveUrl ? `<a href="${data.liveUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-primary">Launch Live Project <i class="ti ti-arrow-up-right"></i></a>` : ''}
+          <a href="#contact" class="btn btn-sm btn-secondary modal-cta-btn">Discuss Similar Project</a>
         </div>
       </div>
     `;
@@ -252,9 +289,11 @@ function initPortfolioModal() {
 
     // Hook modal cta click to close modal and scroll
     const modalCta = modalBody.querySelector('.modal-cta-btn');
-    modalCta.addEventListener('click', () => {
-      closeModal();
-    });
+    if (modalCta) {
+      modalCta.addEventListener('click', () => {
+        closeModal();
+      });
+    }
   };
 
   const closeModal = () => {
@@ -264,15 +303,25 @@ function initPortfolioModal() {
   };
 
   cards.forEach(card => {
-    const info = card.querySelector('.portfolio-info');
-    info.addEventListener('click', () => {
+    card.addEventListener('click', (e) => {
+      // If clicking directly on a link with an href, don't open modal
+      if (e.target.closest('a')) return;
       const projectId = card.getAttribute('data-project');
       openModal(projectId);
     });
+
+    const detailsBtn = card.querySelector('.open-details-btn');
+    if (detailsBtn) {
+      detailsBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const projectId = card.getAttribute('data-project');
+        openModal(projectId);
+      });
+    }
   });
 
-  modalClose.addEventListener('click', closeModal);
-  modalBackdrop.addEventListener('click', closeModal);
+  if (modalClose) modalClose.addEventListener('click', closeModal);
+  if (modalBackdrop) modalBackdrop.addEventListener('click', closeModal);
 
   // Esc key closes modal
   document.addEventListener('keydown', (e) => {
@@ -280,6 +329,123 @@ function initPortfolioModal() {
       closeModal();
     }
   });
+}
+
+/* --- Portfolio Category Filter Logic --- */
+function initPortfolioFilters() {
+  const filterBtns = document.querySelectorAll('.filter-tab-btn');
+  const cards = document.querySelectorAll('.portfolio-card');
+  if (!filterBtns.length) return;
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const filter = btn.getAttribute('data-filter');
+      cards.forEach(card => {
+        const category = card.getAttribute('data-category');
+        if (filter === 'all' || category === filter) {
+          card.style.display = '';
+          card.style.animation = 'slideInCard 0.35s ease forwards';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  });
+}
+
+/* --- Interactive Hero Spotlight Switcher --- */
+function initHeroSpotlight() {
+  const tabs = document.querySelectorAll('.spotlight-tab');
+  const spotlightBody = document.getElementById('hero-spotlight-body');
+  if (!tabs.length || !spotlightBody) return;
+
+  const SPOTLIGHTS = {
+    'storeflow': {
+      title: 'Storeflow Multi-Tenant Retail POS',
+      category: 'Cloud SaaS • Live Deployment',
+      url: 'https://storeflow-mu-eight.vercel.app/',
+      image: 'storeflow_preview.png',
+      badge: '● Active POS in Nigeria',
+      metrics: [
+        { label: 'Nigerian VAT', value: '7.5% Auto' },
+        { label: 'Query Latency', value: '< 0.4s' },
+        { label: 'Till Shifts', value: 'Z-Reports' }
+      ],
+      desc: 'Real-time retail operating system with cashier PIN verification, till shifts, and 80mm thermal receipts.'
+    },
+    'picnic': {
+      title: 'UNN Freshers Colour Picnic 2026',
+      category: 'Campus Event Portal • Live Platform',
+      url: 'https://freshers-experience26.vercel.app/',
+      image: 'colour_picnic.jpg',
+      badge: '● CEDR Field Event',
+      metrics: [
+        { label: 'Faculty Teams', value: '6 Colors' },
+        { label: 'Ticket Pass', value: 'Canvas Stub' },
+        { label: 'Onboarding', value: 'WhatsApp' }
+      ],
+      desc: 'High-throughput freshman orientation ticketing portal with faculty color teams and instant digital passes.'
+    },
+    'ncf': {
+      title: 'NCF Leadership Admin Intelligence',
+      category: 'Enterprise Database • Supabase',
+      url: 'https://ncfunn.vercel.app',
+      image: 'ncf_admin.png',
+      badge: '● Live Executive Hub',
+      metrics: [
+        { label: 'Sync Engine', value: 'Supabase RLS' },
+        { label: 'Visuals', value: 'Chart.js' },
+        { label: 'Attendance', value: 'Real-Time' }
+      ],
+      desc: 'Centralized organizational management environment with live analytics and automated reporting.'
+    }
+  };
+
+  const renderSpotlight = (key) => {
+    const item = SPOTLIGHTS[key] || SPOTLIGHTS['storeflow'];
+    spotlightBody.innerHTML = `
+      <div class="spotlight-content-grid">
+        <div class="spotlight-preview-img-wrap">
+          <img src="${item.image}" alt="${item.title}" class="spotlight-preview-img">
+          <span class="spotlight-status-pill">${item.badge}</span>
+        </div>
+        <div class="spotlight-details">
+          <span class="spotlight-cat">${item.category}</span>
+          <h4 class="spotlight-title">${item.title}</h4>
+          <p class="spotlight-desc">${item.desc}</p>
+          <div class="spotlight-metrics-row">
+            ${item.metrics.map(m => `
+              <div class="spotlight-metric">
+                <span class="spotlight-metric-val">${m.value}</span>
+                <span class="spotlight-metric-lbl">${m.label}</span>
+              </div>
+            `).join('')}
+          </div>
+          <div class="spotlight-action">
+            <a href="${item.url}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-primary">
+              <span>Launch Live System</span>
+              <i class="ti ti-arrow-up-right"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    `;
+  };
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const key = tab.getAttribute('data-spotlight');
+      renderSpotlight(key);
+    });
+  });
+
+  // Render initial
+  renderSpotlight('storeflow');
 }
 
 /* --- Inquiry Form Handling --- */

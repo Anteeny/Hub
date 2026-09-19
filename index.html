@@ -66,65 +66,40 @@
       <div class="hero-content">
         <div class="badge-new">
           <span class="badge-dot"></span>
-          <span>Open for Bookings Q3 2026</span>
+          <span>Open for Client Projects 2026</span>
         </div>
         <h1 class="hero-title">
-          We Engineer High-Performance <span class="text-gradient">Web Applications</span>
+          We Engineer High-Impact <span class="text-gradient">Web Applications</span> That Actually Ship
         </h1>
         <p class="hero-description">
-          Bespoke web applications, high-fidelity administrative dashboards, and sleek interactive platforms designed
-          with premium aesthetics and sub-second load times.
+          From multi-tenant retail POS systems and campus event ticketing engines to executive administrative dashboards. Handcrafted by Tony Ubagu with sub-second performance and meticulous craftsmanship.
         </p>
         <div class="hero-actions">
-          <a href="#contact" class="btn btn-lg btn-primary">
+          <a href="#contact" class="btn btn-lg btn-primary open-contact-btn">
             <span>Start Your Project</span>
             <i class="ti ti-arrow-up-right"></i>
           </a>
-          <a href="#portfolio" class="btn btn-lg btn-secondary">Explore Our Works</a>
+          <a href="#portfolio" class="btn btn-lg btn-secondary">Explore Real Works</a>
         </div>
       </div>
 
-      <!-- Interactive Showcase Mockup -->
+      <!-- Interactive Engineering Showcase -->
       <div class="hero-visual">
-        <div class="code-window">
-          <div class="window-header">
-            <span class="dot red"></span>
-            <span class="dot yellow"></span>
-            <span class="dot green"></span>
-            <span class="window-title">AnteenyHub.js</span>
-          </div>
-          <div class="window-content">
-            <pre><code><span class="keyword">const</span> <span class="variable">AnteenyHub</span> = {
-  <span class="property">mission</span>: <span class="string">"Create pixel-perfect websites"</span>,
-  <span class="property">stack</span>: [<span class="string">"React"</span>, <span class="string">"Vanilla CSS"</span>, <span class="string">"Supabase"</span>],
-  <span class="property">standards</span>: [<span class="string">"High Performance"</span>, <span class="string">"Glassmorphism"</span>],
-  
-  <span class="method">deliverValue</span>() {
-    <span class="keyword">return</span> <span class="string">"🚀 Scale client operations by 10x"</span>;
-  }
-};</code></pre>
-          </div>
-        </div>
-        <div class="dashboard-preview">
-          <div class="preview-header">
-            <div class="circle-avatar"></div>
-            <div class="line-sm"></div>
-          </div>
-          <div class="preview-metrics">
-            <div class="metric-card">
-              <span class="metric-title">Performance</span>
-              <span class="metric-val text-cyan">99%</span>
+        <div class="hero-spotlight-card">
+          <div class="spotlight-header">
+            <div class="window-dots">
+              <span class="dot red"></span>
+              <span class="dot yellow"></span>
+              <span class="dot green"></span>
             </div>
-            <div class="metric-card">
-              <span class="metric-title">UX Index</span>
-              <span class="metric-val text-violet">10/10</span>
+            <div class="spotlight-tabs" id="hero-spotlight-tabs">
+              <button type="button" class="spotlight-tab active" data-spotlight="storeflow">Storeflow POS</button>
+              <button type="button" class="spotlight-tab" data-spotlight="picnic">Colour Picnic</button>
+              <button type="button" class="spotlight-tab" data-spotlight="ncf">NCF Database</button>
             </div>
           </div>
-          <div class="preview-bar-chart">
-            <div class="bar bar-1"></div>
-            <div class="bar bar-2"></div>
-            <div class="bar bar-3"></div>
-            <div class="bar bar-4"></div>
+          <div class="spotlight-body" id="hero-spotlight-body">
+            <!-- Rendered dynamically by app.js -->
           </div>
         </div>
       </div>
@@ -136,19 +111,19 @@
     <div class="container stats-grid">
       <div class="stat-card">
         <span class="stat-num text-gradient">100%</span>
-        <span class="stat-label">Client Satisfaction</span>
+        <span class="stat-label">Client Commitment</span>
       </div>
       <div class="stat-card">
-        <span class="stat-num text-gradient">4+</span>
-        <span class="stat-label">Signature Platforms Built</span>
+        <span class="stat-num text-gradient">5+</span>
+        <span class="stat-label">Real Platforms Deployed</span>
       </div>
       <div class="stat-card">
-        <span class="stat-num text-gradient">&lt;1.2s</span>
-        <span class="stat-label">Average Load Time</span>
+        <span class="stat-num text-gradient">&lt;0.4s</span>
+        <span class="stat-label">Average Query Latency</span>
       </div>
       <div class="stat-card">
         <span class="stat-num text-gradient">24/7</span>
-        <span class="stat-label">Premium Support</span>
+        <span class="stat-label">Reliable Production SLA</span>
       </div>
     </div>
   </section>
@@ -238,50 +213,171 @@
   <section class="section portfolio" id="portfolio">
     <div class="container">
       <div class="section-header">
-        <h2 class="section-title">Our Signature Creations</h2>
-        <p class="section-subtitle">A collection of custom applications we've designed and engineered. Click any card to
-          explore its feature set.</p>
+        <h2 class="section-title">Real Production Platforms &amp; Works</h2>
+        <p class="section-subtitle">A collection of custom applications engineered for commercial retail, universities, leadership teams, and digital academies. Click any card to view deep-dive details or launch live.</p>
+      </div>
+
+      <!-- Filter Tabs -->
+      <div class="portfolio-filter-tabs">
+        <button type="button" class="filter-tab-btn active" data-filter="all">All Projects (5)</button>
+        <button type="button" class="filter-tab-btn" data-filter="saas">SaaS &amp; Retail</button>
+        <button type="button" class="filter-tab-btn" data-filter="events">Campus &amp; Events</button>
+        <button type="button" class="filter-tab-btn" data-filter="dashboards">Dashboards &amp; Admin</button>
+        <button type="button" class="filter-tab-btn" data-filter="edtech">EdTech &amp; Learning</button>
       </div>
 
       <div class="portfolio-grid">
 
-        <!-- Project 1: The Mirror School Academy -->
-        <a href="../MirrorAcademy/index.html" target="_blank" class="portfolio-card" data-project="mirror-academy">
+        <!-- Project 1: Storeflow POS SaaS -->
+        <article class="portfolio-card" data-project="storeflow" data-category="saas">
           <div class="portfolio-img-wrapper">
-            <img src="mirror_academy.png" alt="The Mirror School Academy Preview" class="portfolio-screenshot">
-            <span class="portfolio-tag">Ongoing</span>
-          </div>
-          <div class="portfolio-info">
-            <h3 class="portfolio-project-title">The Mirror School Academy</h3>
-            <p class="portfolio-project-summary">Next-generation online learning platform with subject-focused
-              navigation structures and smooth grids.</p>
-            <div class="portfolio-tech-list">
-              <span>React</span>
-              <span>Vite</span>
-              <span>TailwindCSS</span>
-              <span>Typography API</span>
+            <img src="storeflow_preview.png" alt="Storeflow POS SaaS Preview" class="portfolio-screenshot" loading="lazy">
+            <span class="portfolio-tag tag-cyan">Production SaaS</span>
+            <div class="portfolio-overlay-actions">
+              <a href="https://storeflow-mu-eight.vercel.app/" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-primary">
+                <span>Launch App</span> <i class="ti ti-arrow-up-right"></i>
+              </a>
+              <button type="button" class="btn btn-sm btn-secondary open-details-btn">
+                <span>Case Study</span> <i class="ti ti-info-circle"></i>
+              </button>
             </div>
           </div>
-        </a>
+          <div class="portfolio-info">
+            <div class="portfolio-meta-row">
+              <span class="portfolio-category-label">Retail POS &amp; Cloud ERP</span>
+              <span class="portfolio-status-dot">● Active Deployment</span>
+            </div>
+            <h3 class="portfolio-project-title">Storeflow Multi-Tenant Retail POS</h3>
+            <p class="portfolio-project-summary">Complete cloud POS for Nigerian stores. Features multi-register cashier PINs, till shifts &amp; Z-reports, Nigerian VAT calculations, and thermal receipts.</p>
+            <div class="portfolio-tech-list">
+              <span>React 18</span>
+              <span>Vite</span>
+              <span>TypeScript</span>
+              <span>Supabase RLS</span>
+              <span>Web Crypto</span>
+            </div>
+          </div>
+        </article>
 
-        <!-- Project 2: NCF UNN Admin Portal -->
-        <a href="https://ncfunn.vercel.app" target="_blank" class="portfolio-card" data-project="admin-portal">
+        <!-- Project 2: UNN Freshers Colour Picnic -->
+        <article class="portfolio-card" data-project="colour-picnic" data-category="events">
           <div class="portfolio-img-wrapper">
-            <img src="ncf_admin.png" alt="NCF Admin Portal Preview" class="portfolio-screenshot">
-            <span class="portfolio-tag">Finished</span>
+            <img src="colour_picnic.jpg" alt="UNN Freshers Colour Picnic Preview" class="portfolio-screenshot" loading="lazy">
+            <span class="portfolio-tag tag-gold">Live Event Platform</span>
+            <div class="portfolio-overlay-actions">
+              <a href="https://freshers-experience26.vercel.app/" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-primary">
+                <span>View Event</span> <i class="ti ti-arrow-up-right"></i>
+              </a>
+              <button type="button" class="btn btn-sm btn-secondary open-details-btn">
+                <span>Case Study</span> <i class="ti ti-info-circle"></i>
+              </button>
+            </div>
           </div>
           <div class="portfolio-info">
-            <h3 class="portfolio-project-title">NCF Admin Portal & Dashboard</h3>
-            <p class="portfolio-project-summary">Enterprise administrative environment. Includes real-time database
-              syncing, attendance analytics, and dynamic Chart.js dashboards.</p>
+            <div class="portfolio-meta-row">
+              <span class="portfolio-category-label">Campus Event &amp; Ticketing</span>
+              <span class="portfolio-status-dot">● Live Platform</span>
+            </div>
+            <h3 class="portfolio-project-title">UNN Freshers Colour Picnic 2026</h3>
+            <p class="portfolio-project-summary">High-concurrency university welcome week portal. Features automatic faculty team color assignment, synchronized countdown, and instant digital ticket stub generation.</p>
             <div class="portfolio-tech-list">
               <span>JavaScript ES6</span>
-              <span>Chart.js</span>
-              <span>Supabase Backend</span>
+              <span>HTML5 Canvas</span>
+              <span>Supabase</span>
+              <span>WhatsApp API</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Project 3: NCF UNN Admin Portal -->
+        <article class="portfolio-card" data-project="admin-portal" data-category="dashboards">
+          <div class="portfolio-img-wrapper">
+            <img src="ncf_admin.png" alt="NCF Admin Portal Preview" class="portfolio-screenshot" loading="lazy">
+            <span class="portfolio-tag tag-cyan">Enterprise Dashboard</span>
+            <div class="portfolio-overlay-actions">
+              <a href="https://ncfunn.vercel.app" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-primary">
+                <span>Live Portal</span> <i class="ti ti-arrow-up-right"></i>
+              </a>
+              <button type="button" class="btn btn-sm btn-secondary open-details-btn">
+                <span>Case Study</span> <i class="ti ti-info-circle"></i>
+              </button>
+            </div>
+          </div>
+          <div class="portfolio-info">
+            <div class="portfolio-meta-row">
+              <span class="portfolio-category-label">Executive Leadership OS</span>
+              <span class="portfolio-status-dot">● Production</span>
+            </div>
+            <h3 class="portfolio-project-title">NCF Leadership Intelligence Portal</h3>
+            <p class="portfolio-project-summary">Centralized database administration environment with real-time Supabase syncing, member directories, attendance analytics, and dynamic Chart.js dashboards.</p>
+            <div class="portfolio-tech-list">
+              <span>JavaScript ES6+</span>
+              <span>Chart.js API</span>
+              <span>Supabase DB</span>
               <span>Glassmorphism</span>
             </div>
           </div>
-        </a>
+        </article>
+
+        <!-- Project 4: The Mirror School of Transformation -->
+        <article class="portfolio-card" data-project="mirror-academy" data-category="edtech">
+          <div class="portfolio-img-wrapper">
+            <img src="mirror_academy.png" alt="The Mirror School Academy Preview" class="portfolio-screenshot" loading="lazy">
+            <span class="portfolio-tag tag-violet">EdTech Platform</span>
+            <div class="portfolio-overlay-actions">
+              <a href="https://mirrorschooloftransformation.vercel.app/" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-primary">
+                <span>Visit Academy</span> <i class="ti ti-arrow-up-right"></i>
+              </a>
+              <button type="button" class="btn btn-sm btn-secondary open-details-btn">
+                <span>Case Study</span> <i class="ti ti-info-circle"></i>
+              </button>
+            </div>
+          </div>
+          <div class="portfolio-info">
+            <div class="portfolio-meta-row">
+              <span class="portfolio-category-label">Online Learning Academy</span>
+              <span class="portfolio-status-dot">● Deployed</span>
+            </div>
+            <h3 class="portfolio-project-title">The Mirror School of Transformation</h3>
+            <p class="portfolio-project-summary">Modern online learning platform with subject-focused course navigation, interactive curriculum grids, accessible typography, and smooth hardware transitions.</p>
+            <div class="portfolio-tech-list">
+              <span>React</span>
+              <span>Vite</span>
+              <span>Semantic CSS</span>
+              <span>Responsive Grids</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Project 5: NCF Member Accountability System -->
+        <article class="portfolio-card" data-project="accountability" data-category="dashboards">
+          <div class="portfolio-img-wrapper">
+            <img src="ncf_admin.png" alt="NCF Accountability System Preview" class="portfolio-screenshot" style="filter: hue-rotate(45deg);" loading="lazy">
+            <span class="portfolio-tag tag-gold">Client Portal</span>
+            <div class="portfolio-overlay-actions">
+              <a href="accountability.html" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-primary">
+                <span>Open Form</span> <i class="ti ti-arrow-up-right"></i>
+              </a>
+              <button type="button" class="btn btn-sm btn-secondary open-details-btn">
+                <span>Case Study</span> <i class="ti ti-info-circle"></i>
+              </button>
+            </div>
+          </div>
+          <div class="portfolio-info">
+            <div class="portfolio-meta-row">
+              <span class="portfolio-category-label">Data Collection &amp; Auditing</span>
+              <span class="portfolio-status-dot">● Active Tool</span>
+            </div>
+            <h3 class="portfolio-project-title">NCF Member Accountability System</h3>
+            <p class="portfolio-project-summary">Multi-stage evaluation and reporting workflow with step-by-step progress steppers, offline disaster recovery with Web LocalStorage, and validation states.</p>
+            <div class="portfolio-tech-list">
+              <span>HTML5</span>
+              <span>Vanilla CSS</span>
+              <span>JavaScript ES6</span>
+              <span>LocalStorage</span>
+            </div>
+          </div>
+        </article>
 
       </div>
     </div>
@@ -406,12 +502,14 @@
   <section class="section cta-section" id="cta">
     <div class="container">
       <div class="cta-card">
-        <h2 class="section-title">Ready to Get Started?</h2>
-        <p class="section-subtitle">Join thousands of professionals and clients building better connections on
-          AnteenyHub.</p>
-        <div class="cta-actions" style="margin-top:22px;display:flex;gap:14px;justify-content:center;">
-          <a href="#services" class="btn btn-secondary btn-lg">Find Services</a>
-          <button class="btn btn-primary btn-lg open-contact-btn">Let's Get Started</button>
+        <h2 class="section-title">Ready to Build a Platform Your Users Will Love?</h2>
+        <p class="section-subtitle">Whether you're launching a retail POS system, a high-concurrency event portal, or scaling an institutional dashboard, let's engineer something extraordinary together.</p>
+        <div class="cta-actions" style="margin-top:22px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
+          <a href="https://wa.me/2348031234567?text=Hi%20Tony%2C%20I%20saw%20your%20work%20on%20AnteenyHub%20and%20I%27d%20like%20to%20discuss%20a%20project." target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg">
+            <i class="ti ti-brand-whatsapp"></i>
+            <span>Chat on WhatsApp</span>
+          </a>
+          <button class="btn btn-secondary btn-lg open-contact-btn">Send Project Scope</button>
         </div>
       </div>
     </div>
@@ -506,11 +604,11 @@
         <a href="#pricing">Pricing</a>
       </div>
       <div class="footer-links">
-        <h4 class="footer-title">Inspirations</h4>
-        <a href="#portfolio">Mirror Academy</a>
-        <a href="#portfolio">Accountability System</a>
-        <a href="#portfolio">NCF Admin Portal</a>
-        <a href="#portfolio">Quote Generator</a>
+        <h4 class="footer-title">Live Systems</h4>
+        <a href="https://storeflow-mu-eight.vercel.app/" target="_blank" rel="noopener noreferrer">Storeflow POS</a>
+        <a href="https://freshers-experience26.vercel.app/" target="_blank" rel="noopener noreferrer">Colour Picnic</a>
+        <a href="https://ncfunn.vercel.app" target="_blank" rel="noopener noreferrer">NCF Admin Portal</a>
+        <a href="https://mirrorschooloftransformation.vercel.app/" target="_blank" rel="noopener noreferrer">The Mirror School</a>
       </div>
     </div>
     <div class="footer-bottom">
