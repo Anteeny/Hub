@@ -62,6 +62,7 @@ export interface Product {
   availableColors: { name: string; hex: string; family: ColorFamily }[];
   variants: ProductVariant[];
   featured?: boolean;
+  imageUrl?: string;
 }
 
 export interface ClientMeasurements {

@@ -190,7 +190,7 @@ const demoProducts: Product[] = FMO_CATALOG.map((item) => {
     price: item.basePrice,
     stock: totalStock,
     unit: item.categoryId === "accessories" ? "piece" : "suit",
-    imageUrl: (item as any).featuredImage || undefined,
+    imageUrl: item.imageUrl || (item as any).featuredImage || undefined,
     trackInventory: true,
     taxRate: 7.5,
     fabric: item.fabric,
@@ -4676,8 +4676,17 @@ function App() {
                 ✕ Back to Storeflow POS
               </button>
             </div>
-            <div style={{ padding: "24px" }}>
-              <FmoLookbook onSelectProductForFitting={() => setShowLookbookModal(false)} />
+            <div style={{ padding: "16px sm:padding:24px" }}>
+              <FmoLookbook
+                onSelectProductForFitting={() => {
+                  setShowLookbookModal(false);
+                  navigateTo("checkout");
+                }}
+                onOrderSuit={() => {
+                  setShowLookbookModal(false);
+                  navigateTo("checkout");
+                }}
+              />
             </div>
           </div>
         </div>

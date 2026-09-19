@@ -1,19 +1,26 @@
 import React, { useState, useMemo } from 'react';
 import { FMO_CATEGORIES, FMO_CATALOG, COLOR_FAMILIES } from '../data/fmoCatalog';
 import { Product, SuitCategory, ColorFamily } from '../lib/types';
+import { FmoAiFittingRoom } from './FmoAiFittingRoom';
 
 interface FmoLookbookProps {
   onSelectProductForFitting: (product: Product) => void;
+  onOrderSuit?: (product: Product, selectedColor: string) => void;
 }
 
 export const FmoLookbook: React.FC<FmoLookbookProps> = ({
-  onSelectProductForFitting
+  onSelectProductForFitting,
+  onOrderSuit
 }) => {
   const [activeCategory, setActiveCategory] = useState<SuitCategory | 'all'>('all');
   const [activeColor, setActiveColor] = useState<ColorFamily>('all');
   const [priceMode, setPriceMode] = useState<'purchase' | 'rental'>('purchase');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedProductDetails, setSelectedProductDetails] = useState<Product | null>(null);
+
+  // AI Try-On Studio State
+  const [showAiStudio, setShowAiStudio] = useState<boolean>(false);
+  const [aiTryOnProduct, setAiTryOnProduct] = useState<Product | null>(null);
 
   // Filtered Products
   const filteredProducts = useMemo(() => {
@@ -31,10 +38,10 @@ export const FmoLookbook: React.FC<FmoLookbookProps> = ({
   }, [activeCategory, activeColor, searchQuery]);
 
   return (
-    <section id="lookbook" className="py-20 bg-[#faf9f6] relative">
+    <section id="lookbook" className="py-12 bg-[#faf9f6] relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12">
+        <div className="text-center max-w-3xl mx-auto mb-8">
           <span className="text-xs font-bold tracking-[0.25em] text-[#a17f39] uppercase block mb-2">
             The Sartorial Catalog
           </span>
@@ -44,6 +51,37 @@ export const FmoLookbook: React.FC<FmoLookbookProps> = ({
           <p className="text-xs sm:text-sm text-gray-600 max-w-xl mx-auto">
             Browse our 47+ precision-crafted silhouettes. Filter by category or color family to discover your next commanding ensemble.
           </p>
+        </div>
+
+        {/* Luxury AI Virtual Fitting Room Hero Banner */}
+        <div className="mb-10 bg-gradient-to-r from-[#0b0f19] via-[#111827] to-[#0b0f19] rounded-2xl p-6 sm:p-8 border border-[#c5a059]/40 shadow-xl relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="relative z-10 max-w-xl text-left">
+            <div className="inline-flex items-center gap-2 bg-[#c5a059]/20 border border-[#c5a059] px-3 py-1 rounded-full text-[11px] font-bold text-[#d4af37] uppercase tracking-wider mb-3">
+              <span>✨</span>
+              <span>AI Sartorial Bespoke Mirror</span>
+            </div>
+            <h3 className="font-editorial text-2xl sm:text-3xl font-bold text-white mb-2 leading-tight">
+              Snap Your Face &amp; Try On Any FMO Suit
+            </h3>
+            <p className="text-xs sm:text-sm text-gray-300 leading-relaxed">
+              Use our neural tailoring engine to snap your face or full body shot. See yourself fitted with accurate ambient boutique lighting, collar shadows, and custom cuts.
+            </p>
+          </div>
+          <div className="relative z-10 flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
+            <button
+              type="button"
+              onClick={() => {
+                setAiTryOnProduct(filteredProducts[0] || FMO_CATALOG[0]);
+                setShowAiStudio(true);
+              }}
+              className="w-full sm:w-auto py-3.5 px-6 gold-gradient-btn text-black font-extrabold text-xs uppercase tracking-wider rounded-xl flex items-center justify-center gap-2 shadow-2xl hover:scale-105 transition-all cursor-pointer"
+            >
+              <span>📸</span>
+              <span>Open AI Virtual Try-On Studio</span>
+            </button>
+          </div>
+          {/* Subtle Ambient Gold Glow Background */}
+          <div className="absolute right-0 top-0 bottom-0 w-96 bg-gradient-to-l from-[#c5a059]/15 to-transparent pointer-events-none" />
         </div>
 
         {/* Controls: Search, Price Mode Toggle */}
@@ -105,7 +143,7 @@ export const FmoLookbook: React.FC<FmoLookbookProps> = ({
                 : 'bg-white text-gray-700 border border-[#c5a059]/20 hover:border-[#c5a059]'
             }`}
           >
-            All Cuts (47)
+            All Cuts ({FMO_CATALOG.length})
           </button>
           {FMO_CATEGORIES.map((cat) => (
             <button
@@ -170,23 +208,61 @@ export const FmoLookbook: React.FC<FmoLookbookProps> = ({
           </div>
         </div>
 
-        {/* Product Cards Grid */}
+        {/* Product Cards Grid with Real Photography */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filteredProducts.map((product) => (
             <div
               key={product.id}
-              className="bg-white rounded-xl overflow-hidden border border-[#c5a059]/25 hover:border-[#c5a059] shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group"
+              className="bg-white rounded-xl overflow-hidden border border-[#c5a059]/25 hover:border-[#c5a059] shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group text-left"
             >
+              {/* Suit Photography Showcase (Authentic FMO Boutique Photo) */}
+              <div
+                className="relative w-full aspect-[4/5] bg-gray-900 overflow-hidden group/img cursor-pointer"
+                onClick={() => setSelectedProductDetails(product)}
+              >
+                {product.imageUrl ? (
+                  <img
+                    src={product.imageUrl}
+                    alt={product.name}
+                    className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center bg-[#0b0f19] text-[#d4af37] font-bold text-xs">
+                    FMO BESPOKE
+                  </div>
+                )}
+
+                {/* Quick AI Try-On Overlay Badge */}
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setAiTryOnProduct(product);
+                    setShowAiStudio(true);
+                  }}
+                  className="absolute bottom-3 right-3 bg-[#0b0f19]/90 hover:bg-[#c5a059] text-white hover:text-[#0b0f19] px-3 py-1.5 rounded-full text-[11px] font-bold tracking-wide flex items-center gap-1.5 shadow-lg backdrop-blur-sm transition-all transform hover:scale-105 cursor-pointer z-10"
+                >
+                  <span>✨</span>
+                  <span>AI Try-On</span>
+                </button>
+
+                {/* Category & Silhouette Pill */}
+                <span className="absolute top-3 left-3 bg-black/75 backdrop-blur-sm text-gray-200 text-[10px] font-semibold px-2 py-0.5 rounded">
+                  {product.silhouette.split(',')[0]}
+                </span>
+              </div>
+
               {/* Card Header & Color Swatch Representation */}
-              <div className="p-5 pb-3">
-                <div className="flex items-start justify-between gap-2 mb-3">
+              <div className="p-4 pb-2">
+                <div className="flex items-start justify-between gap-2 mb-2">
                   <div className="flex items-center gap-2">
                     <span
-                      className="w-4 h-4 rounded-full border border-black/20 shadow-inner"
+                      className="w-3.5 h-3.5 rounded-full border border-black/20 shadow-inner flex-shrink-0"
                       style={{ background: product.primaryColorHex }}
                       title={`Color: ${product.availableColors[0]?.name}`}
                     ></span>
-                    <span className="text-[10px] uppercase font-bold tracking-wider text-gray-400">
+                    <span className="text-[10px] uppercase font-bold tracking-wider text-gray-500 truncate">
                       {product.availableColors[0]?.name}
                     </span>
                   </div>
@@ -197,35 +273,31 @@ export const FmoLookbook: React.FC<FmoLookbookProps> = ({
                   )}
                 </div>
 
-                <h3 className="font-serif-luxury text-base font-bold text-[#0b0f19] leading-snug mb-2 group-hover:text-[#a17f39] transition-colors">
+                <h3 className="font-serif-luxury text-sm sm:text-base font-bold text-[#0b0f19] leading-snug mb-1.5 group-hover:text-[#a17f39] transition-colors">
                   {product.name}
                 </h3>
 
-                <p className="text-xs text-gray-600 line-clamp-2 leading-relaxed mb-3">
+                <p className="text-[11px] text-gray-600 line-clamp-2 leading-relaxed mb-2.5">
                   {product.visualDetails}
                 </p>
 
-                {/* Fabric & Silhouette Pills */}
+                {/* Fabric Pill */}
                 <div className="flex flex-wrap gap-1.5 mb-2">
                   <span className="text-[10px] bg-gray-100 text-gray-700 px-2 py-0.5 rounded font-medium">
                     {product.fabric}
                   </span>
-                  <span className="text-[10px] bg-[#faf9f6] text-gray-600 border border-gray-200 px-2 py-0.5 rounded">
-                    {product.silhouette}
-                  </span>
                 </div>
               </div>
 
-              {/* Card Footer with Price & Actions */}
-              <div className="p-5 pt-3 border-t border-gray-100 bg-[#faf9f6]/60">
+              {/* Card Footer with Price & 3 Actions: Details, AI Try-On, Fit & Buy */}
+              <div className="p-4 pt-3 border-t border-gray-100 bg-[#faf9f6]/60">
                 <div className="flex items-center justify-between mb-3">
                   <div>
                     <span className="text-[10px] text-gray-500 uppercase tracking-wider block font-semibold">
                       {priceMode === 'purchase' ? 'Purchase (₦)' : 'Rental (₦)'}
                     </span>
                     <span className="font-mono text-base font-bold text-[#0b0f19]">
-                      ₦
-                      {(priceMode === 'purchase' ? product.basePrice : product.rentalPrice).toLocaleString()}
+                      ₦{(priceMode === 'purchase' ? product.basePrice : product.rentalPrice).toLocaleString()}
                     </span>
                   </div>
                   <span className="text-[11px] text-gray-400">
@@ -235,21 +307,29 @@ export const FmoLookbook: React.FC<FmoLookbookProps> = ({
                   </span>
                 </div>
 
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-3 gap-1.5">
                   <button
                     onClick={() => setSelectedProductDetails(product)}
-                    className="py-2 px-2.5 bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 text-xs font-semibold rounded-lg flex items-center justify-center gap-1 transition-colors cursor-pointer"
+                    className="py-2 px-1.5 bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 text-[11px] font-semibold rounded-lg flex items-center justify-center gap-1 transition-colors cursor-pointer"
                   >
-                    <i className="ti ti-info-circle text-xs text-[#c5a059]"></i>
                     <span>Details</span>
                   </button>
 
                   <button
-                    onClick={() => onSelectProductForFitting(product)}
-                    className="py-2 px-2.5 gold-gradient-btn text-white text-xs font-bold rounded-lg flex items-center justify-center gap-1 shadow-sm cursor-pointer"
+                    onClick={() => {
+                      setAiTryOnProduct(product);
+                      setShowAiStudio(true);
+                    }}
+                    className="py-2 px-1.5 bg-[#0b0f19] hover:bg-[#1f293d] text-[#d4af37] text-[11px] font-bold rounded-lg flex items-center justify-center gap-1 transition-colors cursor-pointer shadow-sm"
                   >
-                    <i className="ti ti-needle text-xs"></i>
-                    <span>Fitting</span>
+                    <span>✨ Try-On</span>
+                  </button>
+
+                  <button
+                    onClick={() => onSelectProductForFitting(product)}
+                    className="py-2 px-1.5 gold-gradient-btn text-black text-[11px] font-bold rounded-lg flex items-center justify-center gap-1 shadow-sm cursor-pointer"
+                  >
+                    <span>Fit &amp; Buy</span>
                   </button>
                 </div>
               </div>
@@ -259,15 +339,13 @@ export const FmoLookbook: React.FC<FmoLookbookProps> = ({
 
         {/* Empty State if Search yielded no results */}
         {filteredProducts.length === 0 && (
-          <div className="text-center py-16 bg-white rounded-2xl border border-dashed border-[#c5a059]/30 p-8">
-            <div className="w-16 h-16 rounded-full bg-[#c5a059]/10 text-[#a17f39] flex items-center justify-center mx-auto text-3xl mb-4">
-              <i className="ti ti-search-off"></i>
-            </div>
-            <h4 className="font-serif-luxury text-xl font-bold text-[#0b0f19] mb-2">
-              No matching suit cuts found
-            </h4>
-            <p className="text-xs text-gray-500 max-w-md mx-auto mb-6">
-              We couldn't find any suit matching your filter criteria. Try resetting the color variation or category.
+          <div className="text-center py-16 bg-white rounded-2xl border border-dashed border-[#c5a059]/40 mt-8">
+            <i className="ti ti-shirt-off text-4xl text-gray-400 mb-3 block"></i>
+            <h3 className="font-editorial text-lg font-bold text-gray-700 mb-1">
+              No Silhouettes Found
+            </h3>
+            <p className="text-xs text-gray-500 max-w-sm mx-auto mb-4">
+              We couldn't find any suits matching your search. Try resetting filters or searching for another fabric.
             </p>
             <button
               onClick={() => {
@@ -275,7 +353,7 @@ export const FmoLookbook: React.FC<FmoLookbookProps> = ({
                 setActiveColor('all');
                 setSearchQuery('');
               }}
-              className="px-5 py-2.5 gold-gradient-btn text-white text-xs font-bold uppercase tracking-wider rounded-lg"
+              className="py-2 px-4 bg-[#0b0f19] text-white text-xs font-bold rounded-lg cursor-pointer"
             >
               Reset All Filters
             </button>
@@ -283,20 +361,36 @@ export const FmoLookbook: React.FC<FmoLookbookProps> = ({
         )}
       </div>
 
-      {/* Product Detail Modal */}
+      {/* Suit Details Modal */}
       {selectedProductDetails && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
-          <div className="bg-white rounded-2xl max-w-lg w-full border border-[#c5a059]/40 shadow-2xl p-6 sm:p-8 relative">
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+          onClick={() => setSelectedProductDetails(null)}
+        >
+          <div
+            className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl relative border border-[#c5a059]/40 text-left"
+            onClick={(e) => e.stopPropagation()}
+          >
             <button
               onClick={() => setSelectedProductDetails(null)}
-              className="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-lg w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"
+              className="absolute top-4 right-4 text-gray-400 hover:text-black text-lg cursor-pointer"
             >
-              <i className="ti ti-x"></i>
+              ✕
             </button>
 
-            <div className="flex items-center gap-2 mb-3">
+            {selectedProductDetails.imageUrl && (
+              <div className="w-full aspect-[4/3] rounded-xl overflow-hidden mb-4 bg-gray-100">
+                <img
+                  src={selectedProductDetails.imageUrl}
+                  alt=""
+                  className="w-full h-full object-cover object-top"
+                />
+              </div>
+            )}
+
+            <div className="flex items-center gap-2 mb-2">
               <span
-                className="w-4 h-4 rounded-full border border-black/20"
+                className="w-3.5 h-3.5 rounded-full border border-black/20"
                 style={{ background: selectedProductDetails.primaryColorHex }}
               ></span>
               <span className="text-xs font-bold uppercase tracking-wider text-[#a17f39]">
@@ -304,11 +398,11 @@ export const FmoLookbook: React.FC<FmoLookbookProps> = ({
               </span>
             </div>
 
-            <h3 className="font-editorial text-2xl font-bold text-[#0b0f19] mb-3">
+            <h3 className="font-editorial text-2xl font-bold text-[#0b0f19] mb-2">
               {selectedProductDetails.name}
             </h3>
 
-            <p className="text-xs sm:text-sm text-gray-600 leading-relaxed mb-6">
+            <p className="text-xs text-gray-600 leading-relaxed mb-4">
               {selectedProductDetails.visualDetails}
             </p>
 
@@ -335,21 +429,52 @@ export const FmoLookbook: React.FC<FmoLookbookProps> = ({
               </div>
             </div>
 
-            <div className="flex gap-3">
+            <div className="flex gap-2">
               <button
+                type="button"
+                onClick={() => {
+                  const p = selectedProductDetails;
+                  setSelectedProductDetails(null);
+                  setAiTryOnProduct(p);
+                  setShowAiStudio(true);
+                }}
+                className="flex-1 py-3 bg-[#0b0f19] text-[#d4af37] text-xs font-bold uppercase tracking-wider rounded-lg flex items-center justify-center gap-1.5 cursor-pointer hover:bg-black transition-colors"
+              >
+                <span>✨</span>
+                <span>AI Virtual Try-On</span>
+              </button>
+
+              <button
+                type="button"
                 onClick={() => {
                   const p = selectedProductDetails;
                   setSelectedProductDetails(null);
                   onSelectProductForFitting(p);
                 }}
-                className="flex-1 py-3 gold-gradient-btn text-white text-xs font-bold uppercase tracking-wider rounded-lg flex items-center justify-center gap-2"
+                className="flex-1 py-3 gold-gradient-btn text-black text-xs font-bold uppercase tracking-wider rounded-lg flex items-center justify-center gap-1.5 cursor-pointer shadow-md"
               >
-                <i className="ti ti-needle text-sm"></i>
-                <span>Book Fitting For This Suit</span>
+                <span>Book Fitting &amp; Buy</span>
               </button>
             </div>
           </div>
         </div>
+      )}
+
+      {/* AI Virtual Fitting Room Modal */}
+      {showAiStudio && (
+        <FmoAiFittingRoom
+          initialProduct={aiTryOnProduct || filteredProducts[0]}
+          allProducts={FMO_CATALOG}
+          onClose={() => setShowAiStudio(false)}
+          onOrderSuit={(product, color) => {
+            setShowAiStudio(false);
+            if (onOrderSuit) {
+              onOrderSuit(product, color);
+            } else {
+              onSelectProductForFitting(product);
+            }
+          }}
+        />
       )}
     </section>
   );

@@ -96,6 +96,7 @@ export const FMO_CATALOG: Product[] = [
     colorFamily: 'navy',
     primaryColorHex: '#1e3a8a',
     availableColors: [{ name: 'Navy Blue', hex: '#1e3a8a', family: 'navy' }],
+    imageUrl: '/images/suits/fmo_suit_02.jpg',
     variants: generateVariants('db-navy-solid', 'Navy Blue', '#1e3a8a', 'navy', 'DB-NAV', 420000, 75000),
     featured: true
   },
@@ -111,6 +112,7 @@ export const FMO_CATALOG: Product[] = [
     colorFamily: 'pink-black',
     primaryColorHex: '#f472b6',
     availableColors: [{ name: 'Pink & Black Split', hex: '#f472b6', family: 'pink-black' }],
+    imageUrl: '/images/suits/fmo_suit_37.jpg',
     variants: generateVariants('db-pink-black-split', 'Pink & Black Split', '#f472b6', 'pink-black', 'DB-SPLIT', 480000, 90000),
     featured: true
   },
@@ -126,6 +128,7 @@ export const FMO_CATALOG: Product[] = [
     colorFamily: 'emerald-green',
     primaryColorHex: '#064e3b',
     availableColors: [{ name: 'Forest Green', hex: '#064e3b', family: 'emerald-green' }],
+    imageUrl: '/images/suits/fmo_suit_31.jpg',
     variants: generateVariants('db-dark-green', 'Forest Green', '#064e3b', 'emerald-green', 'DB-FGRN', 440000, 80000)
   },
   {
@@ -140,6 +143,7 @@ export const FMO_CATALOG: Product[] = [
     colorFamily: 'ash-grey',
     primaryColorHex: '#9ca3af',
     availableColors: [{ name: 'Ash Grey', hex: '#9ca3af', family: 'ash-grey' }],
+    imageUrl: '/images/suits/fmo_suit_03.jpg',
     variants: generateVariants('db-ash-grey', 'Ash Grey', '#9ca3af', 'ash-grey', 'DB-ASH', 395000, 70000)
   },
   {
@@ -154,6 +158,7 @@ export const FMO_CATALOG: Product[] = [
     colorFamily: 'royal-blue',
     primaryColorHex: '#2563eb',
     availableColors: [{ name: 'Royal Blue', hex: '#2563eb', family: 'royal-blue' }],
+    imageUrl: '/images/suits/fmo_suit_15.jpg',
     variants: generateVariants('db-royal-blue', 'Royal Blue', '#2563eb', 'royal-blue', 'DB-RBLU', 430000, 75000)
   },
   {
@@ -168,6 +173,7 @@ export const FMO_CATALOG: Product[] = [
     colorFamily: 'brown',
     primaryColorHex: '#78350f',
     availableColors: [{ name: 'Rich Brown', hex: '#78350f', family: 'brown' }],
+    imageUrl: '/images/suits/fmo_suit_16.jpg',
     variants: generateVariants('db-rich-brown', 'Rich Brown', '#78350f', 'brown', 'DB-BRN', 410000, 70000)
   },
   {
@@ -182,6 +188,7 @@ export const FMO_CATALOG: Product[] = [
     colorFamily: 'black',
     primaryColorHex: '#0a0a0a',
     availableColors: [{ name: 'Jet Black', hex: '#0a0a0a', family: 'black' }],
+    imageUrl: '/images/suits/fmo_suit_10.jpg',
     variants: generateVariants('db-black-satin', 'Jet Black', '#0a0a0a', 'black', 'DB-BLKSAT', 475000, 85000)
   },
   {
@@ -196,6 +203,7 @@ export const FMO_CATALOG: Product[] = [
     colorFamily: 'orange',
     primaryColorHex: '#ea580c',
     availableColors: [{ name: 'Tuscan Orange', hex: '#ea580c', family: 'orange' }],
+    imageUrl: '/images/suits/fmo_suit_21.jpg',
     variants: generateVariants('db-bright-orange', 'Tuscan Orange', '#ea580c', 'orange', 'DB-ORNG', 460000, 85000)
   },
   {
@@ -210,6 +218,7 @@ export const FMO_CATALOG: Product[] = [
     colorFamily: 'light-blue',
     primaryColorHex: '#38bdf8',
     availableColors: [{ name: 'Sky Blue', hex: '#38bdf8', family: 'light-blue' }],
+    imageUrl: '/images/suits/fmo_suit_15.jpg',
     variants: generateVariants('db-light-blue', 'Sky Blue', '#38bdf8', 'light-blue', 'DB-LBLU', 415000, 75000)
   },
   {
@@ -224,6 +233,7 @@ export const FMO_CATALOG: Product[] = [
     colorFamily: 'black',
     primaryColorHex: '#171717',
     availableColors: [{ name: 'Classic Black', hex: '#171717', family: 'black' }],
+    imageUrl: '/images/suits/fmo_suit_27.jpg',
     variants: generateVariants('db-classic-black', 'Classic Black', '#171717', 'black', 'DB-BLK', 410000, 70000)
   },
   {
@@ -238,6 +248,7 @@ export const FMO_CATALOG: Product[] = [
     colorFamily: 'camel-tan',
     primaryColorHex: '#d97706',
     availableColors: [{ name: 'Camel Tan', hex: '#d97706', family: 'camel-tan' }],
+    imageUrl: '/images/suits/fmo_suit_23.jpg',
     variants: generateVariants('db-camel-tan', 'Camel Tan', '#d97706', 'camel-tan', 'DB-CAMEL', 435000, 75000)
   },
   {
@@ -252,6 +263,7 @@ export const FMO_CATALOG: Product[] = [
     colorFamily: 'navy',
     primaryColorHex: '#1e3a8a',
     availableColors: [{ name: 'Striped Navy', hex: '#1e3a8a', family: 'navy' }],
+    imageUrl: '/images/suits/fmo_suit_12.jpg',
     variants: generateVariants('db-striped-navy', 'Striped Navy', '#1e3a8a', 'navy', 'DB-STRP', 450000, 80000)
   },
   {
@@ -266,6 +278,7 @@ export const FMO_CATALOG: Product[] = [
     colorFamily: 'emerald-green',
     primaryColorHex: '#059669',
     availableColors: [{ name: 'Emerald Green', hex: '#059669', family: 'emerald-green' }],
+    imageUrl: '/images/suits/fmo_suit_31.jpg',
     variants: generateVariants('db-emerald-green', 'Emerald Green', '#059669', 'emerald-green', 'DB-EMR', 465000, 85000)
   },
   {
@@ -280,6 +293,7 @@ export const FMO_CATALOG: Product[] = [
     colorFamily: 'navy',
     primaryColorHex: '#0f172a',
     availableColors: [{ name: 'Midnight Navy', hex: '#0f172a', family: 'navy' }],
+    imageUrl: '/images/suits/fmo_suit_18.jpg',
     variants: generateVariants('db-midnight-navy', 'Midnight Navy', '#0f172a', 'navy', 'DB-MNAV', 430000, 75000)
   },
   {
@@ -294,6 +308,7 @@ export const FMO_CATALOG: Product[] = [
     colorFamily: 'light-blue',
     primaryColorHex: '#60a5fa',
     availableColors: [{ name: 'Steel Blue', hex: '#60a5fa', family: 'light-blue' }],
+    imageUrl: '/images/suits/fmo_suit_36.jpg',
     variants: generateVariants('db-steel-blue', 'Steel Blue', '#60a5fa', 'light-blue', 'DB-STEEL', 425000, 75000)
   },
 
@@ -313,6 +328,7 @@ export const FMO_CATALOG: Product[] = [
     primaryColorHex: '#881337',
     availableColors: [{ name: 'Burgundy Striped', hex: '#881337', family: 'burgundy' }],
     variants: generateVariants('3p-mario-casas', 'Burgundy Striped', '#881337', 'burgundy', '3P-MARIO', 520000, 95000),
+    imageUrl: '/images/suits/fmo_suit_29.jpg',
     featured: true
   },
   {
@@ -328,6 +344,7 @@ export const FMO_CATALOG: Product[] = [
     primaryColorHex: '#4a0e17',
     availableColors: [{ name: 'Oxblood', hex: '#4a0e17', family: 'oxblood' }],
     variants: generateVariants('3p-oxblood-solid', 'Oxblood', '#4a0e17', 'oxblood', '3P-OXB', 490000, 85000),
+    imageUrl: '/images/suits/fmo_suit_29.jpg',
     featured: true
   },
   {
@@ -356,6 +373,7 @@ export const FMO_CATALOG: Product[] = [
     colorFamily: 'ash-grey',
     primaryColorHex: '#9ca3af',
     availableColors: [{ name: 'Ash Grey', hex: '#9ca3af', family: 'ash-grey' }],
+    imageUrl: '/images/suits/fmo_suit_03.jpg',
     variants: generateVariants('3p-ash-patterned', 'Ash Grey', '#9ca3af', 'ash-grey', '3P-ASHPAT', 485000, 85000)
   },
   {
@@ -370,6 +388,7 @@ export const FMO_CATALOG: Product[] = [
     colorFamily: 'milk-cream',
     primaryColorHex: '#fef3c7',
     availableColors: [{ name: 'Milk Cream', hex: '#fef3c7', family: 'milk-cream' }],
+    imageUrl: '/images/suits/fmo_suit_20.jpg',
     variants: generateVariants('3p-milk-pinstripe', 'Milk Cream', '#fef3c7', 'milk-cream', '3P-MLKSTRP', 510000, 90000)
   },
   {
@@ -384,6 +403,7 @@ export const FMO_CATALOG: Product[] = [
     colorFamily: 'navy',
     primaryColorHex: '#1e40af',
     availableColors: [{ name: 'Dark Blue Striped', hex: '#1e40af', family: 'navy' }],
+    imageUrl: '/images/suits/fmo_suit_12.jpg',
     variants: generateVariants('3p-blue-pinstriped', 'Dark Blue Striped', '#1e40af', 'navy', '3P-BLUPIN', 475000, 80000)
   },
   {
@@ -398,6 +418,7 @@ export const FMO_CATALOG: Product[] = [
     colorFamily: 'ash-grey',
     primaryColorHex: '#d1d5db',
     availableColors: [{ name: 'Ash Pinstripe', hex: '#d1d5db', family: 'ash-grey' }],
+    imageUrl: '/images/suits/fmo_suit_04.jpg',
     variants: generateVariants('3p-ash-pinstripe', 'Ash Pinstripe', '#d1d5db', 'ash-grey', '3P-ASHPIN', 460000, 75000)
   },
   {
@@ -412,6 +433,7 @@ export const FMO_CATALOG: Product[] = [
     colorFamily: 'brown',
     primaryColorHex: '#713f12',
     availableColors: [{ name: 'Brown Pinstripe', hex: '#713f12', family: 'brown' }],
+    imageUrl: '/images/suits/fmo_suit_16.jpg',
     variants: generateVariants('3p-brown-pinstripe', 'Brown Pinstripe', '#713f12', 'brown', '3P-BRNPIN', 465000, 80000)
   },
   {
@@ -426,6 +448,7 @@ export const FMO_CATALOG: Product[] = [
     colorFamily: 'burgundy',
     primaryColorHex: '#9f1239',
     availableColors: [{ name: 'Wine Red', hex: '#9f1239', family: 'burgundy' }],
+    imageUrl: '/images/suits/fmo_suit_29.jpg',
     variants: generateVariants('3p-wine-red-pinstripe', 'Wine Red', '#9f1239', 'burgundy', '3P-WNEPIN', 495000, 85000)
   },
   {
@@ -440,6 +463,7 @@ export const FMO_CATALOG: Product[] = [
     colorFamily: 'milk-cream',
     primaryColorHex: '#fffbeb',
     availableColors: [{ name: 'Solid Milk', hex: '#fffbeb', family: 'milk-cream' }],
+    imageUrl: '/images/suits/fmo_suit_20.jpg',
     variants: generateVariants('3p-milk-solid', 'Solid Milk', '#fffbeb', 'milk-cream', '3P-MLKSOL', 500000, 90000)
   },
   {
@@ -454,6 +478,7 @@ export const FMO_CATALOG: Product[] = [
     colorFamily: 'black',
     primaryColorHex: '#18181b',
     availableColors: [{ name: 'Black Pinstripe', hex: '#18181b', family: 'black' }],
+    imageUrl: '/images/suits/fmo_suit_10.jpg',
     variants: generateVariants('3p-black-pinstripe', 'Black Pinstripe', '#18181b', 'black', '3P-BLPIN', 460000, 75000)
   },
   {
@@ -468,6 +493,7 @@ export const FMO_CATALOG: Product[] = [
     colorFamily: 'army-green',
     primaryColorHex: '#3f6212',
     availableColors: [{ name: 'Army Olive', hex: '#3f6212', family: 'army-green' }],
+    imageUrl: '/images/suits/fmo_suit_31.jpg',
     variants: generateVariants('3p-army-green', 'Army Olive', '#3f6212', 'army-green', '3P-ARMY', 480000, 80000)
   },
   {
@@ -482,6 +508,7 @@ export const FMO_CATALOG: Product[] = [
     colorFamily: 'navy',
     primaryColorHex: '#172554',
     availableColors: [{ name: 'Dark Navy', hex: '#172554', family: 'navy' }],
+    imageUrl: '/images/suits/fmo_suit_02.jpg',
     variants: generateVariants('3p-dark-blue', 'Dark Navy', '#172554', 'navy', '3P-DNAV', 450000, 75000)
   },
   {
@@ -496,6 +523,7 @@ export const FMO_CATALOG: Product[] = [
     colorFamily: 'black',
     primaryColorHex: '#09090b',
     availableColors: [{ name: 'Solid Black', hex: '#09090b', family: 'black' }],
+    imageUrl: '/images/suits/fmo_suit_10.jpg',
     variants: generateVariants('3p-black-solid', 'Solid Black', '#09090b', 'black', '3P-BLKSOL', 440000, 70000)
   },
   {
@@ -510,6 +538,7 @@ export const FMO_CATALOG: Product[] = [
     colorFamily: 'brown',
     primaryColorHex: '#543310',
     availableColors: [{ name: 'Mocha Brown', hex: '#543310', family: 'brown' }],
+    imageUrl: '/images/suits/fmo_suit_16.jpg',
     variants: generateVariants('3p-brown-solid', 'Mocha Brown', '#543310', 'brown', '3P-BRNSOL', 455000, 75000)
   },
   {
@@ -524,6 +553,7 @@ export const FMO_CATALOG: Product[] = [
     colorFamily: 'royal-blue',
     primaryColorHex: '#1d4ed8',
     availableColors: [{ name: 'Cobalt Blue', hex: '#1d4ed8', family: 'royal-blue' }],
+    imageUrl: '/images/suits/fmo_suit_15.jpg',
     variants: generateVariants('3p-blue-solid', 'Cobalt Blue', '#1d4ed8', 'royal-blue', '3P-BLUSOL', 460000, 75000)
   },
   {
@@ -538,6 +568,7 @@ export const FMO_CATALOG: Product[] = [
     colorFamily: 'black',
     primaryColorHex: '#18181b',
     availableColors: [{ name: 'Chalk Striped', hex: '#18181b', family: 'black' }],
+    imageUrl: '/images/suits/fmo_suit_10.jpg',
     variants: generateVariants('3p-black-bold-stripe', 'Chalk Striped', '#18181b', 'black', '3P-CHKSTR', 490000, 85000)
   },
   {
@@ -552,6 +583,7 @@ export const FMO_CATALOG: Product[] = [
     colorFamily: 'light-blue',
     primaryColorHex: '#93c5fd',
     availableColors: [{ name: 'Textured Light Blue', hex: '#93c5fd', family: 'light-blue' }],
+    imageUrl: '/images/suits/fmo_suit_15.jpg',
     variants: generateVariants('3p-light-blue-textured', 'Textured Light Blue', '#93c5fd', 'light-blue', '3P-LBLUTEX', 470000, 80000)
   },
   {
@@ -566,6 +598,7 @@ export const FMO_CATALOG: Product[] = [
     colorFamily: 'navy',
     primaryColorHex: '#1e3a8a',
     availableColors: [{ name: 'Navy Pinstripe', hex: '#1e3a8a', family: 'navy' }],
+    imageUrl: '/images/suits/fmo_suit_02.jpg',
     variants: generateVariants('3p-blue-vertical-stripe', 'Navy Pinstripe', '#1e3a8a', 'navy', '3P-NVSTRP', 480000, 80000)
   },
   {
@@ -580,6 +613,7 @@ export const FMO_CATALOG: Product[] = [
     colorFamily: 'camel-tan',
     primaryColorHex: '#b45309',
     availableColors: [{ name: 'Dapper Tan', hex: '#b45309', family: 'camel-tan' }],
+    imageUrl: '/images/suits/fmo_suit_23.jpg',
     variants: generateVariants('3p-dapper-textured', 'Dapper Tan', '#b45309', 'camel-tan', '3P-DAPPER', 495000, 85000)
   },
 
@@ -599,6 +633,7 @@ export const FMO_CATALOG: Product[] = [
     primaryColorHex: '#6b21a8',
     availableColors: [{ name: 'Imperial Purple', hex: '#6b21a8', family: 'purple' }],
     variants: generateVariants('jodhpuri-purple', 'Imperial Purple', '#6b21a8', 'purple', 'JD-PURP', 530000, 95000),
+    imageUrl: '/images/suits/fmo_suit_37.jpg',
     featured: true
   },
   {
@@ -627,6 +662,7 @@ export const FMO_CATALOG: Product[] = [
     colorFamily: 'burgundy',
     primaryColorHex: '#881337',
     availableColors: [{ name: 'Wine Red', hex: '#881337', family: 'burgundy' }],
+    imageUrl: '/images/suits/fmo_suit_29.jpg',
     variants: generateVariants('jodhpuri-wine-red', 'Wine Red', '#881337', 'burgundy', 'JD-WNE', 510000, 90000)
   },
   {
@@ -641,6 +677,7 @@ export const FMO_CATALOG: Product[] = [
     colorFamily: 'black',
     primaryColorHex: '#0f172a',
     availableColors: [{ name: 'Jet Black', hex: '#0f172a', family: 'black' }],
+    imageUrl: '/images/suits/fmo_suit_40.jpg',
     variants: generateVariants('jodhpuri-black', 'Jet Black', '#0f172a', 'black', 'JD-BLK', 480000, 85000)
   },
   {
@@ -655,6 +692,7 @@ export const FMO_CATALOG: Product[] = [
     colorFamily: 'camel-tan',
     primaryColorHex: '#b45309',
     availableColors: [{ name: 'Tan Brown', hex: '#b45309', family: 'camel-tan' }],
+    imageUrl: '/images/suits/fmo_suit_40.jpg',
     variants: generateVariants('jodhpuri-brown-tan', 'Tan Brown', '#b45309', 'camel-tan', 'JD-TAN', 475000, 80000)
   },
 
@@ -673,6 +711,7 @@ export const FMO_CATALOG: Product[] = [
     colorFamily: 'ash-grey',
     primaryColorHex: '#9ca3af',
     availableColors: [{ name: 'Ash Grey', hex: '#9ca3af', family: 'ash-grey' }],
+    imageUrl: '/images/suits/fmo_suit_03.jpg',
     variants: generateVariants('2p-ash-solid', 'Ash Grey', '#9ca3af', 'ash-grey', '2P-ASH', 360000, 60000)
   },
   {
@@ -687,6 +726,7 @@ export const FMO_CATALOG: Product[] = [
     colorFamily: 'light-blue',
     primaryColorHex: '#60a5fa',
     availableColors: [{ name: 'Light Blue', hex: '#60a5fa', family: 'light-blue' }],
+    imageUrl: '/images/suits/fmo_suit_15.jpg',
     variants: generateVariants('2p-light-blue', 'Light Blue', '#60a5fa', 'light-blue', '2P-LBLU', 375000, 65000)
   },
 
@@ -706,6 +746,7 @@ export const FMO_CATALOG: Product[] = [
     primaryColorHex: '#f8fafc',
     availableColors: [{ name: 'Pristine White', hex: '#f8fafc', family: 'milk-cream' }],
     variants: generateVariants('wrap-white', 'Pristine White', '#f8fafc', 'milk-cream', 'WP-WHT', 540000, 95000),
+    imageUrl: '/images/suits/fmo_suit_34.jpg',
     featured: true
   },
   {
@@ -734,6 +775,7 @@ export const FMO_CATALOG: Product[] = [
     colorFamily: 'black',
     primaryColorHex: '#0a0a0a',
     availableColors: [{ name: 'Deep Black', hex: '#0a0a0a', family: 'black' }],
+    imageUrl: '/images/suits/fmo_suit_27.jpg',
     variants: generateVariants('wrap-black', 'Deep Black', '#0a0a0a', 'black', 'WP-BLK', 510000, 90000)
   },
 
@@ -753,6 +795,7 @@ export const FMO_CATALOG: Product[] = [
     primaryColorHex: '#ffffff',
     availableColors: [{ name: 'White & Black Lapel', hex: '#ffffff', family: 'milk-cream' }],
     variants: generateVariants('tux-white-contrast', 'White & Black Lapel', '#ffffff', 'milk-cream', 'TX-WHT', 650000, 120000),
+    imageUrl: '/images/suits/fmo_suit_34.jpg',
     featured: true
   },
   {
@@ -768,6 +811,7 @@ export const FMO_CATALOG: Product[] = [
     primaryColorHex: '#000000',
     availableColors: [{ name: 'Formal Black', hex: '#000000', family: 'black' }],
     variants: generateVariants('tux-black-classic', 'Formal Black', '#000000', 'black', 'TX-BLK', 590000, 110000),
+    imageUrl: '/images/suits/fmo_suit_34.jpg',
     featured: true
   },
 
@@ -786,6 +830,7 @@ export const FMO_CATALOG: Product[] = [
     colorFamily: 'navy',
     primaryColorHex: '#1e3a8a',
     availableColors: [{ name: 'Bespoke Curation', hex: '#1e3a8a', family: 'navy' }],
+    imageUrl: '/images/suits/fmo_suit_02.jpg',
     variants: generateVariants('acc-gentleman-bundle', 'Bespoke Curation', '#1e3a8a', 'navy', 'ACC-BNDL', 580000, 110000),
     featured: true
   },
@@ -801,6 +846,7 @@ export const FMO_CATALOG: Product[] = [
     colorFamily: 'milk-cream',
     primaryColorHex: '#ffffff',
     availableColors: [{ name: 'Crisp White', hex: '#ffffff', family: 'milk-cream' }],
+    imageUrl: '/images/suits/fmo_suit_20.jpg',
     variants: generateVariants('acc-egyptian-shirt', 'Crisp White', '#ffffff', 'milk-cream', 'ACC-SHIRT', 75000, 15000)
   },
   {
@@ -815,6 +861,7 @@ export const FMO_CATALOG: Product[] = [
     colorFamily: 'burgundy',
     primaryColorHex: '#881337',
     availableColors: [{ name: 'Wine Paisley', hex: '#881337', family: 'burgundy' }],
+    imageUrl: '/images/suits/fmo_suit_29.jpg',
     variants: generateVariants('acc-silk-tie-set', 'Wine Paisley', '#881337', 'burgundy', 'ACC-TIE', 38000, 8000)
   },
   {
@@ -829,6 +876,7 @@ export const FMO_CATALOG: Product[] = [
     colorFamily: 'camel-tan',
     primaryColorHex: '#d97706',
     availableColors: [{ name: 'Gold & Onyx', hex: '#d97706', family: 'camel-tan' }],
+    imageUrl: '/images/suits/fmo_suit_03.jpg',
     variants: generateVariants('acc-gold-cufflinks', 'Gold & Onyx', '#d97706', 'camel-tan', 'ACC-CUFF', 45000, 10000)
   },
   {
@@ -843,6 +891,7 @@ export const FMO_CATALOG: Product[] = [
     colorFamily: 'camel-tan',
     primaryColorHex: '#e5e7eb',
     availableColors: [{ name: 'Silver Stag', hex: '#e5e7eb', family: 'ash-grey' }],
+    imageUrl: '/images/suits/fmo_suit_08.jpg',
     variants: generateVariants('acc-lapel-brooch', 'Silver Stag', '#e5e7eb', 'ash-grey', 'ACC-PIN', 32000, 7000)
   },
   {
@@ -857,6 +906,7 @@ export const FMO_CATALOG: Product[] = [
     colorFamily: 'black',
     primaryColorHex: '#18181b',
     availableColors: [{ name: 'Black & Brown', hex: '#18181b', family: 'black' }],
+    imageUrl: '/images/suits/fmo_suit_16.jpg',
     variants: generateVariants('acc-leather-belt', 'Black & Brown', '#18181b', 'black', 'ACC-BELT', 55000, 10000)
   },
   {
@@ -871,6 +921,7 @@ export const FMO_CATALOG: Product[] = [
     colorFamily: 'black',
     primaryColorHex: '#09090b',
     availableColors: [{ name: 'High-Shine Black', hex: '#09090b', family: 'black' }],
+    imageUrl: '/images/suits/fmo_suit_05.jpg',
     variants: generateVariants('acc-oxford-shoes', 'High-Shine Black', '#09090b', 'black', 'ACC-SHOE', 165000, 35000)
   },
   {
@@ -890,6 +941,7 @@ export const FMO_CATALOG: Product[] = [
       { name: 'Charcoal Grey', hex: '#374151', family: 'ash-grey' },
       { name: 'Burgundy Wine', hex: '#881337', family: 'burgundy' }
     ],
+    imageUrl: '/images/suits/fmo_suit_02.jpg',
     variants: generateVariants('acc-tailored-waistcoat', 'Midnight Black', '#09090b', 'black', 'ACC-VEST', 65000, 15000)
   }
 ];
