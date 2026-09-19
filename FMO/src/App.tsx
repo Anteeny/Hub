@@ -61,11 +61,127 @@ function normalizeCategoryName(value: string) {
   return aliases[cleaned] ?? cleaned.replace(/\b\w/g, (letter) => letter.toUpperCase());
 }
 
+export type SuitAddon = {
+  id: string;
+  name: string;
+  price: number;
+  category: "inner_jacket" | "shoes" | "tie" | "brooch" | "shirt" | "cufflinks";
+  icon: string;
+  description: string;
+  isInnerJacket?: boolean;
+};
+
+export const SUIT_ADDONS: SuitAddon[] = [
+  {
+    id: "addon-inner-jacket",
+    name: "Tailored Inner Jacket / Waistcoat",
+    price: 65000,
+    category: "inner_jacket",
+    icon: "🧥",
+    description: "Custom tailored 5-button matching or contrast vest (for 2-piece suits, wrap suits & tuxedos)",
+    isInnerJacket: true,
+  },
+  {
+    id: "addon-shoes",
+    name: "Handcrafted Italian Leather Shoes",
+    price: 85000,
+    category: "shoes",
+    icon: "👞",
+    description: "Wholecut Oxford, Derby, or Double Monkstrap dress footwear",
+  },
+  {
+    id: "addon-tie",
+    name: "Luxury Silk Tie & Pocket Square Set",
+    price: 25000,
+    category: "tie",
+    icon: "👔",
+    description: "100% woven Italian silk necktie with coordinated pocket square",
+  },
+  {
+    id: "addon-brooch",
+    name: "Sartorial Lapel Brooch / Pin",
+    price: 15000,
+    category: "brooch",
+    icon: "💎",
+    description: "Polished brass/gold ornamental lapel brooch and collar chain",
+  },
+  {
+    id: "addon-shirt",
+    name: "Egyptian Cotton French Cuff Shirt",
+    price: 45000,
+    category: "shirt",
+    icon: "👔",
+    description: "Crisp formal spread collar shirt with double French cuffs",
+  },
+  {
+    id: "addon-cufflinks",
+    name: "Brass & Sterling Cufflinks Set",
+    price: 18000,
+    category: "cufflinks",
+    icon: "⚜️",
+    description: "Heavyweight monogrammed metallic luxury dress cufflinks",
+  },
+];
+
+const SARTORIAL_COLOR_OPTIONS: Record<string, { name: string; hex: string }[]> = {
+  "double-breasted": [
+    { name: "Navy Blue", hex: "#1e3a8a" },
+    { name: "Jet Black", hex: "#0a0a0a" },
+    { name: "Charcoal Grey", hex: "#374151" },
+    { name: "Forest Green", hex: "#064e3b" },
+    { name: "Rich Brown", hex: "#78350f" },
+    { name: "Tuscan Orange", hex: "#ea580c" },
+    { name: "Camel Tan", hex: "#d97706" },
+  ],
+  "three-piece": [
+    { name: "Midnight Navy", hex: "#0f172a" },
+    { name: "Charcoal Pinstripe", hex: "#374151" },
+    { name: "Wine Red", hex: "#881337" },
+    { name: "Mocha Brown", hex: "#543310" },
+    { name: "Milk Cream", hex: "#fef3c7" },
+    { name: "Solid Black", hex: "#09090b" },
+  ],
+  "jodhpuri": [
+    { name: "Imperial Purple", hex: "#6b21a8" },
+    { name: "Royal Blue", hex: "#1d4ed8" },
+    { name: "Wine Red", hex: "#881337" },
+    { name: "Jet Black", hex: "#0f172a" },
+    { name: "Tan Gold", hex: "#b45309" },
+  ],
+  "two-piece": [
+    { name: "Navy Blue", hex: "#1e3a8a" },
+    { name: "Ash Grey", hex: "#9ca3af" },
+    { name: "Classic Black", hex: "#171717" },
+    { name: "Sky Blue", hex: "#38bdf8" },
+  ],
+  "wrap": [
+    { name: "Earthy Brown", hex: "#713f12" },
+    { name: "Pristine White", hex: "#f8fafc" },
+    { name: "Deep Black", hex: "#0a0a0a" },
+    { name: "Army Olive", hex: "#3f6212" },
+  ],
+  "wedding-tuxedo": [
+    { name: "Formal Black", hex: "#000000" },
+    { name: "White & Black Lapel", hex: "#ffffff" },
+    { name: "Midnight Blue Silk", hex: "#0f172a" },
+    { name: "Burgundy Velvet", hex: "#881337" },
+  ],
+};
+
 // Master master catalog of 47+ FMO luxury sartorial garments & accessories
 const demoProducts: Product[] = FMO_CATALOG.map((item) => {
   const cat = FMO_CATEGORIES.find((c) => c.id === item.categoryId);
   const totalStock = item.variants?.reduce((acc: number, v: any) => acc + (v.stock || 0), 0) || 12;
   const firstVariant = item.variants?.[0];
+  const baseColors: { name: string; hex: string }[] = (item as any).availableColors || [{ name: "Classic", hex: item.primaryColorHex || "#1e293b" }];
+  const categoryPalette = SARTORIAL_COLOR_OPTIONS[item.categoryId] || [];
+  const mergedColors = [...baseColors];
+  for (const col of categoryPalette) {
+    if (!mergedColors.some((c) => c.name.toLowerCase() === col.name.toLowerCase())) {
+      mergedColors.push(col);
+    }
+  }
+
   return {
     id: item.id,
     name: item.name,
@@ -80,7 +196,7 @@ const demoProducts: Product[] = FMO_CATALOG.map((item) => {
     fabric: item.fabric,
     rentalPrice: item.rentalPrice,
     colorHex: item.primaryColorHex,
-    colors: (item as any).availableColors || [{ name: "Classic", hex: item.primaryColorHex || "#1e293b" }],
+    colors: mergedColors,
     variants: item.variants,
   };
 });
@@ -489,7 +605,9 @@ type CartLine = {
   quantity: number;
   selectedSize?: string;
   selectedColor?: string;
+  selectedAddons?: SuitAddon[];
   orderType?: "sale" | "rental";
+  basePrice?: number;
   unitPrice?: number;
   requiresAlteration?: boolean;
   alterationNotes?: string;
@@ -1889,6 +2007,16 @@ function ReceiptPreview({ receipt, onClose, onLockTill }: { receipt: ReceiptData
                     {line.orderType === "rental" ? "Rental Service" : "Suit Purchase"}
                   </span>
                 </div>
+                {line.selectedAddons && line.selectedAddons.length > 0 && (
+                  <div style={{ fontSize: "10px", color: "#334155", margin: "2px 0 3px", paddingLeft: "4px", borderLeft: "2px solid #cbd5e1" }}>
+                    {line.selectedAddons.map((addon) => (
+                      <div key={addon.id} style={{ display: "flex", justifyContent: "space-between" }}>
+                        <span>+ {addon.icon} {addon.name}</span>
+                        <span>+N{addon.price.toFixed(2)}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
                 {line.requiresAlteration && (
                   <div style={{ fontSize: "10px", color: "#b91c1c", fontStyle: "italic", background: "#fef2f2", padding: "3px 6px", borderRadius: "4px", margin: "3px 0" }}>
                     ✂️ Alterations: {line.alterationNotes || "Custom bespoke adjustments requested"}
@@ -2626,6 +2754,7 @@ function CheckoutScreen({ preview, tenantId, onBack }: { preview: boolean; tenan
   const [modalSize, setModalSize] = useState<string>("42R");
   const [modalColor, setModalColor] = useState<string>("Navy Blue");
   const [modalOrderType, setModalOrderType] = useState<"sale" | "rental">("sale");
+  const [modalSelectedAddons, setModalSelectedAddons] = useState<SuitAddon[]>([]);
   const [modalRequiresAlterations, setModalRequiresAlterations] = useState<boolean>(false);
   const [modalAlterationNotes, setModalAlterationNotes] = useState<string>("");
   const [modalMeasurements, setModalMeasurements] = useState({ chest: "42R", waist: "34", inseam: "32", sleeve: "25" });
@@ -3007,8 +3136,15 @@ function CheckoutScreen({ preview, tenantId, onBack }: { preview: boolean; tenan
       });
   }, [preview, tenantId]);
 
-  const categories = ["All", ...new Set(products.map((product) => product.category))];
-  const visibleProducts = products.filter((product) => (category === "All" || product.category === category) && product.name.toLowerCase().includes(query.toLowerCase()));
+  const categories = ["All", ...new Set(products.map((product) => product.category)), "Add-ons & Toppings"];
+  const visibleProducts = products.filter((product) => {
+    const matchesQuery = product.name.toLowerCase().includes(query.toLowerCase());
+    if (category === "All") return matchesQuery;
+    if (category === "Add-ons & Toppings") {
+      return matchesQuery && (product.category === "Gentleman Essentials" || product.id.startsWith("acc-"));
+    }
+    return matchesQuery && product.category === category;
+  });
   const subtotal = cart.reduce((total, line) => total + (line.unitPrice || line.product.price) * line.quantity, 0);
   const discountAmount = discountType === "percent"
     ? subtotal * Math.min(100, Math.max(0, Number(discount) || 0)) / 100
@@ -3024,7 +3160,7 @@ function CheckoutScreen({ preview, tenantId, onBack }: { preview: boolean; tenan
   function handleProductTileClick(product: Product) {
     if (product.category === "Gentleman Essentials" && (!product.variants || product.variants.length <= 1)) {
       setCart((current) => {
-        const existing = current.find((l) => l.product.id === product.id && !l.selectedSize);
+        const existing = current.find((l) => l.product.id === product.id && !l.selectedSize && (!l.selectedAddons || l.selectedAddons.length === 0));
         if (existing) {
           return current.map((l) => (l === existing ? { ...l, quantity: l.quantity + 1 } : l));
         }
@@ -3033,11 +3169,12 @@ function CheckoutScreen({ preview, tenantId, onBack }: { preview: boolean; tenan
       return;
     }
 
-    // Open Sartorial Fitting Modal for suit sizing, colors, alterations, sale/rental
+    // Open Sartorial Fitting Modal for suit sizing, colors, alterations, toppings/add-ons, sale/rental
     setSelectedProductForVariant(product);
     setModalSize("42R");
     setModalColor(product.colors?.[0]?.name || "Classic");
     setModalOrderType("sale");
+    setModalSelectedAddons([]);
     setModalRequiresAlterations(false);
     setModalAlterationNotes("");
     setModalMeasurements({ chest: "42R", waist: "34", inseam: "32", sleeve: "25" });
@@ -3045,13 +3182,17 @@ function CheckoutScreen({ preview, tenantId, onBack }: { preview: boolean; tenan
 
   function confirmAddVariant() {
     if (!selectedProductForVariant) return;
-    const unitPrice = modalOrderType === "rental" ? (selectedProductForVariant.rentalPrice || 75000) : selectedProductForVariant.price;
+    const basePrice = modalOrderType === "rental" ? (selectedProductForVariant.rentalPrice || 75000) : selectedProductForVariant.price;
+    const addonsSum = modalSelectedAddons.reduce((sum, a) => sum + a.price, 0);
+    const unitPrice = basePrice + addonsSum;
     const newLine: CartLine = {
       product: selectedProductForVariant,
       quantity: 1,
       selectedSize: modalSize,
       selectedColor: modalColor,
+      selectedAddons: [...modalSelectedAddons],
       orderType: modalOrderType,
+      basePrice,
       unitPrice,
       requiresAlteration: modalRequiresAlterations,
       alterationNotes: modalRequiresAlterations ? modalAlterationNotes : undefined,
@@ -3260,39 +3401,85 @@ function CheckoutScreen({ preview, tenantId, onBack }: { preview: boolean; tenan
             </div>
           </div>
           <div className="product-tiles">
-            {visibleProducts.map((product) => (
-              <button
-                className="product-tile"
-                type="button"
-                key={product.id}
-                onClick={() => handleProductTileClick(product)}
-                style={{ position: "relative" }}
-              >
-                <div className="tile-image">
-                  {product.imageUrl ? (
-                    <img src={product.imageUrl} alt="" />
-                  ) : (
-                    <span style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "100%", height: "100%", background: "#0f172a", color: "#f8fafc", fontSize: "16px", fontWeight: 700 }}>
-                      {product.name.slice(0, 2).toUpperCase()}
-                    </span>
+            {visibleProducts.map((product) => {
+              const isThreePiece = product.name.toLowerCase().includes("3-piece") || product.category.toLowerCase().includes("3-piece") || product.name.toLowerCase().includes("three-piece");
+              const isSuit = product.category !== "Gentleman Essentials" && !product.id.startsWith("acc-");
+              return (
+                <button
+                  className="product-tile"
+                  type="button"
+                  key={product.id}
+                  onClick={() => handleProductTileClick(product)}
+                  style={{ position: "relative" }}
+                >
+                  <div className="tile-image">
+                    {product.imageUrl ? (
+                      <img src={product.imageUrl} alt="" />
+                    ) : (
+                      <span style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "100%", height: "100%", background: "#0f172a", color: "#f8fafc", fontSize: "16px", fontWeight: 700 }}>
+                        {product.name.slice(0, 2).toUpperCase()}
+                      </span>
+                    )}
+                    {isSuit && (
+                      <span
+                        style={{
+                          position: "absolute",
+                          top: "6px",
+                          right: "6px",
+                          fontSize: "9px",
+                          fontWeight: 700,
+                          padding: "2px 6px",
+                          borderRadius: "4px",
+                          background: isThreePiece ? "rgba(22, 101, 52, 0.9)" : "rgba(180, 83, 9, 0.9)",
+                          color: "white",
+                          letterSpacing: "0.2px",
+                        }}
+                      >
+                        {isThreePiece ? "3-Piece (Vest Incl.)" : "Inner Jacket Avail."}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Color variations display for checkout */}
+                  {product.colors && product.colors.length > 0 && (
+                    <div style={{ display: "flex", alignItems: "center", gap: "3px", margin: "4px 0 2px", flexWrap: "wrap" }}>
+                      {product.colors.slice(0, 5).map((c, i) => (
+                        <span
+                          key={i}
+                          title={c.name}
+                          style={{
+                            width: "10px",
+                            height: "10px",
+                            borderRadius: "50%",
+                            background: c.hex,
+                            border: "1px solid rgba(0,0,0,0.25)",
+                            display: "inline-block",
+                          }}
+                        />
+                      ))}
+                      {product.colors.length > 5 && (
+                        <span style={{ fontSize: "9px", color: "#64748b", fontWeight: 700 }}>+{product.colors.length - 5}</span>
+                      )}
+                      <span style={{ fontSize: "10px", color: "#64748b", marginLeft: "2px" }}>
+                        {product.colors.length} colors
+                      </span>
+                    </div>
                   )}
-                </div>
-                <div style={{ display: "flex", alignItems: "center", gap: "6px", margin: "4px 0 2px" }}>
-                  {product.colorHex && (
-                    <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: product.colorHex, border: "1px solid rgba(0,0,0,0.2)" }} />
+
+                  <div style={{ display: "flex", alignItems: "center", gap: "6px", margin: "2px 0" }}>
+                    <strong style={{ fontSize: "12px", lineHeight: "1.25" }}>{product.name}</strong>
+                  </div>
+                  {product.fabric && (
+                    <small style={{ color: "#64748b", fontSize: "10px", display: "block", marginBottom: "2px" }}>
+                      {product.fabric}
+                    </small>
                   )}
-                  <strong style={{ fontSize: "12px", lineHeight: "1.25" }}>{product.name}</strong>
-                </div>
-                {product.fabric && (
-                  <small style={{ color: "#64748b", fontSize: "10px", display: "block", marginBottom: "2px" }}>
-                    {product.fabric}
-                  </small>
-                )}
-                <span>
-                  {formatNaira(product.price)} · {product.unit}
-                </span>
-              </button>
-            ))}
+                  <span>
+                    {formatNaira(product.price)} · {product.unit}
+                  </span>
+                </button>
+              );
+            })}
           </div>
         </section>
         <aside className="ticket-panel">
@@ -3313,21 +3500,37 @@ function CheckoutScreen({ preview, tenantId, onBack }: { preview: boolean; tenan
                   <div className="ticket-line" key={`${line.product.id}-${idx}`}>
                     <div style={{ flex: 1 }}>
                       <strong>{line.product.name}</strong>
-                      <div style={{ fontSize: "11px", color: "#64748b", margin: "2px 0", display: "flex", gap: "4px", flexWrap: "wrap" }}>
+                      <div style={{ fontSize: "11px", color: "#64748b", margin: "2px 0", display: "flex", gap: "4px", flexWrap: "wrap", alignItems: "center" }}>
                         {line.selectedSize && (
                           <span style={{ background: "#e2e8f0", padding: "1px 5px", borderRadius: "4px", fontWeight: 600 }}>
                             {line.selectedSize}
                           </span>
                         )}
                         {line.selectedColor && (
-                          <span style={{ background: "#e2e8f0", padding: "1px 5px", borderRadius: "4px" }}>
-                            {line.selectedColor}
+                          <span style={{ background: "#f1f5f9", border: "1px solid #cbd5e1", padding: "1px 6px", borderRadius: "4px", fontWeight: 600, color: "#0f172a" }}>
+                            🎨 {line.selectedColor}
                           </span>
                         )}
                         <span style={{ background: line.orderType === "rental" ? "#ede9fe" : "#dcfce7", color: line.orderType === "rental" ? "#6d28d9" : "#166534", padding: "1px 5px", borderRadius: "4px", fontWeight: 700 }}>
                           {line.orderType === "rental" ? "Rental" : "Sale"}
                         </span>
                       </div>
+
+                      {/* Selected Add-ons / Toppings (Shoes, Tie, Brooches, Inner Jacket) */}
+                      {line.selectedAddons && line.selectedAddons.length > 0 && (
+                        <div style={{ margin: "4px 0", padding: "6px 8px", background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: "6px", fontSize: "11px" }}>
+                          <div style={{ fontWeight: 700, color: "#475569", marginBottom: "3px", fontSize: "10px", textTransform: "uppercase" }}>
+                            + Included Toppings / Add-ons ({line.selectedAddons.length}):
+                          </div>
+                          {line.selectedAddons.map((addon) => (
+                            <div key={addon.id} style={{ display: "flex", justifyContent: "space-between", color: "#1e293b", padding: "1px 0" }}>
+                              <span>{addon.icon} {addon.name}</span>
+                              <span style={{ fontWeight: 600, color: "#168379" }}>+{formatNaira(addon.price)}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+
                       {line.requiresAlteration && (
                         <div style={{ fontSize: "10px", color: "#b91c1c", fontStyle: "italic", background: "#fef2f2", padding: "2px 5px", borderRadius: "3px", marginTop: "2px" }}>
                           ✂️ {line.alterationNotes || "Tailor Alterations Requested"}
@@ -3624,38 +3827,150 @@ function CheckoutScreen({ preview, tenantId, onBack }: { preview: boolean; tenan
               </div>
             </div>
 
-            {/* Color Swatches */}
+            {/* Color Variations Palette */}
             {selectedProductForVariant.colors && selectedProductForVariant.colors.length > 0 && (
-              <div style={{ marginBottom: "14px" }}>
-                <label style={{ fontSize: "11px", fontWeight: 700, textTransform: "uppercase", color: "#475569", display: "block", marginBottom: "6px" }}>
-                  Fabric Color Swatch:
-                </label>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
-                  {selectedProductForVariant.colors.map((c) => (
-                    <button
-                      key={c.name}
-                      type="button"
-                      onClick={() => setModalColor(c.name)}
-                      style={{
-                        display: "inline-flex",
-                        alignItems: "center",
-                        gap: "6px",
-                        padding: "5px 10px",
-                        borderRadius: "20px",
-                        fontSize: "11px",
-                        fontWeight: 600,
-                        border: modalColor === c.name ? "2px solid #0f172a" : "1px solid #cbd5e1",
-                        background: modalColor === c.name ? "#f1f5f9" : "white",
-                        cursor: "pointer"
-                      }}
-                    >
-                      <span style={{ width: "10px", height: "10px", borderRadius: "50%", background: c.hex, display: "inline-block", border: "1px solid rgba(0,0,0,0.2)" }} />
-                      {c.name}
-                    </button>
-                  ))}
+              <div style={{ marginBottom: "16px" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "6px" }}>
+                  <label style={{ fontSize: "11px", fontWeight: 700, textTransform: "uppercase", color: "#475569", margin: 0 }}>
+                    Color Variation:
+                  </label>
+                  <span style={{ fontSize: "11px", fontWeight: 700, color: "#168379" }}>
+                    Selected: {modalColor}
+                  </span>
+                </div>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(135px, 1fr))", gap: "6px" }}>
+                  {selectedProductForVariant.colors.map((c) => {
+                    const isSelected = modalColor === c.name;
+                    return (
+                      <button
+                        key={c.name}
+                        type="button"
+                        onClick={() => setModalColor(c.name)}
+                        style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: "8px",
+                          padding: "6px 10px",
+                          borderRadius: "8px",
+                          fontSize: "11px",
+                          fontWeight: isSelected ? 700 : 500,
+                          border: isSelected ? "2px solid #0f172a" : "1px solid #cbd5e1",
+                          background: isSelected ? "#f1f5f9" : "#ffffff",
+                          cursor: "pointer",
+                          transition: "all 0.15s ease",
+                          textAlign: "left",
+                        }}
+                      >
+                        <span
+                          style={{
+                            width: "14px",
+                            height: "14px",
+                            borderRadius: "50%",
+                            background: c.hex,
+                            display: "inline-block",
+                            border: "1.5px solid rgba(0,0,0,0.25)",
+                            flexShrink: 0,
+                            boxShadow: isSelected ? "0 0 0 2px #cbd5e1" : "none",
+                          }}
+                        />
+                        <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                          {c.name}
+                        </span>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             )}
+
+            {/* Sartorial Add-ons & Finishing Touches ("Toppings" like food business) */}
+            {(() => {
+              const isAlreadyThreePiece =
+                selectedProductForVariant.category.toLowerCase().includes("3-piece") ||
+                selectedProductForVariant.name.toLowerCase().includes("3-piece") ||
+                selectedProductForVariant.name.toLowerCase().includes("three-piece");
+              const toppingsTotal = modalSelectedAddons.reduce((sum, a) => sum + a.price, 0);
+              return (
+                <div style={{ marginBottom: "16px", background: "#f8fafc", padding: "12px", borderRadius: "10px", border: "1px solid #e2e8f0" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "4px" }}>
+                    <div>
+                      <label style={{ fontSize: "11px", fontWeight: 800, textTransform: "uppercase", color: "#0f172a", letterSpacing: "0.5px", margin: 0 }}>
+                        Sartorial Add-ons & Finishing Touches (Toppings)
+                      </label>
+                      <p style={{ margin: "2px 0 8px", fontSize: "11px", color: "#64748b" }}>
+                        Select accessories to bundle with this suit (shoes, ties, brooches, inner jacket)
+                      </p>
+                    </div>
+                    {modalSelectedAddons.length > 0 && (
+                      <span style={{ fontSize: "11px", fontWeight: 700, color: "#168379" }}>
+                        +{formatNaira(toppingsTotal)}
+                      </span>
+                    )}
+                  </div>
+
+                  <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                    {SUIT_ADDONS.map((addon) => {
+                      const isChecked = modalSelectedAddons.some((a) => a.id === addon.id);
+                      const isInnerJacket = addon.isInnerJacket;
+                      return (
+                        <div
+                          key={addon.id}
+                          onClick={() => {
+                            setModalSelectedAddons((prev) =>
+                              prev.some((a) => a.id === addon.id)
+                                ? prev.filter((a) => a.id !== addon.id)
+                                : [...prev, addon]
+                            );
+                          }}
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                            padding: "8px 10px",
+                            borderRadius: "8px",
+                            background: isChecked ? "#f0fdf4" : "#ffffff",
+                            border: isChecked ? "1.5px solid #168379" : "1px solid #cbd5e1",
+                            cursor: "pointer",
+                            transition: "all 0.15s ease",
+                          }}
+                        >
+                          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                            <input
+                              type="checkbox"
+                              checked={isChecked}
+                              onChange={() => {}} // Handled by container click
+                              style={{ cursor: "pointer", width: "16px", height: "16px", accentColor: "#168379" }}
+                            />
+                            <span style={{ fontSize: "16px" }}>{addon.icon}</span>
+                            <div>
+                              <div style={{ fontSize: "12px", fontWeight: 700, color: "#0f172a" }}>
+                                {addon.name}
+                                {isInnerJacket && isAlreadyThreePiece && (
+                                  <span style={{ marginLeft: "6px", fontSize: "10px", color: "#166534", background: "#dcfce7", padding: "1px 5px", borderRadius: "3px", fontWeight: 600 }}>
+                                    Vest included in 3-Piece (Check for 2nd contrast vest)
+                                  </span>
+                                )}
+                                {isInnerJacket && !isAlreadyThreePiece && (
+                                  <span style={{ marginLeft: "6px", fontSize: "10px", color: "#b45309", background: "#fef3c7", padding: "1px 5px", borderRadius: "3px", fontWeight: 600 }}>
+                                    Add 3rd Piece (Waistcoat)
+                                  </span>
+                                )}
+                              </div>
+                              <div style={{ fontSize: "10px", color: "#64748b" }}>
+                                {addon.description}
+                              </div>
+                            </div>
+                          </div>
+                          <div style={{ fontSize: "12px", fontWeight: 700, color: isChecked ? "#168379" : "#475569", whiteSpace: "nowrap", marginLeft: "8px" }}>
+                            +{formatNaira(addon.price)}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            })()}
 
             {/* Alterations Toggle */}
             <div style={{ padding: "10px", borderRadius: "8px", background: "#f8fafc", border: "1px solid #e2e8f0", marginBottom: "16px" }}>
@@ -3722,13 +4037,26 @@ function CheckoutScreen({ preview, tenantId, onBack }: { preview: boolean; tenan
               )}
             </div>
 
-            <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
-              <button type="button" className="secondary-button" onClick={() => setSelectedProductForVariant(null)}>
-                Cancel
-              </button>
-              <button type="button" className="primary-button" onClick={confirmAddVariant}>
-                Add Suit to Ticket <span>→</span>
-              </button>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "16px", paddingTop: "12px", borderTop: "1px solid #e2e8f0" }}>
+              <div>
+                <span style={{ fontSize: "11px", color: "#64748b", display: "block" }}>
+                  Total ({modalOrderType === "rental" ? "Rental" : "Purchase"}{modalSelectedAddons.length > 0 ? ` + ${modalSelectedAddons.length} topping${modalSelectedAddons.length > 1 ? "s" : ""}` : ""})
+                </span>
+                <strong style={{ fontSize: "16px", color: "#0f172a" }}>
+                  {formatNaira(
+                    (modalOrderType === "rental" ? (selectedProductForVariant.rentalPrice || 75000) : selectedProductForVariant.price) +
+                    modalSelectedAddons.reduce((sum, a) => sum + a.price, 0)
+                  )}
+                </strong>
+              </div>
+              <div style={{ display: "flex", gap: "8px" }}>
+                <button type="button" className="secondary-button" onClick={() => setSelectedProductForVariant(null)}>
+                  Cancel
+                </button>
+                <button type="button" className="primary-button" onClick={confirmAddVariant}>
+                  Add to Ticket <span>→</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -4221,7 +4549,7 @@ function App() {
       <section className="welcome-panel">
         <div>
           <p className="eyebrow">{displayWorkspace.role} account · Enugu Flagship</p>
-          <h1>FMO Sartorial House & Boutique</h1>
+          <h1>FMO home of class and culture</h1>
           <p className="intro">
             No 1 Suit Store in Enugu. For the Man of Class & Culture. Ready for orders, tailor fittings, stock, and checkout.
           </p>
@@ -4254,7 +4582,7 @@ function App() {
             <span className="module-state">Primary Duty</span>
           </div>
           <h2>Checkout & Sales</h2>
-          <p>Ring up bespoke suits, fitting deposits, take Cash, Card, or Zenith Bank Transfer, and print tailor work slips.</p>
+          <p>Ring up orders, select register, take Cash or Card payments, and print receipts.</p>
           <button className="primary-button" type="button" onClick={() => navigateTo("checkout")}>
             Open checkout <span>→</span>
           </button>
@@ -4266,9 +4594,7 @@ function App() {
             <span className="module-state">Catalog Ready</span>
           </div>
           <h2>Products & stock</h2>
-          <p>
-            Browse 47+ luxury suit cuts across 7 sartorial categories, manage sizes, colors, fabrics, and inventory.
-          </p>
+          <p>Add what you sell, set prices, and keep an eye on stock levels.</p>
           <button
             className="secondary-button"
             type="button"
@@ -4281,12 +4607,10 @@ function App() {
         <article className="module-card">
           <div className="card-heading">
             <span className="icon-tile purple">⬡</span>
-            <span className="module-state">Stylists & Tailors</span>
+            <span className="module-state">Team & Cashiers</span>
           </div>
           <h2>Team & cashiers</h2>
-          <p>
-            Manage sartorial stylists, master tailors, fitting roles, and quick 4-digit register PINs.
-          </p>
+          <p>Invite team members by email, manage roles, and set up quick cashier PINs.</p>
           <button
             className="secondary-button"
             type="button"
@@ -4299,10 +4623,10 @@ function App() {
         <article className="module-card">
           <div className="card-heading">
             <span className="icon-tile amber">📈</span>
-            <span className="module-state">Sartorial Analytics</span>
+            <span className="module-state">Analytics</span>
           </div>
           <h2>Reports & analytics</h2>
-          <p>See daily suit sales totals, fitting deposits collected, VAT 7.5%, payment breakdowns, and margins.</p>
+          <p>See daily sales totals, revenue, profit margins, payment breakdowns, and top products.</p>
           <button
             className="secondary-button"
             type="button"
@@ -4318,7 +4642,7 @@ function App() {
             <span className="module-state">Administration</span>
           </div>
           <h2>Store settings</h2>
-          <p>Flagship boutique address in Trans-Ekulu Enugu, Zenith Bank transfer details, and register tills.</p>
+          <p>Set up business tax identity, manage checkout registers, receipt formats, and payment bank accounts.</p>
           <button
             className="secondary-button"
             type="button"

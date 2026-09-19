@@ -872,6 +872,25 @@ export const FMO_CATALOG: Product[] = [
     primaryColorHex: '#09090b',
     availableColors: [{ name: 'High-Shine Black', hex: '#09090b', family: 'black' }],
     variants: generateVariants('acc-oxford-shoes', 'High-Shine Black', '#09090b', 'black', 'ACC-SHOE', 165000, 35000)
+  },
+  {
+    id: 'acc-tailored-waistcoat',
+    categoryId: 'accessories',
+    name: 'Tailored Inner Jacket / Waistcoat',
+    visualDetails: 'Bespoke tailored 5-button inner waistcoat to upgrade 2-piece suits, wrap suits, or tuxedos.',
+    basePrice: 65000,
+    rentalPrice: 15000,
+    fabric: 'Super 140s Virgin Wool / Silk Backing',
+    silhouette: 'Single-Breasted 5-Button Vest',
+    colorFamily: 'black',
+    primaryColorHex: '#18181b',
+    availableColors: [
+      { name: 'Midnight Black', hex: '#09090b', family: 'black' },
+      { name: 'Navy Blue', hex: '#1e3a8a', family: 'navy' },
+      { name: 'Charcoal Grey', hex: '#374151', family: 'ash-grey' },
+      { name: 'Burgundy Wine', hex: '#881337', family: 'burgundy' }
+    ],
+    variants: generateVariants('acc-tailored-waistcoat', 'Midnight Black', '#09090b', 'black', 'ACC-VEST', 65000, 15000)
   }
 ];
 
