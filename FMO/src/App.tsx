@@ -3750,299 +3750,461 @@ function CheckoutScreen({ preview, tenantId, onBack }: { preview: boolean; tenan
 
       {/* Sartorial Tailoring Variant & Fitting Modal */}
       {selectedProductForVariant && (
-        <div className="modal-backdrop" role="dialog" aria-modal="true" onClick={() => setSelectedProductForVariant(null)}>
-          <div className="product-modal sartorial-modal" onClick={(e) => e.stopPropagation()} style={{ maxWidth: "520px", width: "95%", background: "white", borderRadius: "12px", padding: "24px" }}>
-            <div className="modal-heading" style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "16px" }}>
-              <div>
-                <p className="eyebrow" style={{ margin: 0, color: "#168379" }}>Sartorial Fitting & Sizing</p>
-                <h2 style={{ margin: "4px 0", fontSize: "18px" }}>{selectedProductForVariant.name}</h2>
-                <p style={{ margin: 0, fontSize: "12px", color: "#64748b" }}>
-                  Fabric: {selectedProductForVariant.fabric || "Super 140s Wool"} · {selectedProductForVariant.category}
-                </p>
-              </div>
-              <button className="close-button" type="button" onClick={() => setSelectedProductForVariant(null)} style={{ fontSize: "18px", border: "none", background: "none", cursor: "pointer" }}>✕</button>
-            </div>
-
-            {/* Purchase vs Rental Option */}
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", marginBottom: "16px" }}>
-              <button
-                type="button"
-                onClick={() => setModalOrderType("sale")}
-                style={{
-                  padding: "10px",
-                  borderRadius: "8px",
-                  border: modalOrderType === "sale" ? "2px solid #168379" : "1px solid #cbd5e1",
-                  background: modalOrderType === "sale" ? "#f0fdf9" : "white",
-                  cursor: "pointer",
-                  textAlign: "left"
-                }}
-              >
-                <strong style={{ display: "block", fontSize: "12px", color: "#0f172a" }}>Bespoke Purchase</strong>
-                <span style={{ fontSize: "14px", fontWeight: 800, color: "#168379" }}>{formatNaira(selectedProductForVariant.price)}</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setModalOrderType("rental")}
-                style={{
-                  padding: "10px",
-                  borderRadius: "8px",
-                  border: modalOrderType === "rental" ? "2px solid #168379" : "1px solid #cbd5e1",
-                  background: modalOrderType === "rental" ? "#f0fdf9" : "white",
-                  cursor: "pointer",
-                  textAlign: "left"
-                }}
-              >
-                <strong style={{ display: "block", fontSize: "12px", color: "#0f172a" }}>Event Rental</strong>
-                <span style={{ fontSize: "14px", fontWeight: 800, color: "#7c3aed" }}>
-                  {formatNaira(selectedProductForVariant.rentalPrice || 75000)}
-                </span>
-              </button>
-            </div>
-
-            {/* Size Selector */}
-            <div style={{ marginBottom: "14px" }}>
-              <label style={{ fontSize: "11px", fontWeight: 700, textTransform: "uppercase", color: "#475569", display: "block", marginBottom: "6px" }}>
-                Select Jacket & Trouser Size:
-              </label>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
-                {["38R", "40R", "42R", "44R", "46R", "48R", "Custom Bespoke"].map((sz) => (
-                  <button
-                    key={sz}
-                    type="button"
-                    onClick={() => setModalSize(sz)}
+        <div className="sartorial-modal-backdrop" role="dialog" aria-modal="true" onClick={() => setSelectedProductForVariant(null)}>
+          <div className="sartorial-modal" onClick={(e) => e.stopPropagation()}>
+            {/* Pinned Non-Scrolling Header */}
+            <div className="sartorial-modal-header">
+              <div style={{ display: "flex", alignItems: "center", gap: "12px", minWidth: 0 }}>
+                {selectedProductForVariant.imageUrl ? (
+                  <img
+                    src={selectedProductForVariant.imageUrl}
+                    alt={selectedProductForVariant.name}
                     style={{
-                      padding: "6px 10px",
-                      borderRadius: "6px",
-                      fontSize: "11px",
-                      fontWeight: 600,
-                      border: modalSize === sz ? "2px solid #168379" : "1px solid #cbd5e1",
-                      background: modalSize === sz ? "#168379" : "white",
-                      color: modalSize === sz ? "white" : "#1e293b",
-                      cursor: "pointer"
+                      width: "44px",
+                      height: "54px",
+                      objectFit: "cover",
+                      borderRadius: "8px",
+                      border: "1px solid #cbd5e1",
+                      flexShrink: 0,
+                    }}
+                  />
+                ) : (
+                  <div
+                    style={{
+                      width: "44px",
+                      height: "54px",
+                      borderRadius: "8px",
+                      background: "#0f172a",
+                      color: "#f8fafc",
+                      display: "grid",
+                      placeItems: "center",
+                      fontWeight: 800,
+                      fontSize: "12px",
+                      flexShrink: 0,
                     }}
                   >
-                    {sz}
-                  </button>
-                ))}
+                    FMO
+                  </div>
+                )}
+                <div style={{ minWidth: 0 }}>
+                  <span style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.5px", color: "#168379", display: "block" }}>
+                    {selectedProductForVariant.category}
+                  </span>
+                  <h2 style={{ margin: "2px 0 0", fontSize: "16px", fontWeight: 800, color: "#0f172a", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                    {selectedProductForVariant.name}
+                  </h2>
+                  <p style={{ margin: 0, fontSize: "11px", color: "#64748b" }}>
+                    Fabric: {selectedProductForVariant.fabric || "Super 140s Italian Wool"}
+                  </p>
+                </div>
               </div>
+              <button
+                type="button"
+                onClick={() => setSelectedProductForVariant(null)}
+                aria-label="Close modal"
+                style={{
+                  width: "32px",
+                  height: "32px",
+                  borderRadius: "50%",
+                  border: "1px solid #cbd5e1",
+                  background: "#ffffff",
+                  color: "#64748b",
+                  fontSize: "16px",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexShrink: 0,
+                  marginLeft: "12px",
+                  transition: "all 0.15s ease",
+                }}
+              >
+                ✕
+              </button>
             </div>
 
-            {/* Color Variations Palette */}
-            {selectedProductForVariant.colors && selectedProductForVariant.colors.length > 0 && (
-              <div style={{ marginBottom: "16px" }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "6px" }}>
-                  <label style={{ fontSize: "11px", fontWeight: 700, textTransform: "uppercase", color: "#475569", margin: 0 }}>
-                    Color Variation:
-                  </label>
-                  <span style={{ fontSize: "11px", fontWeight: 700, color: "#168379" }}>
-                    Selected: {modalColor}
+            {/* Scrollable Modal Body */}
+            <div className="sartorial-modal-body">
+              {/* Purchase vs Rental Option */}
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+                <button
+                  type="button"
+                  onClick={() => setModalOrderType("sale")}
+                  style={{
+                    padding: "10px 12px",
+                    borderRadius: "8px",
+                    border: modalOrderType === "sale" ? "2px solid #168379" : "1px solid #cbd5e1",
+                    background: modalOrderType === "sale" ? "#f0fdf9" : "white",
+                    cursor: "pointer",
+                    textAlign: "left",
+                    transition: "all 0.15s ease",
+                  }}
+                >
+                  <strong style={{ display: "block", fontSize: "12px", color: "#0f172a" }}>Bespoke Purchase</strong>
+                  <span style={{ fontSize: "14px", fontWeight: 800, color: "#168379" }}>{formatNaira(selectedProductForVariant.price)}</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setModalOrderType("rental")}
+                  style={{
+                    padding: "10px 12px",
+                    borderRadius: "8px",
+                    border: modalOrderType === "rental" ? "2px solid #168379" : "1px solid #cbd5e1",
+                    background: modalOrderType === "rental" ? "#f0fdf9" : "white",
+                    cursor: "pointer",
+                    textAlign: "left",
+                    transition: "all 0.15s ease",
+                  }}
+                >
+                  <strong style={{ display: "block", fontSize: "12px", color: "#0f172a" }}>Event Rental</strong>
+                  <span style={{ fontSize: "14px", fontWeight: 800, color: "#7c3aed" }}>
+                    {formatNaira(selectedProductForVariant.rentalPrice || 75000)}
                   </span>
-                </div>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(135px, 1fr))", gap: "6px" }}>
-                  {selectedProductForVariant.colors.map((c) => {
-                    const isSelected = modalColor === c.name;
-                    return (
-                      <button
-                        key={c.name}
-                        type="button"
-                        onClick={() => setModalColor(c.name)}
+                </button>
+              </div>
+
+              {/* Visual Style & Active Color Preview Banner */}
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "14px",
+                  background: "#f8fafc",
+                  padding: "12px 14px",
+                  borderRadius: "10px",
+                  border: "1px solid #e2e8f0",
+                }}
+              >
+                {selectedProductForVariant.imageUrl && (
+                  <div style={{ position: "relative", flexShrink: 0 }}>
+                    <img
+                      src={selectedProductForVariant.imageUrl}
+                      alt={selectedProductForVariant.name}
+                      style={{
+                        width: "56px",
+                        height: "70px",
+                        objectFit: "cover",
+                        borderRadius: "8px",
+                        border: "1px solid #cbd5e1",
+                        boxShadow: "0 2px 5px rgba(0,0,0,0.08)",
+                      }}
+                    />
+                    <span
+                      style={{
+                        position: "absolute",
+                        bottom: "-4px",
+                        right: "-4px",
+                        width: "16px",
+                        height: "16px",
+                        borderRadius: "50%",
+                        background:
+                          selectedProductForVariant.colors?.find((c) => c.name === modalColor)?.hex ||
+                          selectedProductForVariant.colorHex ||
+                          "#0f172a",
+                        border: "2px solid #ffffff",
+                        boxShadow: "0 1px 3px rgba(0,0,0,0.3)",
+                      }}
+                      title={`Selected shade: ${modalColor}`}
+                    />
+                  </div>
+                )}
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap", marginBottom: "4px" }}>
+                    <span
+                      style={{
+                        fontSize: "10px",
+                        fontWeight: 800,
+                        textTransform: "uppercase",
+                        padding: "2px 6px",
+                        borderRadius: "4px",
+                        background: "#dcfce7",
+                        color: "#166534",
+                        letterSpacing: "0.3px",
+                      }}
+                    >
+                      Bespoke Cut
+                    </span>
+                    <span
+                      style={{
+                        fontSize: "11px",
+                        fontWeight: 700,
+                        color: "#0f172a",
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "5px",
+                      }}
+                    >
+                      <span
                         style={{
-                          display: "inline-flex",
-                          alignItems: "center",
-                          gap: "8px",
-                          padding: "6px 10px",
-                          borderRadius: "8px",
-                          fontSize: "11px",
-                          fontWeight: isSelected ? 700 : 500,
-                          border: isSelected ? "2px solid #0f172a" : "1px solid #cbd5e1",
-                          background: isSelected ? "#f1f5f9" : "#ffffff",
-                          cursor: "pointer",
-                          transition: "all 0.15s ease",
-                          textAlign: "left",
+                          width: "9px",
+                          height: "9px",
+                          borderRadius: "50%",
+                          background:
+                            selectedProductForVariant.colors?.find((c) => c.name === modalColor)?.hex ||
+                            selectedProductForVariant.colorHex ||
+                            "#0f172a",
+                          display: "inline-block",
+                          border: "1px solid rgba(0,0,0,0.2)",
                         }}
-                      >
-                        <span
-                          style={{
-                            width: "14px",
-                            height: "14px",
-                            borderRadius: "50%",
-                            background: c.hex,
-                            display: "inline-block",
-                            border: "1.5px solid rgba(0,0,0,0.25)",
-                            flexShrink: 0,
-                            boxShadow: isSelected ? "0 0 0 2px #cbd5e1" : "none",
-                          }}
-                        />
-                        <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                          {c.name}
-                        </span>
-                      </button>
-                    );
-                  })}
+                      />
+                      Color: {modalColor}
+                    </span>
+                  </div>
+                  <p style={{ margin: 0, fontSize: "11px", color: "#64748b", lineHeight: 1.35 }}>
+                    Tailored in FMO's signature style. Choose your custom fabric shade and sizing below.
+                  </p>
                 </div>
               </div>
-            )}
 
-            {/* Sartorial Add-ons & Finishing Touches ("Toppings" like food business) */}
-            {(() => {
-              const isAlreadyThreePiece =
-                selectedProductForVariant.category.toLowerCase().includes("3-piece") ||
-                selectedProductForVariant.name.toLowerCase().includes("3-piece") ||
-                selectedProductForVariant.name.toLowerCase().includes("three-piece");
-              const toppingsTotal = modalSelectedAddons.reduce((sum, a) => sum + a.price, 0);
-              return (
-                <div style={{ marginBottom: "16px", background: "#f8fafc", padding: "12px", borderRadius: "10px", border: "1px solid #e2e8f0" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "4px" }}>
-                    <div>
-                      <label style={{ fontSize: "11px", fontWeight: 800, textTransform: "uppercase", color: "#0f172a", letterSpacing: "0.5px", margin: 0 }}>
-                        Sartorial Add-ons & Finishing Touches (Toppings)
-                      </label>
-                      <p style={{ margin: "2px 0 8px", fontSize: "11px", color: "#64748b" }}>
-                        Select accessories to bundle with this suit (shoes, ties, brooches, inner jacket)
-                      </p>
-                    </div>
-                    {modalSelectedAddons.length > 0 && (
-                      <span style={{ fontSize: "11px", fontWeight: 700, color: "#168379" }}>
-                        +{formatNaira(toppingsTotal)}
-                      </span>
-                    )}
+              {/* Size Selector */}
+              <div>
+                <label style={{ fontSize: "11px", fontWeight: 700, textTransform: "uppercase", color: "#475569", display: "block", marginBottom: "6px" }}>
+                  Select Jacket & Trouser Size:
+                </label>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+                  {["38R", "40R", "42R", "44R", "46R", "48R", "Custom Bespoke"].map((sz) => (
+                    <button
+                      key={sz}
+                      type="button"
+                      onClick={() => setModalSize(sz)}
+                      style={{
+                        padding: "6px 10px",
+                        borderRadius: "6px",
+                        fontSize: "11px",
+                        fontWeight: 600,
+                        border: modalSize === sz ? "2px solid #168379" : "1px solid #cbd5e1",
+                        background: modalSize === sz ? "#168379" : "white",
+                        color: modalSize === sz ? "white" : "#1e293b",
+                        cursor: "pointer",
+                        transition: "all 0.15s ease",
+                      }}
+                    >
+                      {sz}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Color Variations Palette */}
+              {selectedProductForVariant.colors && selectedProductForVariant.colors.length > 0 && (
+                <div>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "6px" }}>
+                    <label style={{ fontSize: "11px", fontWeight: 700, textTransform: "uppercase", color: "#475569", margin: 0 }}>
+                      Color Variation / Fabric Shade:
+                    </label>
+                    <span style={{ fontSize: "11px", fontWeight: 700, color: "#168379" }}>
+                      Selected: {modalColor}
+                    </span>
                   </div>
-
-                  <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-                    {SUIT_ADDONS.map((addon) => {
-                      const isChecked = modalSelectedAddons.some((a) => a.id === addon.id);
-                      const isInnerJacket = addon.isInnerJacket;
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(135px, 1fr))", gap: "6px" }}>
+                    {selectedProductForVariant.colors.map((c) => {
+                      const isSelected = modalColor === c.name;
                       return (
-                        <div
-                          key={addon.id}
-                          onClick={() => {
-                            setModalSelectedAddons((prev) =>
-                              prev.some((a) => a.id === addon.id)
-                                ? prev.filter((a) => a.id !== addon.id)
-                                : [...prev, addon]
-                            );
-                          }}
+                        <button
+                          key={c.name}
+                          type="button"
+                          onClick={() => setModalColor(c.name)}
                           style={{
-                            display: "flex",
+                            display: "inline-flex",
                             alignItems: "center",
-                            justifyContent: "space-between",
-                            padding: "8px 10px",
+                            gap: "8px",
+                            padding: "6px 10px",
                             borderRadius: "8px",
-                            background: isChecked ? "#f0fdf4" : "#ffffff",
-                            border: isChecked ? "1.5px solid #168379" : "1px solid #cbd5e1",
+                            fontSize: "11px",
+                            fontWeight: isSelected ? 700 : 500,
+                            border: isSelected ? "2px solid #0f172a" : "1px solid #cbd5e1",
+                            background: isSelected ? "#f1f5f9" : "#ffffff",
                             cursor: "pointer",
                             transition: "all 0.15s ease",
+                            textAlign: "left",
                           }}
                         >
-                          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                            <input
-                              type="checkbox"
-                              checked={isChecked}
-                              onChange={() => {}} // Handled by container click
-                              style={{ cursor: "pointer", width: "16px", height: "16px", accentColor: "#168379" }}
-                            />
-                            <span style={{ fontSize: "16px" }}>{addon.icon}</span>
-                            <div>
-                              <div style={{ fontSize: "12px", fontWeight: 700, color: "#0f172a" }}>
-                                {addon.name}
-                                {isInnerJacket && isAlreadyThreePiece && (
-                                  <span style={{ marginLeft: "6px", fontSize: "10px", color: "#166534", background: "#dcfce7", padding: "1px 5px", borderRadius: "3px", fontWeight: 600 }}>
-                                    Vest included in 3-Piece (Check for 2nd contrast vest)
-                                  </span>
-                                )}
-                                {isInnerJacket && !isAlreadyThreePiece && (
-                                  <span style={{ marginLeft: "6px", fontSize: "10px", color: "#b45309", background: "#fef3c7", padding: "1px 5px", borderRadius: "3px", fontWeight: 600 }}>
-                                    Add 3rd Piece (Waistcoat)
-                                  </span>
-                                )}
-                              </div>
-                              <div style={{ fontSize: "10px", color: "#64748b" }}>
-                                {addon.description}
-                              </div>
-                            </div>
-                          </div>
-                          <div style={{ fontSize: "12px", fontWeight: 700, color: isChecked ? "#168379" : "#475569", whiteSpace: "nowrap", marginLeft: "8px" }}>
-                            +{formatNaira(addon.price)}
-                          </div>
-                        </div>
+                          <span
+                            style={{
+                              width: "14px",
+                              height: "14px",
+                              borderRadius: "50%",
+                              background: c.hex,
+                              display: "inline-block",
+                              border: "1.5px solid rgba(0,0,0,0.25)",
+                              flexShrink: 0,
+                              boxShadow: isSelected ? "0 0 0 2px #cbd5e1" : "none",
+                            }}
+                          />
+                          <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                            {c.name}
+                          </span>
+                        </button>
                       );
                     })}
                   </div>
                 </div>
-              );
-            })()}
+              )}
 
-            {/* Alterations Toggle */}
-            <div style={{ padding: "10px", borderRadius: "8px", background: "#f8fafc", border: "1px solid #e2e8f0", marginBottom: "16px" }}>
-              <label style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer", margin: 0, fontWeight: 700, fontSize: "12px" }}>
-                <input
-                  type="checkbox"
-                  checked={modalRequiresAlterations}
-                  onChange={(e) => setModalRequiresAlterations(e.target.checked)}
-                />
-                <span>✂️ Tailoring & Fitting Alterations Required?</span>
-              </label>
+              {/* Sartorial Add-ons & Finishing Touches ("Toppings" like food business) */}
+              {(() => {
+                const isAlreadyThreePiece =
+                  selectedProductForVariant.category.toLowerCase().includes("3-piece") ||
+                  selectedProductForVariant.name.toLowerCase().includes("3-piece") ||
+                  selectedProductForVariant.name.toLowerCase().includes("three-piece");
+                const toppingsTotal = modalSelectedAddons.reduce((sum, a) => sum + a.price, 0);
+                return (
+                  <div style={{ background: "#f8fafc", padding: "12px", borderRadius: "10px", border: "1px solid #e2e8f0" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "4px" }}>
+                      <div>
+                        <label style={{ fontSize: "11px", fontWeight: 800, textTransform: "uppercase", color: "#0f172a", letterSpacing: "0.5px", margin: 0 }}>
+                          Sartorial Add-ons & Finishing Touches (Toppings)
+                        </label>
+                        <p style={{ margin: "2px 0 8px", fontSize: "11px", color: "#64748b" }}>
+                          Select accessories to bundle with this suit (shoes, ties, brooches, inner jacket)
+                        </p>
+                      </div>
+                      {modalSelectedAddons.length > 0 && (
+                        <span style={{ fontSize: "11px", fontWeight: 700, color: "#168379" }}>
+                          +{formatNaira(toppingsTotal)}
+                        </span>
+                      )}
+                    </div>
 
-              {modalRequiresAlterations && (
-                <div style={{ marginTop: "10px" }}>
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: "6px", marginBottom: "6px" }}>
+                    <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                      {SUIT_ADDONS.map((addon) => {
+                        const isChecked = modalSelectedAddons.some((a) => a.id === addon.id);
+                        const isInnerJacket = addon.isInnerJacket;
+                        return (
+                          <div
+                            key={addon.id}
+                            onClick={() => {
+                              setModalSelectedAddons((prev) =>
+                                prev.some((a) => a.id === addon.id)
+                                  ? prev.filter((a) => a.id !== addon.id)
+                                  : [...prev, addon]
+                              );
+                            }}
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "space-between",
+                              padding: "8px 10px",
+                              borderRadius: "8px",
+                              background: isChecked ? "#f0fdf4" : "#ffffff",
+                              border: isChecked ? "1.5px solid #168379" : "1px solid #cbd5e1",
+                              cursor: "pointer",
+                              transition: "all 0.15s ease",
+                            }}
+                          >
+                            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                              <input
+                                type="checkbox"
+                                checked={isChecked}
+                                onChange={() => {}} // Handled by container click
+                                style={{ cursor: "pointer", width: "16px", height: "16px", accentColor: "#168379" }}
+                              />
+                              <span style={{ fontSize: "16px" }}>{addon.icon}</span>
+                              <div>
+                                <div style={{ fontSize: "12px", fontWeight: 700, color: "#0f172a" }}>
+                                  {addon.name}
+                                  {isInnerJacket && isAlreadyThreePiece && (
+                                    <span style={{ marginLeft: "6px", fontSize: "10px", color: "#166534", background: "#dcfce7", padding: "1px 5px", borderRadius: "3px", fontWeight: 600 }}>
+                                      Vest included in 3-Piece (Check for 2nd contrast vest)
+                                    </span>
+                                  )}
+                                  {isInnerJacket && !isAlreadyThreePiece && (
+                                    <span style={{ marginLeft: "6px", fontSize: "10px", color: "#b45309", background: "#fef3c7", padding: "1px 5px", borderRadius: "3px", fontWeight: 600 }}>
+                                      Add 3rd Piece (Waistcoat)
+                                    </span>
+                                  )}
+                                </div>
+                                <div style={{ fontSize: "10px", color: "#64748b" }}>
+                                  {addon.description}
+                                </div>
+                              </div>
+                            </div>
+                            <div style={{ fontSize: "12px", fontWeight: 700, color: isChecked ? "#168379" : "#475569", whiteSpace: "nowrap", marginLeft: "8px" }}>
+                              +{formatNaira(addon.price)}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })()}
+
+              {/* Alterations Toggle */}
+              <div style={{ padding: "10px 12px", borderRadius: "8px", background: "#f8fafc", border: "1px solid #e2e8f0" }}>
+                <label style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer", margin: 0, fontWeight: 700, fontSize: "12px" }}>
+                  <input
+                    type="checkbox"
+                    checked={modalRequiresAlterations}
+                    onChange={(e) => setModalRequiresAlterations(e.target.checked)}
+                  />
+                  <span>✂️ Tailoring & Fitting Alterations Required?</span>
+                </label>
+
+                {modalRequiresAlterations && (
+                  <div style={{ marginTop: "10px" }}>
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: "6px", marginBottom: "6px" }}>
+                      <label style={{ margin: 0, fontSize: "10px" }}>
+                        Chest (in)
+                        <input
+                          type="text"
+                          value={modalMeasurements.chest}
+                          onChange={(e) => setModalMeasurements({ ...modalMeasurements, chest: e.target.value })}
+                          style={{ marginTop: "2px", padding: "5px", fontSize: "11px" }}
+                        />
+                      </label>
+                      <label style={{ margin: 0, fontSize: "10px" }}>
+                        Waist (in)
+                        <input
+                          type="text"
+                          value={modalMeasurements.waist}
+                          onChange={(e) => setModalMeasurements({ ...modalMeasurements, waist: e.target.value })}
+                          style={{ marginTop: "2px", padding: "5px", fontSize: "11px" }}
+                        />
+                      </label>
+                      <label style={{ margin: 0, fontSize: "10px" }}>
+                        Inseam (in)
+                        <input
+                          type="text"
+                          value={modalMeasurements.inseam}
+                          onChange={(e) => setModalMeasurements({ ...modalMeasurements, inseam: e.target.value })}
+                          style={{ marginTop: "2px", padding: "5px", fontSize: "11px" }}
+                        />
+                      </label>
+                      <label style={{ margin: 0, fontSize: "10px" }}>
+                        Sleeve (in)
+                        <input
+                          type="text"
+                          value={modalMeasurements.sleeve}
+                          onChange={(e) => setModalMeasurements({ ...modalMeasurements, sleeve: e.target.value })}
+                          style={{ marginTop: "2px", padding: "5px", fontSize: "11px" }}
+                        />
+                      </label>
+                    </div>
                     <label style={{ margin: 0, fontSize: "10px" }}>
-                      Chest (in)
+                      Tailor Instructions
                       <input
                         type="text"
-                        value={modalMeasurements.chest}
-                        onChange={(e) => setModalMeasurements({ ...modalMeasurements, chest: e.target.value })}
-                        style={{ marginTop: "2px", padding: "5px", fontSize: "11px" }}
-                      />
-                    </label>
-                    <label style={{ margin: 0, fontSize: "10px" }}>
-                      Waist (in)
-                      <input
-                        type="text"
-                        value={modalMeasurements.waist}
-                        onChange={(e) => setModalMeasurements({ ...modalMeasurements, waist: e.target.value })}
-                        style={{ marginTop: "2px", padding: "5px", fontSize: "11px" }}
-                      />
-                    </label>
-                    <label style={{ margin: 0, fontSize: "10px" }}>
-                      Inseam (in)
-                      <input
-                        type="text"
-                        value={modalMeasurements.inseam}
-                        onChange={(e) => setModalMeasurements({ ...modalMeasurements, inseam: e.target.value })}
-                        style={{ marginTop: "2px", padding: "5px", fontSize: "11px" }}
-                      />
-                    </label>
-                    <label style={{ margin: 0, fontSize: "10px" }}>
-                      Sleeve (in)
-                      <input
-                        type="text"
-                        value={modalMeasurements.sleeve}
-                        onChange={(e) => setModalMeasurements({ ...modalMeasurements, sleeve: e.target.value })}
+                        placeholder="e.g. Hem trousers 1 inch, taper lower leg"
+                        value={modalAlterationNotes}
+                        onChange={(e) => setModalAlterationNotes(e.target.value)}
                         style={{ marginTop: "2px", padding: "5px", fontSize: "11px" }}
                       />
                     </label>
                   </div>
-                  <label style={{ margin: 0, fontSize: "10px" }}>
-                    Tailor Instructions
-                    <input
-                      type="text"
-                      placeholder="e.g. Hem trousers 1 inch, taper lower leg"
-                      value={modalAlterationNotes}
-                      onChange={(e) => setModalAlterationNotes(e.target.value)}
-                      style={{ marginTop: "2px", padding: "5px", fontSize: "11px" }}
-                    />
-                  </label>
-                </div>
-              )}
+                )}
+              </div>
             </div>
 
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "16px", paddingTop: "12px", borderTop: "1px solid #e2e8f0" }}>
+            {/* Pinned Non-Scrolling Footer (Always visible) */}
+            <div className="sartorial-modal-footer">
               <div>
                 <span style={{ fontSize: "11px", color: "#64748b", display: "block" }}>
-                  Total ({modalOrderType === "rental" ? "Rental" : "Purchase"}{modalSelectedAddons.length > 0 ? ` + ${modalSelectedAddons.length} topping${modalSelectedAddons.length > 1 ? "s" : ""}` : ""})
+                  Total ({modalOrderType === "rental" ? "Rental" : "Purchase"}
+                  {modalSelectedAddons.length > 0 ? ` + ${modalSelectedAddons.length} topping${modalSelectedAddons.length > 1 ? "s" : ""}` : ""}
+                  {modalColor ? ` · ${modalColor}` : ""})
                 </span>
-                <strong style={{ fontSize: "16px", color: "#0f172a" }}>
+                <strong style={{ fontSize: "17px", color: "#0f172a", fontWeight: 800 }}>
                   {formatNaira(
                     (modalOrderType === "rental" ? (selectedProductForVariant.rentalPrice || 75000) : selectedProductForVariant.price) +
                     modalSelectedAddons.reduce((sum, a) => sum + a.price, 0)
@@ -4050,10 +4212,10 @@ function CheckoutScreen({ preview, tenantId, onBack }: { preview: boolean; tenan
                 </strong>
               </div>
               <div style={{ display: "flex", gap: "8px" }}>
-                <button type="button" className="secondary-button" onClick={() => setSelectedProductForVariant(null)}>
+                <button type="button" className="secondary-button" onClick={() => setSelectedProductForVariant(null)} style={{ padding: "8px 14px", fontSize: "12px" }}>
                   Cancel
                 </button>
-                <button type="button" className="primary-button" onClick={confirmAddVariant}>
+                <button type="button" className="primary-button" onClick={confirmAddVariant} style={{ padding: "8px 18px", fontSize: "12px", display: "inline-flex", alignItems: "center", gap: "6px" }}>
                   Add to Ticket <span>→</span>
                 </button>
               </div>

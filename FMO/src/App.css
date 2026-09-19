@@ -3397,3 +3397,93 @@ label { display: block; margin-bottom: 17px; color: #4b6269; font-size: 12px; fo
 .toggle-state-badge.disabled {
   color: #94a3b8;
 }
+
+/* ==========================================================================
+   SARTORIAL FITTING & TOPPINGS MODAL (FIX FOR OVERFLOW & CUT-OFF BUG)
+   ========================================================================== */
+.sartorial-modal-backdrop {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 9999 !important;
+  background: rgba(15, 23, 42, 0.72) !important;
+  backdrop-filter: blur(6px) !important;
+  -webkit-backdrop-filter: blur(6px) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 16px !important;
+  overflow-y: auto !important;
+}
+
+.sartorial-modal {
+  max-width: 580px !important;
+  width: 100% !important;
+  max-height: 90vh !important;
+  background: #ffffff !important;
+  border-radius: 16px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  padding: 0 !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35) !important;
+  overflow: hidden !important;
+  animation: sartorialModalPop 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+@keyframes sartorialModalPop {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.sartorial-modal-header {
+  padding: 16px 20px !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+  background: #fafbfc !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  flex-shrink: 0 !important;
+}
+
+.sartorial-modal-body {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  padding: 20px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 16px !important;
+  overscroll-behavior: contain !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+.sartorial-modal-body::-webkit-scrollbar {
+  width: 6px;
+}
+.sartorial-modal-body::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+.sartorial-modal-body::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+.sartorial-modal-body::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.sartorial-modal-footer {
+  padding: 14px 20px !important;
+  border-top: 1px solid #e2e8f0 !important;
+  background: #fafbfc !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  flex-shrink: 0 !important;
+}
+
