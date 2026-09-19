@@ -43,23 +43,27 @@ label { display: block; margin-bottom: 17px; color: #4b6269; font-size: 12px; fo
 .catalog-header > .primary-button { justify-self: end; }
 .catalog-header h1 { margin: 0; font-size: clamp(30px, 3.8vw, 44px); }
 
-/* Navigation Back Button Pill Component */
+/* Navigation Back Button Component (matches store cards/pills) */
 .app-back-btn,
 .back-button {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  height: 38px;
-  padding: 0 16px 0 10px;
+  gap: 7px;
+  height: 36px;
+  width: fit-content;
+  max-width: max-content;
+  justify-self: start;
+  align-self: flex-start;
+  padding: 0 12px 0 8px;
   background: #ffffff;
-  border: 1px solid #d5e0e3;
-  border-radius: 9999px;
-  color: #2b454f;
-  font-size: 13px;
-  font-weight: 600;
+  border: 1px solid #d4e3e0;
+  border-radius: 8px;
+  color: #233e44;
+  font-size: 12px;
+  font-weight: 700;
   font-family: inherit;
   cursor: pointer;
-  box-shadow: 0 2px 5px rgba(24, 45, 52, 0.05);
+  box-shadow: 0 2px 6px rgba(35, 54, 60, 0.04);
   transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
   text-decoration: none;
   user-select: none;
@@ -67,14 +71,14 @@ label { display: block; margin-bottom: 17px; color: #4b6269; font-size: 12px; fo
   flex-shrink: 0;
 }
 .app-back-btn-icon {
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: #edf5f4;
+  background: #eef8f5;
   color: #168379;
-  border-radius: 50%;
+  border-radius: 6px;
   transition: transform 0.18s ease, background 0.18s ease, color 0.18s ease;
 }
 .app-back-btn:hover,
@@ -82,7 +86,7 @@ label { display: block; margin-bottom: 17px; color: #4b6269; font-size: 12px; fo
   background: #ffffff;
   border-color: #168379;
   color: #168379;
-  box-shadow: 0 4px 12px rgba(22, 131, 121, 0.14);
+  box-shadow: 0 4px 12px rgba(22, 131, 121, 0.12);
   transform: translateY(-1px);
 }
 .app-back-btn:hover .app-back-btn-icon {
