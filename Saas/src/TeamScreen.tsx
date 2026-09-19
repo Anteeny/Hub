@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { supabase } from "./lib/supabase";
+import { BackButton } from "./BackButton";
 
 export type TeamMember = {
   id: string;
@@ -372,10 +373,8 @@ async function hashPinClientSide(pin: string): Promise<string> {
 
   return (
     <main className="catalog-shell">
-      <header className="catalog-header">
-        <button className="back-button" type="button" onClick={onBack}>
-          ← Home
-        </button>
+      <header className="catalog-header team-header">
+        <BackButton onClick={onBack} label="Home" />
         <div style={{ textAlign: "right" }}>
           <p className="eyebrow">PEOPLE & SHIFTS</p>
           <h1>Team & cashiers</h1>

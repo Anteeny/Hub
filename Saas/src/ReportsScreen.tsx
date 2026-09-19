@@ -1,6 +1,7 @@
 import { useEffect, useState, useMemo } from "react";
 import { supabase } from "./lib/supabase";
 import { ZReportPreview, type ZReportData } from "./ZReportModal";
+import { BackButton } from "./BackButton";
 
 interface ReportsScreenProps {
   tenantId?: string;
@@ -910,8 +911,8 @@ export function ReportsScreen({
   return (
     <main className="catalog-shell">
       {/* ──── Header ──── */}
-      <header className="catalog-header">
-        <button className="back-button" type="button" onClick={onBack}>← Home</button>
+      <header className="catalog-header rpt-header">
+        <BackButton onClick={onBack} label="Home" />
         <div style={{ textAlign: "right" }}>
           <p className="eyebrow">REPORTS &amp; ANALYTICS</p>
           <h1>Sales Insights</h1>

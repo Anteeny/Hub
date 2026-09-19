@@ -4,6 +4,7 @@ import { supabase } from "./lib/supabase";
 import { TeamScreen } from "./TeamScreen";
 import { ReportsScreen } from "./ReportsScreen";
 import { ZReportPreview, type ShiftCashMovement, type ZReportData } from "./ZReportModal";
+import { BackButton } from "./BackButton";
 export type { ShiftCashMovement, ZReportData };
 export { ZReportPreview };
 import "./App.css";
@@ -330,9 +331,7 @@ function ProductsScreen({
   return (
     <main className="catalog-shell">
       <header className="catalog-header">
-        <button className="back-button" type="button" onClick={onBack}>
-          ← Home
-        </button>
+        <BackButton onClick={onBack} label="Home" />
         <div>
           <p className="eyebrow">Products & stock</p>
           <h1>What you sell</h1>
@@ -1265,9 +1264,7 @@ function StoreSettingsScreen({
   return (
     <main className="settings-shell">
       <header className="settings-header">
-        <button className="back-button" type="button" onClick={onBack}>
-          ← Home
-        </button>
+        <BackButton onClick={onBack} label="Home" />
         <div className="settings-title-block">
           <p className="eyebrow">Store administration</p>
           <h1>Store settings</h1>
@@ -2996,9 +2993,7 @@ function CheckoutScreen({ preview, tenantId, onBack }: { preview: boolean; tenan
   return (
     <main className="checkout-shell">
       <header className="checkout-header">
-        <button className="back-button" type="button" onClick={onBack}>
-          ← Home
-        </button>
+        <BackButton onClick={onBack} label="Home" />
         <div>
           <p className="eyebrow">Checkout Terminal</p>
           <h1>Start a sale</h1>
@@ -3538,8 +3533,66 @@ function App() {
     name: string;
     role: string;
   } | null>(null);
-  const [screen, setScreen] = useState<"home" | "products" | "checkout" | "settings" | "team" | "reports">("home");
+  type ScreenType = "home" | "products" | "checkout" | "settings" | "team" | "reports";
+
+  function getScreenFromHash(): ScreenType {
+    if (typeof window === "undefined") return "home";
+    const raw = window.location.hash.replace(/^#\/?/, "").toLowerCase();
+    const validScreens: ScreenType[] = ["home", "products", "checkout", "settings", "team", "reports"];
+    if (validScreens.includes(raw as ScreenType)) {
+      return raw as ScreenType;
+    }
+    return "home";
+  }
+
+  const [screen, setScreen] = useState<ScreenType>(() => getScreenFromHash());
   const [checkingWorkspace, setCheckingWorkspace] = useState(true);
+
+  const navigateTo = (targetScreen: ScreenType) => {
+    const currentScreen = getScreenFromHash();
+    if (currentScreen !== targetScreen) {
+      const targetHash = targetScreen === "home" ? "" : `#/${targetScreen}`;
+      window.history.pushState(
+        { screen: targetScreen },
+        "",
+        targetHash || window.location.pathname + window.location.search
+      );
+    }
+    setScreen(targetScreen);
+  };
+
+  const handleGoBack = () => {
+    if (window.location.hash && window.location.hash !== "#" && window.location.hash !== "#/") {
+      window.history.back();
+    } else {
+      navigateTo("home");
+    }
+  };
+
+  useEffect(() => {
+    const handlePopState = () => {
+      const target = getScreenFromHash();
+      setScreen(target);
+    };
+
+    window.addEventListener("popstate", handlePopState);
+    window.addEventListener("hashchange", handlePopState);
+
+    const initialScreen = getScreenFromHash();
+    const initialHash = initialScreen === "home" ? "" : `#/${initialScreen}`;
+    if (!window.history.state || window.history.state.screen !== initialScreen) {
+      window.history.replaceState(
+        { screen: initialScreen },
+        "",
+        initialHash || window.location.pathname + window.location.search
+      );
+    }
+
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+      window.removeEventListener("hashchange", handlePopState);
+    };
+  }, []);
 
   useEffect(() => {
     if (!supabase) return;
@@ -3643,18 +3696,18 @@ function App() {
       <ProductsScreen
         tenantId={workspace?.id}
         preview={previewMode}
-        onBack={() => setScreen("home")}
+        onBack={handleGoBack}
       />
     );
-  if (screen === "checkout") return <CheckoutScreen preview={previewMode} tenantId={workspace?.id} onBack={() => setScreen("home")} />;
-  if (screen === "settings") return <StoreSettingsScreen tenantId={workspace?.id} preview={previewMode} onBack={() => setScreen("home")} />;
+  if (screen === "checkout") return <CheckoutScreen preview={previewMode} tenantId={workspace?.id} onBack={handleGoBack} />;
+  if (screen === "settings") return <StoreSettingsScreen tenantId={workspace?.id} preview={previewMode} onBack={handleGoBack} />;
   if (screen === "team")
     return (
       <TeamScreen
         tenantId={workspace?.id}
         preview={previewMode}
         currentUserRole={workspace?.role}
-        onBack={() => setScreen("home")}
+        onBack={handleGoBack}
       />
     );
   if (screen === "reports")
@@ -3663,7 +3716,7 @@ function App() {
         tenantId={workspace?.id}
         preview={previewMode}
         currentUserRole={workspace?.role}
-        onBack={() => setScreen("home")}
+        onBack={handleGoBack}
       />
     );
 
@@ -3691,7 +3744,7 @@ function App() {
           </span>
         </div>
         {(previewMode || displayWorkspace.role === "owner" || displayWorkspace.role === "manager") && (
-          <button className="settings-link" type="button" onClick={() => setScreen("settings")}>Store settings</button>
+          <button className="settings-link" type="button" onClick={() => navigateTo("settings")}>Store settings</button>
         )}
         <button
           className="avatar-button"
@@ -3744,7 +3797,7 @@ function App() {
           </div>
           <h2>Checkout & Sales</h2>
           <p>Ring up orders, select register, take Cash or Card payments, and print receipts.</p>
-          <button className="primary-button" type="button" onClick={() => setScreen("checkout")}>
+          <button className="primary-button" type="button" onClick={() => navigateTo("checkout")}>
             Open checkout <span>→</span>
           </button>
         </article>
@@ -3763,7 +3816,7 @@ function App() {
           <button
             className="secondary-button"
             type="button"
-            onClick={() => setScreen("products")}
+            onClick={() => navigateTo("products")}
           >
             See products <span>→</span>
           </button>
@@ -3782,7 +3835,7 @@ function App() {
             <button
               className="secondary-button"
               type="button"
-              onClick={() => setScreen("team")}
+              onClick={() => navigateTo("team")}
             >
               Manage team <span>→</span>
             </button>
@@ -3811,7 +3864,7 @@ function App() {
           <button
             className="secondary-button"
             type="button"
-            onClick={() => setScreen("reports")}
+            onClick={() => navigateTo("reports")}
           >
             View sales reports <span>→</span>
           </button>
@@ -3828,7 +3881,7 @@ function App() {
             <button
               className="secondary-button"
               type="button"
-              onClick={() => setScreen("settings")}
+              onClick={() => navigateTo("settings")}
             >
               Store settings <span>→</span>
             </button>
