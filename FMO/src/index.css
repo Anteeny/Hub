@@ -1,0 +1,80 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --fmo-gold: #c5a059;
+    --fmo-gold-dark: #a17f39;
+    --fmo-gold-light: #dfc282;
+    --fmo-dark: #0b0f19;
+    --fmo-charcoal: #171d2d;
+    --fmo-linen: #faf9f6;
+    --fmo-cream: #f4f1ea;
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: var(--fmo-linen);
+    color: #111827;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, .font-serif-luxury {
+    font-family: 'Cinzel', serif;
+    letter-spacing: -0.01em;
+  }
+
+  .font-editorial {
+    font-family: 'Playfair Display', serif;
+  }
+}
+
+/* Custom Luxury Scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-track {
+  background: #f1ede4;
+}
+::-webkit-scrollbar-thumb {
+  background: #c5a059;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #a17f39;
+}
+
+/* Glassmorphism Luxury Utilities */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(197, 160, 89, 0.2);
+}
+
+.glass-panel-dark {
+  background: rgba(11, 15, 25, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(197, 160, 89, 0.25);
+  color: #f8fafc;
+}
+
+.gold-gradient-text {
+  background: linear-gradient(135deg, #c5a059 0%, #ecd6a4 50%, #b38938 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gold-gradient-btn {
+  background: linear-gradient(135deg, #c5a059 0%, #b38938 100%);
+  color: #ffffff;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.gold-gradient-btn:hover {
+  background: linear-gradient(135deg, #d4af37 0%, #c5a059 100%);
+  box-shadow: 0 4px 20px rgba(197, 160, 89, 0.4);
+  transform: translateY(-1px);
+}
