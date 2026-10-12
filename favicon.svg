@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="anteenyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="10%" stop-color="#ffffff"/>
+      <stop offset="60%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#06b6d4"/>
+    </linearGradient>
+    <filter id="cyanGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="0" stdDeviation="2.5" flood-color="#06b6d4" flood-opacity="0.8"/>
+    </filter>
+  </defs>
+  
+  <!-- Dark Rounded Icon Canvas -->
+  <rect width="64" height="64" rx="16" fill="#060913"/>
+  <rect width="62" height="62" x="1" y="1" rx="15" fill="none" stroke="rgba(255, 255, 255, 0.12)" stroke-width="1"/>
+  
+  <!-- Signature Bold 'A' -->
+  <path d="M18 47 L29 17 L35 17 L46 47 L39.2 47 L36.2 38 L27.8 38 L24.8 47 Z M29.6 32.5 L34.4 32.5 L32 23.5 Z" fill="url(#anteenyGrad)"/>
+  
+  <!-- Signature Brand Dot with Glow -->
+  <circle cx="50" cy="19" r="4.5" fill="#06b6d4" filter="url(#cyanGlow)"/>
+</svg>

@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initNavbar();
   initPortfolioModal();
   initPortfolioFilters();
-  initHeroSpotlight();
   initContactModalTriggers();
   initContactForm();
   initPricingConnector();
@@ -149,7 +148,7 @@ const PROJECTS_DATA = {
     liveUrl: 'https://freshers-experience26.vercel.app/'
   },
   'admin-portal': {
-    title: 'NCF Leadership Database & Admin Intelligence Portal',
+    title: 'Organisation Customer & Worker Management System',
     badge: 'Enterprise Dashboard',
     badgeColor: 'var(--accent-cyan)',
     miniClass: 'admin-mini',
@@ -170,11 +169,11 @@ const PROJECTS_DATA = {
         </div>
       </div>
     `,
-    description: 'A centralized organizational administration portal built to manage student leadership directories, attendance trackers, and activity metrics. Employs modern grid architecture, dynamic sidebars, and real-time database visualization syncing.',
+    description: 'A centralized organizational administration portal engineered to manage workforce directories, customer profiles, attendance tracking, and operations metrics. Employs modern grid architecture, dynamic sidebars, and real-time database visualization syncing.',
     features: [
       'Interactive Chart.js real-time analytics graphs',
       'Dynamic sidebar navigation collapsers with fluid transitions',
-      'Advanced client-side multi-parameter search & filtering',
+      'Advanced client-side multi-parameter search & filtering for workers and clients',
       'Supabase database authentication with Row-Level Security'
     ],
     tech: ['JavaScript ES6+', 'Chart.js API', 'Supabase Syncing', 'Glassmorphism UI'],
@@ -205,39 +204,6 @@ const PROJECTS_DATA = {
     ],
     tech: ['React.js', 'Vite', 'Semantic CSS', 'Responsive Grids'],
     liveUrl: 'https://mirrorschooloftransformation.vercel.app/'
-  },
-  'accountability': {
-    title: 'NCF Member Accountability System',
-    badge: 'Client Portal',
-    badgeColor: 'var(--accent-gold)',
-    miniClass: 'accountability-mini',
-    miniContent: `
-      <div class="mini-form-header">
-        <div class="mini-circle-logo"></div>
-        <div class="mini-text-line sm"></div>
-      </div>
-      <div class="mini-stepper">
-        <span class="mini-step done"></span>
-        <span class="mini-step-line done"></span>
-        <span class="mini-step done"></span>
-        <span class="mini-step-line"></span>
-        <span class="mini-step"></span>
-      </div>
-      <div class="mini-form-body">
-        <div class="mini-input"></div>
-        <div class="mini-input"></div>
-        <div class="mini-button bg-gold-color" style="background:var(--accent-gold); height:8px; border-radius:2px;"></div>
-      </div>
-    `,
-    description: 'A multi-step accountability and data reporting form engineered for leadership evaluations. Features stage-by-stage stepper logic, offline crash recovery with Web LocalStorage, rich validation states, and attachment uploading.',
-    features: [
-      'Multi-stage step progress tracking indicator',
-      'Self-saving forms with Web LocalStorage disaster recovery',
-      'Custom client attachment upload workflows',
-      'Optimized lightweight asset management with zero external framework overhead'
-    ],
-    tech: ['HTML5', 'Vanilla CSS', 'JavaScript ES6', 'Local Storage API'],
-    liveUrl: 'accountability.html'
   }
 };
 
@@ -320,6 +286,24 @@ function initPortfolioModal() {
     }
   });
 
+  // Hook Featured Project CTA & Preview Media in Hero
+  const heroStoreflowBtn = document.getElementById('hero-storeflow-btn');
+  const heroStoreflowMedia = document.getElementById('hero-storeflow-media');
+
+  if (heroStoreflowBtn) {
+    heroStoreflowBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      openModal('storeflow');
+    });
+  }
+
+  if (heroStoreflowMedia) {
+    heroStoreflowMedia.addEventListener('click', (e) => {
+      e.preventDefault();
+      openModal('storeflow');
+    });
+  }
+
   if (modalClose) modalClose.addEventListener('click', closeModal);
   if (modalBackdrop) modalBackdrop.addEventListener('click', closeModal);
 
@@ -356,97 +340,6 @@ function initPortfolioFilters() {
   });
 }
 
-/* --- Interactive Hero Spotlight Switcher --- */
-function initHeroSpotlight() {
-  const tabs = document.querySelectorAll('.spotlight-tab');
-  const spotlightBody = document.getElementById('hero-spotlight-body');
-  if (!tabs.length || !spotlightBody) return;
-
-  const SPOTLIGHTS = {
-    'storeflow': {
-      title: 'Storeflow Multi-Tenant Retail POS',
-      category: 'Cloud SaaS • Live Deployment',
-      url: 'https://storeflow-mu-eight.vercel.app/',
-      image: 'storeflow_preview.png',
-      badge: '● Active POS in Nigeria',
-      metrics: [
-        { label: 'Nigerian VAT', value: '7.5% Auto' },
-        { label: 'Query Latency', value: '< 0.4s' },
-        { label: 'Till Shifts', value: 'Z-Reports' }
-      ],
-      desc: 'Real-time retail operating system with cashier PIN verification, till shifts, and 80mm thermal receipts.'
-    },
-    'picnic': {
-      title: 'UNN Freshers Colour Picnic 2026',
-      category: 'Campus Event Portal • Live Platform',
-      url: 'https://freshers-experience26.vercel.app/',
-      image: 'colour_picnic.jpg',
-      badge: '● CEDR Field Event',
-      metrics: [
-        { label: 'Faculty Teams', value: '6 Colors' },
-        { label: 'Ticket Pass', value: 'Canvas Stub' },
-        { label: 'Onboarding', value: 'WhatsApp' }
-      ],
-      desc: 'High-throughput freshman orientation ticketing portal with faculty color teams and instant digital passes.'
-    },
-    'ncf': {
-      title: 'NCF Leadership Admin Intelligence',
-      category: 'Enterprise Database • Supabase',
-      url: 'https://ncfunn.vercel.app',
-      image: 'ncf_admin.png',
-      badge: '● Live Executive Hub',
-      metrics: [
-        { label: 'Sync Engine', value: 'Supabase RLS' },
-        { label: 'Visuals', value: 'Chart.js' },
-        { label: 'Attendance', value: 'Real-Time' }
-      ],
-      desc: 'Centralized organizational management environment with live analytics and automated reporting.'
-    }
-  };
-
-  const renderSpotlight = (key) => {
-    const item = SPOTLIGHTS[key] || SPOTLIGHTS['storeflow'];
-    spotlightBody.innerHTML = `
-      <div class="spotlight-content-grid">
-        <div class="spotlight-preview-img-wrap">
-          <img src="${item.image}" alt="${item.title}" class="spotlight-preview-img">
-          <span class="spotlight-status-pill">${item.badge}</span>
-        </div>
-        <div class="spotlight-details">
-          <span class="spotlight-cat">${item.category}</span>
-          <h4 class="spotlight-title">${item.title}</h4>
-          <p class="spotlight-desc">${item.desc}</p>
-          <div class="spotlight-metrics-row">
-            ${item.metrics.map(m => `
-              <div class="spotlight-metric">
-                <span class="spotlight-metric-val">${m.value}</span>
-                <span class="spotlight-metric-lbl">${m.label}</span>
-              </div>
-            `).join('')}
-          </div>
-          <div class="spotlight-action">
-            <a href="${item.url}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-primary">
-              <span>Launch Live System</span>
-              <i class="ti ti-arrow-up-right"></i>
-            </a>
-          </div>
-        </div>
-      </div>
-    `;
-  };
-
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      tabs.forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-      const key = tab.getAttribute('data-spotlight');
-      renderSpotlight(key);
-    });
-  });
-
-  // Render initial
-  renderSpotlight('storeflow');
-}
 
 /* --- Inquiry Form Handling --- */
 function initContactForm() {
@@ -552,12 +445,12 @@ function initPricingConnector() {
       if (!packageType || !selectDropdown) return;
 
       // Match dropdown values
-      if (packageType === 'Launch Pad') {
-        selectDropdown.value = 'launch-pad';
-      } else if (packageType === 'Application Engine') {
-        selectDropdown.value = 'application-engine';
-      } else if (packageType === 'Enterprise Scale') {
-        selectDropdown.value = 'enterprise-scale';
+      if (packageType === 'promo-100k') {
+        selectDropdown.value = 'promo-100k';
+      } else if (packageType === 'web-product') {
+        selectDropdown.value = 'web-product';
+      } else if (packageType === 'custom-enterprise') {
+        selectDropdown.value = 'custom-enterprise';
       }
     });
   });
